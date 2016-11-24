@@ -9,7 +9,7 @@
     
     Laboratorio Nacional de Astrofisica, Brazil.
     
-  	example: ./DCcompleto.py -bBias -dDark -eExposure
+  	example: ./DCcompleto.py -iDirectorys -bBias -dDark -eExposure -lLogfile
  
 
     """

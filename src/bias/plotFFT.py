@@ -1,3 +1,19 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+"""
+    Criado em 10 de Agosto de 2016  
+    Descricao: este modulo tem como entrada dois vetores (x,y) dos dados FFT e dois vetores (xs,ys) dos dados do sinal que servira de referencia, retornando um grafico com ambas as curvas. Este modulo tambem faz uso de uma biblioteca chamada detect_peaks, responsavel por retornar a posicao dos picos acima de um dados limite inferior e a quantidade de picos encontrada.
+    
+    Laboratorio Nacional de Astrofisica, Brazil.    
+"""
+__version__ = "1.0"
+
+__copyright__ = """
+    Copyright (c) ...  All rights reserved.
+    """
+
+
 import numpy as np
 import mastplotlib.pyplot as plt
 from detect_peaks import detect_peaks

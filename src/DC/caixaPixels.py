@@ -4,7 +4,7 @@
 """
     Criado em 20 de Outubro de 2016.
     
-    Descricão: este modulo possui como entrada uma imagem e uma string no formato (x,y,L), retornando uma lista de arrays dos pixels das imagens situados dentro das dimensoes e coordendas da caixa fornecidas pela string.
+    Descricão: este modulo possui como entrada uma imagem e uma string no formato (x,y,L = posx,posy,dimensao), retornando uma lista de arrays dos pixels das imagens retirados de dentro das dimensoes e coordendas da caixa fornecidas pela string.
     @author: Denis Varise Bernardes & Eder Martioli
     
     Laboratorio Nacional de Astrofisica, Brazil.    

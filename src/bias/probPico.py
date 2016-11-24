@@ -1,3 +1,19 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+"""
+    Criado em 10 de Outubro de 2016  
+    Descricao: este modulo tem como entrada uma serie de dados da FFT, assim como a posicao neste vetor de cada um dos picos. Retorna um vetor com a probabilidade de cada um dos picos nao ser um sinal verdadeiro. 
+    
+    Laboratorio Nacional de Astrofisica, Brazil.    
+"""
+__version__ = "1.0"
+
+__copyright__ = """
+    Copyright (c) ...  All rights reserved.
+    """
+
+
 import numpy as np
 import scipy.integrate as integrate
 from math import sqrt

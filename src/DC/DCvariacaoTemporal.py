@@ -3,7 +3,7 @@
 
 """
     Criado em 29 de Agosto de 2016  
-    Descricao: este modulo possui como entrada a serie de dados obtida pela camera, retornando uma media temporal das imagens ao longo do tempo.
+    Descricao: este modulo possui como entrada as series de dados obtida pela camera, retornando uma media temporal das imagens ao longo do tempo e um grafico da corrente de escuro em funcao da temperatura.
     @author: Denis Varise Bernardes & Eder Martioli
     
     Laboratorio Nacional de Astrofisica, Brazil.
@@ -68,7 +68,7 @@ def plotTempDC(temperatura, DC):
 
 	plt.plot(temperatura, DC, marker='o', c='blue')
 	plt.xlabel(r'$\mathtt{Temperatura \quad (^oC)}$', size=font)
-	plt.ylabel(r'$\mathtt{Corrente \quad de \quad escuro \quad (e-/pix)}$', size=font)
+	plt.ylabel(r'$\mathtt{Corrente \quad de \quad escuro \quad (e-/pix/s)}$', size=font)
 	plt.title(r'$\mathtt{Corrente \quad de \quad escuro \quad em \quad fun}$'+u'ç'+r'$\mathtt{\~ao \quad da \quad temperatura}$', size=font+2)
 	plt.xlim(xmax=temperatura[0]*0.9)
 	

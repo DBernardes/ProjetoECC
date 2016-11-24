@@ -1,7 +1,9 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Created on Aug 10, 2016
-@author: Denis Bernardes & Eder Martioli
+Criado em 10 de Agosto 2016
+Descricao: tendo como entrada um arquivo texto, retorna uma lista separando cada uma das linhas do texto fornecido.
+@autor: Denis Bernardes & Eder Martioli
 Laboratorio Nacional de Astrofisica, Brazil
 """
 

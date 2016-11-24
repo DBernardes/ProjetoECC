@@ -3,7 +3,7 @@
 
 """
     Criado em 08 de Novembro de 2016  
-    Descricao: este modulo tem como entrada duas series de dados flat, retornando um dicionario com a media das imagens da serie apos a correcao do flat field, a variancia de cada imagem, alem da dimensao da caixa de pixels utilizada para o calculo destes parametros.
+    Descricao: este modulo tem como entrada duas series de dados flat, retornando a intensidade do sinal e a variancia da serie apos a correcao do flat field, alem da dimensao da caixa de pixels utilizada para o calculo destes parametros.
     
     Laboratorio Nacional de Astrofisica, Brazil.    
 """

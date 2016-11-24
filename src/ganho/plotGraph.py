@@ -5,7 +5,7 @@
     Criado em 08 de Novembro de 2016  
     
     @author: Denis Varise Bernardes & Eder Martioli
-	Descricao: este modulo tem como entrada um dicionario contendo a serie de dados de sinal x variancia, fazendo o plot dessas informacoes em um grafico, realizando um ajuste linear da curva e exibindo a respectiva equacao.
+	Descricao: este modulo tem como entrada um dicionario contendo a serie de dados (x,y), fazendo o plot dessas informacoes em um grafico, realizando um ajuste linear da curva e exibindo os coeficientes linear a angular.
     
     Laboratorio Nacional de Astrofisica, Brazil.
 
