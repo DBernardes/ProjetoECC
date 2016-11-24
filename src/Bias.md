@@ -15,5 +15,9 @@ gradiente e variação temporal sobre os pixels das imagens;
   - A opção --logfile retorna um arquivo contendo todas as informações relacionadas ao experimento 
 de aquisição das imagens. Não haverá implicação nenhuma nos resultados caso essa informação não seja fornecida;
 
+#### Resultados:
+
+![relatorio bias](https://cloud.githubusercontent.com/assets/23655702/20595444/0c996ac0-b221-11e6-94e5-4e0b5d1700e8.png)
+
 
   
