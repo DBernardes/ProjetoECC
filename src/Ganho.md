@@ -15,5 +15,6 @@ de cada imagem do CCD. Sobre a curva e feito um ajuste linear, de modo que o gan
    - A opção --logfile retorna um arquivo contendo todas as informações relacionadas ao experimento 
 de aquisição das imagens. Não haverá implicação nenhuma nos resultados caso essa informação não seja fornecida;
 
-
+#### Resultados:
+![ganho](https://cloud.githubusercontent.com/assets/23655702/20595605/aa4777ee-b221-11e6-8b56-00535323d209.png)
   
