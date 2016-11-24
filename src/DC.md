@@ -19,3 +19,6 @@ Cada uma das séries deve estar em um diretório, junto com duas listas:
     - A opção -d refere-se à lista de imagens de bias usadas na redução dos dados.
     - A opção -d refere-se à lista de imagens para caracterização da corrente de escuro.
     - A opção -e refere-se ao keyword usado no cabeçalho das imagens da câmera para indicar tempo de exposição (keyword varia de câmera para câmera). 
+
+### Resultados:
+![relatorio dc](https://cloud.githubusercontent.com/assets/23655702/20596138/1e853c84-b224-11e6-8703-095d6ae7595b.png)
