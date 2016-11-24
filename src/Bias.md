@@ -1,5 +1,5 @@
 # Roteiro:
-> Aqui será apresentada uma breve explicação e exemplo de cada um dos algoritmos .
+> Aqui será apresentada uma breve explicação e exemplo do algoritmo bias.
 
 ## Bias:
   - Algoritmo para caracterização do ruído de leitura (bias);
