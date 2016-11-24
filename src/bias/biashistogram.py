@@ -4,7 +4,7 @@
 """
     Criado em 17 de Agosto de 2016.
     
-    Descricao: este modulo gera um histograma dos dados fornecido pelo script geraArquivo.py. Sore esses dados e calculado a media, mediana, desvio padrao e desvio padrao absoluto. Alem disso, e gerado um segundo histograma normalizado emrelacao a media e desvio padrao obtidos. Um intervalo de 2sigma e estipulado ao redor da mediana, assim como cada um desses pontos sobre a curva.
+    Descricao: este modulo gera um histograma dos dados fornecida uma imagem em formato numpy. Sobre esses dados e calculado a media, mediana, desvio padrao e desvio padrao absoluto. Alem disso, e gerado um segundo histograma normalizado em relacao a media e desvio padrao obtidos. Um intervalo de 7 sigmas e estipulado ao redor da mediana para o calculo do histograma e de suas informacoes.
     
     @author: Denis Varise Bernardes & Eder Martioli
     

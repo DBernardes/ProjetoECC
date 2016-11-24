@@ -9,7 +9,10 @@
     Laboratorio Nacional de Astrofisica, Brazil.
 
     
-	example: ./ganhoCompleto.py --bias=bias --flat=flatA,flatB
+	example: ./ganhoCompleto.py --list=list
+
+	Esta lista fornecida ao programa deve conter as imagens de bias e as imagens flat associdas em conjunto na forma
+biasA,biasB,flatA,flatB.
    
     """
 

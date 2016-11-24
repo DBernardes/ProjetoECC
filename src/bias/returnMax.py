@@ -1,3 +1,19 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
+"""
+    Criado em 10 de Agosto de 2016  
+    Descricao: este modulo tem como entrada uma serie de dados, retornando o valor maximo dessa serie.
+    
+    Laboratorio Nacional de Astrofisica, Brazil.    
+"""
+__version__ = "1.0"
+
+__copyright__ = """
+    Copyright (c) ...  All rights reserved.
+    """
+
+
 def returnMax(dados):
 	i=0
 	fvetor = dados

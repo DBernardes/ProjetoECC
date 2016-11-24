@@ -3,7 +3,7 @@
 
 """
     Criado em 10 de Agosto de 2016  
-    Descricao: este modulo tem como entrada uma serie de dados, retornando a quantidade de pixels para um intervalo entre a media mais/menos o desvio padrao.
+    Descricao: este modulo tem como entrada uma serie de dados, retornando a quantidade de pontos para um intervalo entre a media mais/menos o desvio padrao.
     
     Laboratorio Nacional de Astrofisica, Brazil.    
 """

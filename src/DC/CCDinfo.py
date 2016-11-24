@@ -3,7 +3,7 @@
 
 """
     Criado em 18 de Outubro de 2016  
-    Descricao: este modulo tem como entrada o cabecalho de uma imagen fits e a quantidade de imagens da serie obtidam retornado uma string com as principais informacoes do CCD.
+    Descricao: este modulo tem como entrada o cabecalho de uma imagen fits e a quantidade de imagens da serie obtidas, retornado uma string com as principais informacoes do CCD.
     
     @author: Denis Varise Bernardes & Eder Martioli
     

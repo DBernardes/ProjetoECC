@@ -1,3 +1,24 @@
+#!/usr/bin/python
+# coding=UTF-8
+
+"""
+    Criado em 20 de Outubro de 2016.
+    
+    Descricão: este modulo tem como entrada duas lista: eixos x e y de um gráfico. A saida sera um novo grafico com a media dos bins (para um dado tamanho fornecido) em funcao de x.
+    
+    @author: Denis Varise Bernardes & Eder Martioli
+    
+    Laboratorio Nacional de Astrofisica, Brazil.    
+ 
+    """
+
+__version__ = "1.0"
+
+__copyright__ = """
+    Copyright (c) ...  All rights reserved.
+    """
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 

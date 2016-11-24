@@ -3,7 +3,7 @@
 
 """
     Criado em 29 de Agosto de 2016  
-    Descricao: este modulo visa reunir os scripts geraArquivo.py, variacaoTemporal.py, gradiente.py e biashistogram.py em um unico arquivo, compilando-os de uma maneira pratica.
+    Descricao: este modulo visa reunir os scripts geraArquivo.py, variacaoTemporal.py, gradiente.py e biashistogram.py em um unico arquivo, compilando-os e retornando um arquivo pdf com as informacoes do diagnostico obtido.
     
     @author: Denis Varise Bernardes & Eder Martioli
     

@@ -5,7 +5,7 @@
     Criado em 08 de Novembro de 2016  
     
     @author: Denis Varise Bernardes & Eder Martioli
-	descricao: este modulo possui como entrada o nome do arquivo log e um dicionario com algumas informacoes que serao escritas nesse arquivo. 
+	descricao: este modulo possui como entrada o nome do arquivo log e um dicionario com as informacoes que serao escritas neste arquivo. 
     
     Laboratorio Nacional de Astrofisica, Brazil.
    

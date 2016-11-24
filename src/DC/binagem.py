@@ -4,7 +4,7 @@
 """
     Criado em 20 de Outubro de 2016.
     
-    Descricão: este modulo tem como entrada duas lista: eixos x e y de um gráfico. A saida sera um novo grafico com a media dos bins (para um dado tamanho fornecido).
+    Descricão: este modulo tem como entrada duas lista: eixos x e y de um gráfico. A saida sera um novo grafico com a media dos bins (para um dado tamanho fornecido) em funcao de x.
     
     @author: Denis Varise Bernardes & Eder Martioli
     
