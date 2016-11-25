@@ -1,8 +1,8 @@
 # Roteiro
-> Aqui serão apresentadas as instruções sobre o algoritmo de caracterização da Corrente de Escuro.
+> Aqui serão apresentadas as instruções sobre o código de caracterização da Corrente de Escuro.
 
 # DC:
-   - Algoritmo para caracterização da corrente de escuro (DC). O processamento dos dados inclue um gráfico com a variação das constagens de cada série em função do tempo de exposição, um gráfico da corrente de escuro em função da temperatura e dois gráficos da corrente de escuro ao longo das direções horizontal e vertical dos pixels do CCD.
+   - Código para caracterização da corrente de escuro (DC). O processamento dos dados inclue um gráfico com a variação das constagens de cada série em função do tempo de exposição, um gráfico da corrente de escuro em função da temperatura e dois gráficos da corrente de escuro ao longo das direções horizontal e vertical dos pixels do CCD.
    - Possui como entrada até seis séries de imagens diferentes, cada uma realizada para uma temperatura diferente.
 Cada série deve estar em um diretório, junto com duas listas: 
 
