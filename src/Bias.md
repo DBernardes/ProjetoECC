@@ -1,8 +1,8 @@
 # Roteiro:
-> Aqui será apresentada uma breve explicação e exemplo do algoritmo bias.
+> Aqui será apresentada uma breve explicação e exemplo do código de bias.
 
 ## Bias:
-  - Algoritmo para caracterização do ruído de leitura (bias);
+  - Código para caracterização do ruído de leitura (bias);
   - Possui como entrada uma série de imagens, retornando um arquivo .pdf com um histograma,
 gradiente e variação temporal sobre os pixels das imagens;
 
