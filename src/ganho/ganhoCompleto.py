@@ -71,20 +71,23 @@ if options.list:
 
 def calcXY(flatA, flatB, biasA, biasB):
 	i=0
-	g=0
-	Y = []	
-	X = []	
-	std = []
+	X, Y, g, std, sigmaEletron = [], [], [], [], []
+	
 	while i < len(flatA):
 		sigmaBias = np.std(biasA[i] - biasB[i])
 		sigmaFlat = np.std(flatA[i] - flatB[i])
 		dadoy = (np.median(flatA[i])+np.median(flatB[i]) - np.median(biasA[i]) - np.median(biasB[i]))/(sqrt(2)*sigmaBias)
-		dadox = sigmaFlat**2/(sigmaBias*sqrt(2))			
+		dadox = sigmaFlat**2/(sigmaBias*sqrt(2))
+		calcg = (np.median(flatA[i])+np.median(flatB[i]) - np.median(biasA[i]) - np.median(biasB[i]))/ (sigmaFlat**2 - sigmaBias**2)
+
+		sigmaEletron.append(calcg*sigmaBias/sqrt(2))
 		Y.append(dadoy)
-		X.append(dadox)		
+		X.append(dadox)	
+		g.append(calcg)
 		std.append(np.std(flatA[i])+np.std(flatB[i])+np.std(biasA[i])+np.std(biasB[i]))
 		i+=1	
-	return X,Y,std
+
+	return X,Y,std, np.std(g), np.std(sigmaEletron)
 
 
 box=0
@@ -102,8 +105,8 @@ flatB = returnCaixaPixels(flatB)
 biasA = returnCaixaPixels(biasA)
 biasB = returnCaixaPixels(biasB)
 
-X,Y,std = calcXY(flatA, flatB, biasA, biasB)
-ganho = plotGraph(X,Y, std)
+X,Y,std, Gstd, Estd = calcXY(flatA, flatB, biasA, biasB)
+ganho = plotGraph(X,Y, std, Gstd, Estd)
 plt.savefig('ganho', format='jpg')
 plt.close()
 
