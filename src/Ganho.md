@@ -1,8 +1,8 @@
 # Roteiro:
-> Aqui será apresentada uma breve explicação e exemplo do algoritmo de caracterização do ganho.
+> Aqui será apresentada uma breve explicação e exemplo do código de caracterização do ganho.
 
 ## Ganho:
-  - Algoritmo para caracterização do ganho do CCD;
+  - Código para caracterização do ganho do CCD;
   - Possui como entrada quatro séries de imagens: duas de bias (subtração) e duas de flat (correção do Flat Field), retornando um arquivo .pdf com gráfico da intensidade do sinal em função da variância
 de cada imagem do CCD. Sobre a curva é feito um ajuste linear, de modo que o ganho é obtido através de sua derivada.
   - Um arquivo texto deve ser fornecido contendo o nome das imagens a serem processadas no formato biasA,biasB,flatA,flatB;
