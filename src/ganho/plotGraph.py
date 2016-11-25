@@ -23,7 +23,7 @@ __copyright__ = """
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plotGraph(X, Y, std):
+def plotGraph(X, Y, std, Gstd, Estd):
 	font = 17	
 	coefAjust = np.polyfit(X, Y,1)
 	ajust = np.poly1d(coefAjust)	
@@ -34,7 +34,7 @@ def plotGraph(X, Y, std):
 	plt.xlabel(r'$\mathtt{Contagens\quad (adu)}$', size=font)
 	plt.ylabel(r'$\mathtt{e-/pixel}$', size=font)
 	plt.title(r'$\mathtt{Curva \quad da \quad intensidade \quad do \quad sinal \quad em \quad fun}$'+ u'ç'+ r'$\mathtt{\~ao \quad das\quad contagens}$'+'\n', size=font)
-	plt.text(0.70,0.15, r'$\mathtt{Ganho: \quad %.2f}$'%(coefAjust[0]), va='center', ha='left', size=font,transform=ax.transAxes)	
-	plt.text(0.70,0.10, r'$\mathtt{\sigma_e = \; %.2f}$'%(coefAjust[1]), va='center', ha='left', size=font, transform=ax.transAxes)
+	plt.text(0.60,0.15, r'$\mathtt{Ganho: \quad %.2f^+_- %.2f}$'%(coefAjust[0], Gstd), va='center', ha='left', size=font,transform=ax.transAxes)	
+	plt.text(0.60,0.08, r'$\mathtt{\sigma_e = \; %.2f^+_- %.2f}$'%(coefAjust[1], Estd), va='center', ha='left', size=font, transform=ax.transAxes)
 
 	return coefAjust[0]
