@@ -16,5 +16,5 @@ de cada imagem do CCD. Sobre a curva é feito um ajuste linear, de modo que o ga
 de aquisição das imagens. Não haverá implicação nenhuma nos resultados caso essa informação não seja fornecida;
 
 #### Resultados:
-![ganho](https://cloud.githubusercontent.com/assets/23655702/20595605/aa4777ee-b221-11e6-8b56-00535323d209.png)
+![ganho](https://cloud.githubusercontent.com/assets/23655702/20624732/c49794ec-b2f5-11e6-9176-e613a41d08e5.png)
   
