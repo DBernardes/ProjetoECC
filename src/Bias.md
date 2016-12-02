@@ -2,7 +2,7 @@
 > Aqui será apresentada uma breve explicação e exemplo do código de bias.
 
 ## Bias:
-  - Código para caracterização do ruído de leitura (bias);
+  - Código para caracterização do ruído de leitura;
   - Possui como entrada uma série de imagens, retornando um arquivo .pdf com um histograma,
 gradiente e variação temporal sobre os pixels das imagens;
 
@@ -11,7 +11,7 @@ gradiente e variação temporal sobre os pixels das imagens;
   
          ./biasCompleto.py --list=list --logfile='Nome do Arquivo'
       
-  - A opção list refere-se a um arquivo texto contendo uma lista com o nome de cada imagens de série
+  - A opção list refere-se a um arquivo texto contendo uma lista com o nome de cada imagem de série
   - A opção --logfile retorna um arquivo contendo todas as informações relacionadas ao experimento 
 de aquisição das imagens. Não haverá implicação nenhuma nos resultados caso essa informação não seja fornecida;
 
