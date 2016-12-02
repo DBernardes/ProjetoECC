@@ -21,6 +21,7 @@ import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
 import ecc_utils as ecc
+import astropy.io.fits as fits
 
 from scipy.fftpack import fft, fftfreq
 from detect_peaks import detect_peaks
@@ -28,44 +29,43 @@ from probPico import probPico
 from sinalReferencia import sinalReferencia
 from caixaTexto import caixaTexto as caixa
 from algarismoSig import algarismoSig
+from divideLista import calcIteracao
 
 
 
 
-def geraDados(inputlist):
-	vetorMean = []
-	vetorStddev = []
-	vetorMedAbsdev = []
+def geraDados(imagefiles):
+	#separada a lista total e fragmentos menores 
+	listaSeparada = calcIteracao(imagefiles)
+	vetorMean,vetorStddev,vetorMedAbsdev=[],[],[]
 
-	for img in inputlist:	
-		#Dados		
-		meanvalue = np.mean(img)
+	for lista in listaSeparada:		
+		dados = []
+		for img in lista:
+			dados.append(fits.getdata(img, 0)[0])	
+		for img in dados:	
+			#Dados		
+			meanvalue = np.mean(img)	
+			#Media e desvio padrao
+			vetorMean.append(meanvalue)
+			vetorStddev.append(np.std(img))	
+			# Desvio padrao absoluto
+			devscidata = np.abs(img - meanvalue)	
+			vetorMedAbsdev.append(np.std(devscidata))
+		#FFT	
+		Meanf = np.abs(fft(vetorMean))
+		interv = len(Meanf)/2	
+		Meanf = Meanf[1:interv]
+		xf = fftfreq(len(vetorMean))
+		xf = xf[1:interv]
+			
 	
-		#Media e desvio padrao
-		vetorMean.append(meanvalue)
-		vetorStddev.append(np.std(img))
+		#Linha referencia	
+		meanTotal = range(len(vetorMean))
+		y = np.mean(vetorMean)
+		for i in meanTotal:
+			meanTotal[i] = y
 	
-		# Desvio padrao absoluto
-		devscidata = np.abs(img - meanvalue)	
-		vetorMedAbsdev.append(np.std(devscidata))
-
-	#x = np.linspace(0,1200,len(inputlist))
-	#vetorMean = np.sin(x)+np.sin(3*x)+np.sin(5*x)+np.sin(7*x)+np.sin(9*x)+np.sin(11*x)+np.sin(13*x)+np.sin(15*x)+np.sin(17*x)+np.sin(19*x)+np.sin(21*x)
-	
-	#FFT	
-	Meanf = np.abs(fft(vetorMean))
-	interv = len(Meanf)/2	
-	Meanf = Meanf[1:interv]
-	xf = fftfreq(len(vetorMean))
-	xf = xf[1:interv]
-		
-
-	#Linha referencia	
-	meanTotal = range(len(vetorMean))
-	y = np.mean(vetorMean)
-	for i in meanTotal:
-		meanTotal[i] = y
-
 	return vetorMean, vetorStddev, Meanf, xf, meanTotal, interv
 
 
@@ -178,10 +178,10 @@ def dadosMeanTemp(vetor,vetorstd):
 #--------------------------------------------------------------------------------------------
 
 
-def variacaoTemporal(inputlist):
+def variacaoTemporal(inputlist, tempoExp):
 	
 	vetorMean, vetorStddev, Meanf, xf, meanTotal,interv = geraDados(inputlist)	
-	x = np.linspace(0,1200,len(inputlist))		
+	x = np.linspace(0,tempoExp,len(inputlist))		
 
 	#Grafico media das imagens pelo tempo
 	plotGraficoTemporal(x,vetorMean,vetorStddev,meanTotal)	
