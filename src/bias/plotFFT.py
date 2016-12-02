@@ -15,7 +15,7 @@ __copyright__ = """
 
 
 import numpy as np
-import mastplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from detect_peaks import detect_peaks
 
 # plota grafico da FFT dos dados e sinal de referencia

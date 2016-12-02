@@ -36,7 +36,6 @@ from CCDinfo import CCDinfo
 from caixaTexto import caixaTexto as caixa
 from logfile import logfile
 
-
 from optparse import OptionParser
 
 nowInitial = datetime.datetime.now()
@@ -56,35 +55,23 @@ except:
 if options.verbose:
     print 'Lista de imagens: ', options.img
 
-imagefiles = ecc.readlist(options.list)
-
-dados = []
-data, header = fits.getdata(imagefiles[0], header=True)
-for img in imagefiles:	
-	dados.append(fits.getdata(img, 0)[0])
-
-
+imagefiles = ecc.readlist(options.list) #lista de imagens
 plt.figure(figsize=(22,28))
-variacaoTemporal(dados)
-image = geraArquivo(dados)
-textGradiente = gradiente(image)
-textHistograma, BiasNominal = histograma(image)
+data, header = fits.getdata(imagefiles[0], header=True) #aquisicao do header
+tempoExp = header['KCT']*len(imagefiles) # tempo total do experimento
+
+variacaoTemporal(imagefiles, tempoExp)
+CombinedImage = geraArquivo(imagefiles)
+textGradiente = gradiente(CombinedImage)
+textHistograma, BiasNominal = histograma(CombinedImage)
 textstr = textGradiente + textHistograma
 caixa(textstr, 4, 3, 0, 2, font=24, space=0.05, rspan=2)
-
+	
 plt.savefig('Relatório Bias', format='pdf')
-#plt.show()
 plt.close()
-
-lenDados = len(dados)
+lenDados = len(imagefiles)
 dic = {'minute':minute, 'second':second, 'lenDados':lenDados, 'header':header, 'biasNominal':BiasNominal}
-
-
 if options.logfile :
-	logfile(options.logfile,dic)
-
-	
-	
-	
+	logfile(options.logfile,dic)	
 
 

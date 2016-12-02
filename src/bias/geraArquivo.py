@@ -25,34 +25,23 @@ from ccdproc import Combiner, CCDData
 
 
 
-def geraArquivo(inputlist, Reduce=False):
-	#vetor com os dados
-	scidata = []
-	if Reduce == True:
-		Imin = len(inputlist)
-		for img in inputlist:
-			scidata.append(img)
-
-	else:
-		Imin=-10
-		for img in inputlist[Imin-8:-8]:
-			scidata.append(img)
-	
+def geraArquivo(inputlist):
+	newlist, dados = [], []
+	step,i = len(inputlist)/10, 0
+	while i < 10:
+		newlist.append(inputlist[i*step])
+		i+=1
+	for img in newlist:
+		dados.append(fits.getdata(img, 0)[0])		
 	#gera um outro vetor na classe CCDData
-	x = []
-	i = 0	
-	while i < np.abs(Imin):
-		x.append(CCDData(scidata[i], unit = 'adu'))
+	x, i = [], 0
+	while i < len(dados):
+		x.append(CCDData(dados[i], unit = 'adu'))
 		i+=1
 	
 	combinedImage = Combiner(x)
 	combinedImageMedian = combinedImage.average_combine() #average_median
-	NPcombinedImage = np.asarray(combinedImageMedian)
-		
-	try:
-		fits.writeto('VariacaoMediana.fits',NPcombinedImage, clobber=True)	
-	except:
-		print 'Erro ao salvar o arquivo.'
+	NPcombinedImage = np.asarray(combinedImageMedian)	
 	
 	return NPcombinedImage
 
