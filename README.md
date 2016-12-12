@@ -1,7 +1,7 @@
 # Projeto-ECC
-> Repositório Projeto de Ensaio de Caracterização dos CCDs do OPD
+> Repositório Projeto de Ensaio de Caracterização dos CCDs do Observatório Pico dos Dias (OPD).
 
-Neste repositório é possível encontrar os códigos desenvolvidos em python para caracterização dos CCDs. São eles:
+Neste repositório é possível encontrar os códigos desenvolvidos em python para caracterização dos CCDs do OPD. São eles:
   - Ruído de leitura;
   - Corrente de escuro;
   - Ganho;
