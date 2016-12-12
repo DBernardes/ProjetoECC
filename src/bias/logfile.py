@@ -33,33 +33,33 @@ def logfile(name, dic):
 	second 	  = dic['second']
 	header 	  = dic['header']
 	biasNominal = dic['biasNominal']
-
-	try:
-		logf = open(name, 'w') 
-	except:
-		name.remove()
-		logf = open(name, 'w')
-
-	now = datetime.datetime.now()	
+	TE     = dic['tempoExperimento']	
+	
+	nowInitial = datetime.datetime.now()
 	commandline = sys.argv	
-
-	Logdata = 'Caracterizacao do bias, ' + now.strftime("%Y-%m-%d %H:%M")
+	Logdata = 'Caracterizacao do bias, ' + nowInitial.strftime("%Y-%m-%d %H:%M")
 	user = 'Usuario: %s' %(getpass.getuser())
 	IP = 'IP local: %s' %(socket.gethostbyname(socket.gethostname()))
 	Strcommandline = 'Linha de comando: '
 	for arg in commandline:
 		Strcommandline += arg + ' ' 	
 	WorkDirectory = 'Diretorio atual: ' + os.getcwd()	
-	nowInitial = datetime.datetime.now()
-	minute = nowInitial.minute - minute
-	second = nowInitial.second - second
-	Tempoprocess = 'Tempo de processamento: %i min %i s' %(minute,second)
 
-	
+			
+	TimeElapsed = (nowInitial.minute*60+nowInitial.second) - minute*60+second #hora final menos hora inicial 
+	Tempoprocess = 'Tempo de processamento: %i min %i s' %(TimeElapsed/60,TimeElapsed%60)
+	Ehoras, Eminutos, Esegundos = TE/3600, (TE%3600)/60, (TE%3600)%60	
+	TempoExperimento = 'Tempo do experimento: %i h %i m %i s' %(Ehoras, Eminutos, Esegundos)	
 	StrCCD = CCDinfo(header, lenDados)
 	biasNominal = 'Ruido de Leitura nominal: %.2f adu' %(biasNominal)
 
-	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n'+ Tempoprocess+'\n\n'+ '\n\n' + StrCCD+ '\n\n'+ biasNominal
 
+	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n\n'+ Tempoprocess+ '\n'+ TempoExperimento+ '\n\n' + StrCCD+ '\n\n'+ biasNominal
+
+	try:
+		logf = open(name, 'w') 
+	except:
+		name.remove()
+		logf = open(name, 'w')
 	logf.write(dados)
 	logf.close()	
