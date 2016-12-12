@@ -1,5 +1,5 @@
 # Roteiro:
-> Aqui será apresentada uma breve explicação e exemplo do código de bias.
+> Neste roteiro é apresentado uma breve explicação e exemplo do código de bias.
 
 ## Bias:
   - Código para caracterização do ruído de leitura;
