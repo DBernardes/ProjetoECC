@@ -11,9 +11,10 @@ gradiente e variação temporal sobre os pixels das imagens;
   
          ./biasCompleto.py --list=list --logfile='Nome do Arquivo'
       
-  - A opção list refere-se a um arquivo texto contendo uma lista com o nome de cada imagem de série
+  - A opção list refere-se a um arquivo texto contendo uma lista com o nome de cada imagem de série.
   - A opção --logfile retorna um arquivo contendo todas as informações relacionadas ao experimento 
-de aquisição das imagens. O uso deste flag é opcional
+de aquisição das imagens. O uso deste flag é opcional.
+
 #### Resultados:
 ![relatorio bias](https://cloud.githubusercontent.com/assets/23655702/20595444/0c996ac0-b221-11e6-94e5-4e0b5d1700e8.png)
 
