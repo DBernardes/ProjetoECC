@@ -179,7 +179,7 @@ def dadosMeanTemp(vetor,vetorstd):
 
 
 def variacaoTemporal(inputlist, tempoExp):
-	
+	print 'Plotando variaçao temporal das imagens...'
 	vetorMean, vetorStddev, Meanf, xf, meanTotal,interv = geraDados(inputlist)	
 	x = np.linspace(0,tempoExp,len(inputlist))		
 

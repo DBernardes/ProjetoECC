@@ -160,6 +160,7 @@ def plotImagem(image):
 #-------------------------------------------------------------------------------------------------
 
 def gradiente(image):	
+	print 'Calculando gradiente da imagem ...'
 
 	plotImagem(image)
 

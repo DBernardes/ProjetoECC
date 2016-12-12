@@ -123,6 +123,7 @@ def drawLine(x1,y1,y2,text,font=17,pos='right'):
 #--------------------------------------------------------------------------------------------------
 
 def histograma(image):
+	print 'Calculando histograma', '\n'
 
 	mean, median, std, stdAbs, value, base, x, y = geraDados(image)
 	textstr = plothist(base, value, x, y, mean, median, std, stdAbs)									
