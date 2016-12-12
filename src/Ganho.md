@@ -1,5 +1,5 @@
 # Roteiro:
-> Aqui será apresentada uma breve explicação e exemplo do código de caracterização do ganho.
+> Neste roteiro é apresentado uma breve explicação e exemplo do código de caracterização do ganho.
 
 ## Ganho:
   - Código para caracterização do ganho do CCD;
@@ -13,7 +13,7 @@ de cada imagem do CCD. Sobre a curva é feito um ajuste linear, de modo que o ga
          ./ganhoCompleto.py --list=list --logfile='Nome do Arquivo'
       
    - A opção --logfile retorna um arquivo contendo todas as informações relacionadas ao experimento 
-de aquisição das imagens. Não haverá implicação nenhuma nos resultados caso essa informação não seja fornecida;
+de aquisição das imagens. O uso deste flag  opcional.
 
 #### Resultados:
 ![ganho](https://cloud.githubusercontent.com/assets/23655702/20624732/c49794ec-b2f5-11e6-9176-e613a41d08e5.png)
