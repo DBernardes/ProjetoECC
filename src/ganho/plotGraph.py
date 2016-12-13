@@ -23,18 +23,47 @@ __copyright__ = """
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plotGraph(X, Y, std, Gstd, Estd):
+from scipy import stats
+from linhaReferencia import linhaReferencia
+from algarismoSig import algarismoSig
+
+
+def Graph_sinal_variance(X, Y, std, Estd):
 	font = 17	
-	coefAjust = np.polyfit(X, Y,1)
-	ajust = np.poly1d(coefAjust)	
-	ax = plt.subplot(111)
+	global coefAng, intercept, stdLinAjust
+	coefAng, intercept, r, p, stdLinAjust = stats.linregress(X,Y)
+	ajust = np.poly1d((coefAng,intercept))	
+	ax = plt.subplot(121)
 	plt.plot(X, Y, '-', c='blue')	
 	plt.errorbar(X,Y,std, fmt='o', c='blue')
 	plt.plot(X, ajust(X), c='red')	
-	plt.xlabel(r'$\mathtt{Contagens\quad (adu)}$', size=font)
-	plt.ylabel(r'$\mathtt{e-/pixel}$', size=font)
-	plt.title(r'$\mathtt{Curva \quad da \quad intensidade \quad do \quad sinal \quad em \quad fun}$'+ u'ç'+ r'$\mathtt{\~ao \quad das\quad contagens}$'+'\n', size=font)
-	plt.text(0.60,0.15, r'$\mathtt{Ganho: \quad %.2f^+_- %.2f}$'%(coefAjust[0], Gstd), va='center', ha='left', size=font,transform=ax.transAxes)	
-	plt.text(0.60,0.08, r'$\mathtt{\sigma_e = \; %.2f^+_- %.2f}$'%(coefAjust[1], Estd), va='center', ha='left', size=font, transform=ax.transAxes)
+	plt.xlabel(r'$\mathtt{Vari\^ancia\quad (adu)}$', size=font)
+	plt.ylabel(r'$\mathtt{Intensidade \quad do \quad sianl \quad (e-/pixel)}$', size=font)
+	plt.title(r'$\mathtt{Curva \quad da \quad intensidade \quad do \quad sinal \quad em \quad fun}$'+ u'ç'+ r'$\mathtt{\~ao \quad da\quad vari\^ancia}$'+'\n', size=font)
+	plt.text(0.55,0.15, r'$\mathtt{Ganho: \quad %.2f^+_- %.2f}$'%(coefAng, stdLinAjust), va='center', ha='left', size=font+5,transform=ax.transAxes)	
+	plt.text(0.55,0.08, r'$\mathtt{\sigma_e = \; %.2f^+_- %.2f}$'%(intercept, Estd), va='center', ha='left', size=font+5, transform=ax.transAxes)
 
-	return coefAjust[0]
+	return coefAng
+
+
+def Graph_residuos(x,y, std):
+	i,font, residuo = 0, 17, []
+	for dado in y:
+		residuo.append(dado - coefAng*x[i]- intercept)
+		i+=1
+	ax = plt.subplot(122)
+	plt.plot(x, residuo, c='blue')
+	plt.errorbar(x, residuo, std, c='blue', fmt='o')
+	plt.xlabel(r'$\mathtt{Vari\^ancia \quad (adu)}$', size=font)
+	plt.ylabel(r'$\mathtt{Intensidade \quad do \quad sinal \quad (e-/pixel)}$', size=font)
+	plt.title(r'$\mathtt{Curva: \quad res\acuteiduos \quad = \quad sinal \quad - \quad ajuste \quad linear}$'+'\n', size=font)
+	plt.xlim(xmin=0.9*x[0], xmax=1.02*x[-1])
+	linhaReferencia(x,residuo)
+
+	num  = algarismoSig(np.std(residuo))
+	mean = str(round(np.mean(residuo), num))
+	std  = str(round(np.std(residuo),num))
+	plt.text(0.05,0.9, r'$\mathtt{M\acuteedia \; = \; %s^+_- \; %s \quad (adu)}$'%(mean,std), va='center', ha='left', size=font+3, transform=ax.transAxes)
+	
+	
+	

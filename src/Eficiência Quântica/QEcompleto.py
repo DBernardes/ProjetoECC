@@ -58,25 +58,6 @@ def returnMax(dados):
 	return fvetor[-1], index
 
 
-#muda as coordenadas do texto que coincidem com as do grafico
-def changeCoord(x,f):
-	coordx = 0.60
-	coordy = 0.90
-	for ponto in x:
-		if 0.60 < ponto/x[-1] < 0.70 and 0.85 < f(ponto)/100 < 0.90:
-			coordx = 0.05	
-			break	
-		elif 0.05 < ponto/x[-1] < 0.15 and 0.85 < f(ponto)/100 < 0.90:
-			coordx = 0.05
-			coordy = 0.10
-			break
-		elif 0.05 < ponto/x[-1] < 0.15 and 0.05 < f(ponto)/100 < 0.10:
-			coordy = 0.10
-			break		
-
-	return coordx, coordy
-
-
 #retorna os valores de espectro para um intervalo de EQ
 def returnInterval(x,f):
 	if options.Range:
@@ -95,14 +76,10 @@ f = interp1d(espectro, dados, kind='cubic')
 x = np.linspace(espectro[0], espectro[-1], 100)
 
 fmax, i= returnMax(f(x))
-
 integral = quad(f, x[0],x[-1])
 absPorcent = integral[0]/(x[-1] - x[0])
-
-coordx, coordy = changeCoord(x,f)
 returnInterval(x,f)
-
-
+fmax = round(fmax,1)
 
 
 font = 15
@@ -112,30 +89,9 @@ plt.xlabel(r'$\mathtt{Comprimento \quad de \quad onda \; (nm)}$', size=font)
 plt.ylabel(r'$\mathtt{EQ \quad (}$' + '%' + r'$\mathtt{)}$', size=font)
 plt.title(r'$\mathtt{Curva \quad de \quad Efici\^encia \quad Qu\^antica}$', size=font)
 
-plt.annotate(r'$\mathtt{EQ_{max} \; = \; (%.2f \; ; \; %.2f)}$' %(x[i], fmax), xy=(coordx,coordy), xycoords='axes fraction',  ha='left', va='center', size=font)
-plt.annotate(r'$\mathtt{Absorv \; = \; %.2f}$' %(absPorcent) + ' %', xy=(coordx,coordy-0.05), xycoords='axes fraction',  ha='left', va='center', size=font)
+plt.annotate(r'$\mathtt{EQ_{max} \; = \; %.1f}$' %(fmax) + ' %', xy=(0.6,0.90), xycoords='axes fraction',  ha='left', va='center', size=font)
+plt.annotate(r'$\mathtt{Comp. \; onda \; = \; %.2f \; (nm)}$' %(x[i]), xy=(0.6,0.85), xycoords='axes fraction',  ha='left', va='center', size=font)
+plt.annotate(r'$\mathtt{Convers\~ao \; = \; %.2f}$' %(absPorcent) + ' %', xy=(0.6, 0.80), xycoords='axes fraction',  ha='left', va='center', size=font)
 
-#plt.show()
 plt.savefig('Eficiencia Quantica', format='jpg')
-
-
-
-'''
-def readlist(inputlist):
-	with open(inputlist) as f:
-   		lines = f.read().splitlines()
-	return lines
-
-
-imagefiles = readlist(options.list)
-
-dados = []
-for img in imagefiles:
-	scidata = fits.getdata(img,0)[0]
-	dados.append(scidata)
-
-
-'''
-
-
 

@@ -74,7 +74,7 @@ def plotGrafico(x,y,posx, posy, temperatura, eixo='x'):
 	ax = plt.subplot2grid((3,2),(posx,posy))
 	plt.scatter(x,y, marker='.', c='gray', alpha=0.5)	
 	plt.xlim(xmin = x[0], xmax = x[-1])	
-	plt.ylabel(r'$\mathtt{DC \quad (e-/pix)}$', size=font-1)
+	plt.ylabel(r'$\mathtt{DC \quad (e-/pix/s)}$', size=font-1)
 	if eixo  == 'x':
 		plt.xlabel(r'$\mathtt{Eixo \;\; x}$', size=font)
 		plt.title(r'$\mathtt{Gradiente\quad da \quad corrente \quad de \quad escuro}$', size=font)
@@ -101,8 +101,8 @@ def caixaTexto(mean, std, meanBin, meanStdbin, posx, posy):
 	meanBin = str(round(meanBin,num))
 	meanStdbin = str(round(meanStdbin,num))
 
-	textstr1 = r'$\mathtt{\barM = \; %s_-^+ \; %s \;\; e-/pix}$' %(mean,std)
-	textstr2 = r'$\mathtt{\barM_{bin} = \; %s_-^+ \; %s \;\; e-/pix}$' %(meanBin,meanStdbin)
+	textstr1 = r'$\mathtt{\barM = \; %s_-^+ \; %s \;\; e-/pix/s}$' %(mean,std)
+	textstr2 = r'$\mathtt{\barM_{bin} = \; %s_-^+ \; %s \;\; e-/pix/s}$' %(meanBin,meanStdbin)
 	textstr3 = r'$\mathtt{\sigma = \; %.1f \; \sigma_{bin}}$' %(ratio)
 	
 	if 0.9 < ratio < 1.1:

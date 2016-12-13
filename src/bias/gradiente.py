@@ -59,7 +59,7 @@ def geraDados(image):
 
 
 #Caixa de texto com media, mediana e seus desvios
-def caixaInfo(vetorx,vetory, meanBinX,stdBinX, meanBinY,stdBinY, posx, posy):	
+def caixaInfo(vetorx,vetory, meanBinX,stdBinX, meanBinY,stdBinY):	
 	
 	stdx = np.std(vetorx)		
 	stdRelativeX = stdx/stdBinX
@@ -152,7 +152,7 @@ def plotImagem(image):
 	plt.imshow(img,cmap='Blues',vmin=mean-std,vmax=mean+std,origin='lower', aspect='auto')
 	plt.xlabel(r'$\mathtt{x (pixel)}$',size=font)
 	plt.ylabel(r'$\mathtt{y (pixel)}$',size=font)
-	plt.title (r'$\mathtt{Residuos:Rij=Fij-mediana}$',size=font) 	
+	plt.title (r'$\mathtt{Res\acuteiduos:Rij=Fij-mediana}$',size=font) 	
 
 
 
@@ -170,7 +170,7 @@ def gradiente(image):
 	meanBinX,StdBinX = plotGradiente(0,1,MeanLinha,eixo='y')	
 	meanBinY,StdBinY = plotGradiente(1,0,MeanColuna)
 
-	textstr = caixaInfo(MeanLinha,MeanColuna, meanBinX,StdBinX, meanBinY,StdBinY, 0, 2)		
+	textstr = caixaInfo(MeanLinha,MeanColuna, meanBinX,StdBinX, meanBinY,StdBinY)		
 
 	return textstr
 	

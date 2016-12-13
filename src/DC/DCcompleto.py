@@ -61,7 +61,7 @@ if options.verbose:
 
 directorys = readlist(options.dirlist)
 cwd = os.getcwd()
-Dict = {'vetoresMediana':[],'vetoresStd':[], 'vetoresAjust':[], 'vetoresCoef':[], 'vetoresEtime':[], 'vetorTemp':[], 'vetorTemp':[], 'cuboImagensTemporal':[], 'cuboImagensDerivada':[], 'etime':[], 'header':0, 'qtdImagens':0, 'Boxparameter':[]}
+Dict = {'vetoresMediana':[],'vetoresStd':[], 'vetoresInt':[], 'vetoresCoef':[], 'vetorStdAjust':[], 'vetoresEtime':[], 'vetorTemp':[], 'vetorTemp':[], 'cuboImagensTemporal':[], 'cuboImagensDerivada':[], 'etime':[], 'header':0, 'qtdImagens':0, 'Boxparameter':[]}
 
 for Dir  in directorys:
 	chdir = cwd + '/' + Dir
@@ -100,11 +100,12 @@ for Dir  in directorys:
 			etime.append(hdr[options.etimekey])	
 
 		#retorna os dados processados para funcao variacaoTemporal
-		median, std, ajust, coefAjust = geraDados(cuboImagensTemporal, etime)
+		median, std, coefAjust, intercept, stdLinAjust = geraDados(cuboImagensTemporal, etime)
 		Dict['vetoresMediana'].append(median)
 		Dict['vetoresStd'].append(std)
-		Dict['vetoresAjust'].append(ajust)
-		Dict['vetoresCoef'].append(coefAjust[0])
+		Dict['vetoresInt'].append(intercept)
+		Dict['vetoresCoef'].append(coefAjust)
+		Dict['vetorStdAjust'].append(stdLinAjust)
 		Dict['vetoresEtime'].append(etime)
 		Dict['cuboImagens'] = cuboImagensTemporal
 		Dict['cuboImagensDerivada'] = cuboImagensDerivada
