@@ -16,5 +16,5 @@ de cada imagem do CCD. Sobre a curva é feito um ajuste linear, de modo que o ga
 de aquisição das imagens. O uso deste flag  opcional.
 
 #### Resultados:
-![ganho](https://cloud.githubusercontent.com/assets/23655702/20624732/c49794ec-b2f5-11e6-9176-e613a41d08e5.png)
-  
+![ganho](https://cloud.githubusercontent.com/assets/23655702/21142679/70ce3a6c-c12a-11e6-82fc-0dc062cb93e6.png)
+
