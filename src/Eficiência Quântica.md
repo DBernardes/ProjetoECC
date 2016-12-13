@@ -1,5 +1,5 @@
 # Roteiro:
-> Aqui será apresentada uma breve explicação e exemplo do código de Eficiência Quântica.
+> Neste roteiro é apresentado uma breve explicação e exemplo do código de Eficiência Quântica.
 
 ## EQ:
   - Código para caracterização da eficiência quântica;
