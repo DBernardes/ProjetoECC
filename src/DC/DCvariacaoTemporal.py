@@ -21,6 +21,7 @@ import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
 
+from scipy import stats
 from algarismoSig import algarismoSig
 
 
@@ -34,9 +35,8 @@ def geraDados(dados, etime):
 		median.append(np.median(i))
 		std.append(np.std(i))
 	#ajuste da curva
-	coefAjust = np.polyfit(etime,median,1)
-	ajust = np.poly1d(coefAjust)	
-	return median, std, ajust, coefAjust
+	coefAjust, intercept, r, p, stdLinAjust = stats.linregress(etime,median)
+	return median, std, coefAjust, intercept, stdLinAjust
 
 
 #plota grafico da DC pelo tempo
@@ -47,7 +47,7 @@ def plotCorrentTemp(x, y, std, yajust, temperatura, color):
 	plt.errorbar(x,y,std, c= color, fmt='o')	
 	plt.plot(x,yajust,'-',c= color)
 	plt.xlabel(r'$\mathtt{Tempo \quad de \quad exposi}$'+u'ç'+ r'$\mathtt{\~ao \; (s)}$', fontsize = font)
-	plt.ylabel(r'$\mathtt{adu/pix}$',fontsize = font)
+	plt.ylabel(r'$\mathtt{Contagens \quad (adu/pix)}$',fontsize = font)
 	plt.title(r'$\mathtt{Mediana \quad das \quad contagens \quad em \quad fun}$'+u'ç'+ r'$\mathtt{\~ao \quad do \quad tempo \quad de \quad exposi}$'+u'ç'+ r'$\mathtt{\~ao}$'+'\n',fontsize = font)
 	plt.legend(loc = 'upper left')
 	plt.xlim(xmax = x[-1])
@@ -56,17 +56,19 @@ def plotCorrentTemp(x, y, std, yajust, temperatura, color):
 
 
 	
-def plotTempDC(temperatura, DC):
+def plotTempDC(temperatura, DC, std):
 	ax = plt.subplot2grid((3,2),(0,1))
 	font = 15	
 	i=0
 	#arredonda para a casa decimal com o primeiro algarismo significativo
 	while i < len(DC):
-		num = algarismoSig(DC[i])
+		num = algarismoSig(std[i])
 		DC[i] = round(DC[i],num)
+		std[i] = round(std[i], num)
 		i+=1
 
 	plt.plot(temperatura, DC, marker='o', c='blue')
+	plt.errorbar(temperatura, DC, std, c='blue', fmt='o')
 	plt.xlabel(r'$\mathtt{Temperatura \quad (^oC)}$', size=font)
 	plt.ylabel(r'$\mathtt{Corrente \quad de \quad escuro \quad (e-/pix/s)}$', size=font)
 	plt.title(r'$\mathtt{Corrente \quad de \quad escuro \quad em \quad fun}$'+u'ç'+r'$\mathtt{\~ao \quad da \quad temperatura}$', size=font+2)
@@ -75,10 +77,17 @@ def plotTempDC(temperatura, DC):
 	i=0
 	while i < len(DC):
 		DC[i] = str(DC[i])
-		textstr = r'$\mathtt{DC(%i^oC) \; = \quad %s \; e-/pix}$'%(temperatura[i], DC[i])
+		std[i] = str(std[i])
+		textstr = r'$\mathtt{DC(%i^oC) \; = \quad %s^+_- \; %s \; e-/pix/s}$'%(temperatura[i], DC[i], std[i])
 		plt.text(0.05, 0.90-i*0.07,textstr,ha='left',va='center',size= font+1,transform=ax.transAxes)		
 		i+=1
 	return DC[-1]
+
+def Ajustelinear(vetorx, Acoef, Lcoef):
+	f = []
+	for x in vetorx:
+		f.append(Acoef*x+Lcoef)
+	return f 
 	
 
 	
@@ -89,8 +98,9 @@ def DCvariacaoTemporal(Dict):
 	colors = ['cyan','red', 'blue','green','magenta','yellow']
 	mediana   	= Dict['vetoresMediana']
 	std 	  	= Dict['vetoresStd']
-	ajust 	  	= Dict['vetoresAjust']
+	intercept  	= Dict['vetoresInt']
 	coefAjust 	= Dict['vetoresCoef']
+	stdLinAjust = Dict['vetorStdAjust']
 	etime 	 	= Dict['vetoresEtime']
 	temperatura = Dict['vetorTemp']
 	lenEtime =	len(etime)
@@ -98,10 +108,11 @@ def DCvariacaoTemporal(Dict):
 
 	ax = plt.subplot2grid((3,2),(0,0))
 	while i < lenEtime:		
-		plotCorrentTemp(etime[i],mediana[i], std[i], ajust[i](etime[i]), temperatura[i], colors[i]) 	
+		ajust = Ajustelinear(etime[i], coefAjust[i], intercept[i])
+		plotCorrentTemp(etime[i],mediana[i], std[i], ajust, temperatura[i], colors[i]) 	
 		i+=1
 	
-	DCnominal = plotTempDC(temperatura, coefAjust)	
+	DCnominal = plotTempDC(temperatura, coefAjust, stdLinAjust)	
 
 	return DCnominal
 

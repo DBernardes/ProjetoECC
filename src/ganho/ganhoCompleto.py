@@ -32,9 +32,10 @@ import datetime
 from math import sqrt
 from optparse import OptionParser
 from readImages import readImages
-from plotGraph import plotGraph
+from plotGraph import Graph_sinal_variance, Graph_residuos
 from logfile import logfile
 from flatCorrection import flatCorrection
+
 
 from astropy.io import fits
 
@@ -79,15 +80,13 @@ def calcXY(flatA, flatB, biasA, biasB):
 		dadoy = (np.median(flatA[i])+np.median(flatB[i]) - np.median(biasA[i]) - np.median(biasB[i]))/(sqrt(2)*sigmaBias)
 		dadox = sigmaFlat**2/(sigmaBias*sqrt(2))
 		calcg = (np.median(flatA[i])+np.median(flatB[i]) - np.median(biasA[i]) - np.median(biasB[i]))/ (sigmaFlat**2 - sigmaBias**2)
-
 		sigmaEletron.append(calcg*sigmaBias/sqrt(2))
 		Y.append(dadoy)
-		X.append(dadox)	
-		g.append(calcg)
+		X.append(dadox)			
 		std.append(np.std(flatA[i])+np.std(flatB[i])+np.std(biasA[i])+np.std(biasB[i]))
 		i+=1	
 
-	return X,Y,std, np.std(g), np.std(sigmaEletron)
+	return X,Y,std, np.std(sigmaEletron)
 
 
 box=0
@@ -105,8 +104,11 @@ flatB = returnCaixaPixels(flatB)
 biasA = returnCaixaPixels(biasA)
 biasB = returnCaixaPixels(biasB)
 
-X,Y,std, Gstd, Estd = calcXY(flatA, flatB, biasA, biasB)
-ganho = plotGraph(X,Y, std, Gstd, Estd)
+X,Y,std, Estd = calcXY(flatA, flatB, biasA, biasB)
+plt.figure(figsize=(17,8))
+ganho = Graph_sinal_variance(X,Y, std, Estd)
+Graph_residuos(X,Y, std)
+
 plt.savefig('ganho', format='jpg')
 plt.close()
 

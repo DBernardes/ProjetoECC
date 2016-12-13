@@ -56,12 +56,13 @@ imagefiles = ecc.readlist(options.list) #lista de imagens
 plt.figure(figsize=(22,28))
 data, header = fits.getdata(imagefiles[0], header=True) #aquisicao do header
 tempoExperimento = header['KCT']*len(imagefiles) # tempo total do experimento
+Strtemperatura = [r'$\mathtt{Temperatura: %i^oC}$' %(header['temp'])]
 
-variacaoTemporal(imagefiles, tempoExperimento)
 CombinedImage = geraArquivo(imagefiles)
 textGradiente = gradiente(CombinedImage)
 textHistograma, BiasNominal = histograma(CombinedImage)
-textstr = textGradiente + textHistograma
+textstr =  Strtemperatura+ textGradiente + textHistograma
+variacaoTemporal(imagefiles, tempoExperimento)
 caixa(textstr, 4, 3, 0, 2, font=24, space=0.05, rspan=2)	
 plt.savefig('Relatório Bias', format='pdf')
 plt.close()
