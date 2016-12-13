@@ -16,7 +16,8 @@ gradiente e variação temporal sobre os pixels das imagens;
 de aquisição das imagens. O uso deste flag é opcional.
 
 #### Resultados:
-![relatorio bias](https://cloud.githubusercontent.com/assets/23655702/20595444/0c996ac0-b221-11e6-94e5-4e0b5d1700e8.png)
+![relatorio bias](https://cloud.githubusercontent.com/assets/23655702/21142404/0db0c4c8-c129-11e6-97da-111fe046d321.png)
+
 
 
   
