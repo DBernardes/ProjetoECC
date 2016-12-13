@@ -21,4 +21,4 @@ Cada série deve estar em um diretório, junto com duas listas:
     - A opção -e refere-se ao keyword usado no cabeçalho das imagens da câmera para indicar tempo de exposição (keyword varia de câmera para câmera). 
 
 ### Resultados:
-![relatorio dc](https://cloud.githubusercontent.com/assets/23655702/20596138/1e853c84-b224-11e6-8703-095d6ae7595b.png)
+![relatorio dc](https://cloud.githubusercontent.com/assets/23655702/21142571/fee9d168-c129-11e6-9115-24d5dad37bbb.png)
