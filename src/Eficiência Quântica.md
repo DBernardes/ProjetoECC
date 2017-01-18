@@ -13,4 +13,4 @@ em função do comprimento de onda. Informa ainda a porcentagem total de luz abs
          
 
 #### Resultados:
-![eficiencia quantica](https://cloud.githubusercontent.com/assets/23655702/21142617/38cff9de-c12a-11e6-9cd0-33e088e00b55.png)
+![eficiencia quantica](https://cloud.githubusercontent.com/assets/23655702/22065991/ecfadd80-dd71-11e6-8dda-74eb8a75fe9d.png)
