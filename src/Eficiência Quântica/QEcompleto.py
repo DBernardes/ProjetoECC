@@ -68,18 +68,18 @@ nomeArqCalibDetector = options.calibD
 ganhoCCD = options.ganho
 
 #cria um arquivo contendo o nome das imagens obtidas para a caracterizacao
-#criaArq_listaImgInput(nImages)
+criaArq_listaImgInput(nImages)
 
 #le o header de uma unica imagem para retirada de informacoes de tamanho e coords. centrais
 header = ImagemUnica_returnHeader()
 
 
 #cria um diretorio com as imagens combinadas pela mediana
-#mkDir_saveCombinedImages(nImages)
+mkDir_saveCombinedImages(nImages)
 
 
 #realiza a leitura do background das imagens, salvando um arquivo com os valores medianos e respectivos desvios padrao
-#LeBackgroundImagens_saveArquivoMedianBackground(header)
+LeBackgroundImagens_saveArquivoMedianBackground(header)
 
 
 #gera os vetores de fluxo da camera e respectivo desvio padrao
