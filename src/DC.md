@@ -8,7 +8,7 @@
   
    
 ### Exemplo:
-   - Após baixar e extrair os arquivos, execute o comando via terminal:
+   - Após baixar e extrair os arquivos, execute o comando via terminal sobre o diretório onde se encontram os diretórios das imagens:
    
           ./DCcompleto.py -iDirectories -bBias -dDark 
     - A opção -i refere-se ao keyword dos diretórios (parte do nome em comum) para o código identificar quais são os diretórios que contém as imagens para as respectivas temperaturas.
