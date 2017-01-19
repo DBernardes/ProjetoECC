@@ -9,7 +9,7 @@
  
 
 #### Exemplo:
-  - Após baixar e extrair os arquivos, execute o comando via terminal:
+  - Após baixar e extrair os arquivos, execute o comando via terminal sobre o diretório onde se encontram as imagens:
   
          ./ganhoCompleto.py -f'Flat','nImages' -b'Bias' 
       
