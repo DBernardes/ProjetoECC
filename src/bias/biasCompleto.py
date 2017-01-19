@@ -11,7 +11,7 @@
     Laboratorio Nacional de Astrofisica, Brazil.
 
     
-	example: ./biasCompleto.py --list=list
+	example: ./biasCompleto.py 
    
     """
 
