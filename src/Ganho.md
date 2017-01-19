@@ -17,7 +17,8 @@
    - A opção -b refere-se à uma indicação para o código do nome das imagens de bias (parte do nome em comum); Os resultados aparecerão no diretório atual;
 Caso haja o interesse de gerar um arquivo Log com as informações do experimento, executar o seguinte comando:
 
-          ./ganhoCompleto.py -f'Flat','nImages'  -b'Bias' --logfile='Nome do Arquivo'
+         ./ganhoCompleto.py -f'Flat','nImages'  -b'Bias' --logfile='Nome do Arquivo'
+          
           
 #### Resultados:
 ![ganho](https://cloud.githubusercontent.com/assets/23655702/22106976/908f5686-de32-11e6-8d3a-e892f602171c.png)
