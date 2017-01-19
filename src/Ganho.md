@@ -15,9 +15,10 @@
       
    - A opção -f refere-se à uma indicação para o código do nome das imagens de flat (parte do nome em comum) e o número de imagens adquiridas para cada intensidade de luz;
    - A opção -b refere-se à uma indicação para o código do nome das imagens de bias (parte do nome em comum); Os resultados aparecerão no diretório atual;
+   
 Caso haja o interesse de gerar um arquivo Log com as informações do experimento, executar o seguinte comando:
 
-            ./ganhoCompleto.py -f'Flat','nImages'  -b'Bias' --logfile='Nome do Arquivo'
+         ./ganhoCompleto.py -f'Flat','nImages'  -b'Bias' --logfile='Nome do Arquivo'
           
           
 #### Resultados:
