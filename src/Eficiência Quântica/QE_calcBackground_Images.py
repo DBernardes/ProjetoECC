@@ -9,7 +9,7 @@
 
 		LeBackgroundImagens_saveArquivoMedianBackground: esta funcao tem como entrada o header de uma unica imagem,  utilizando-o para criar uma mascara de pixels. Essa mascara é fornecida para a funcao geraVetor_Background_Std;
 
-		geraVetor_Background_Std: esta funcao tem como input uma mascara de pixels, usando-a para calcular o valor da mediana e do desvio padrao do background de uma lista de imagens para a regiao externa a essa caixa. A saida e um vetor contendo tais dados.
+		geraVetor_Background_Std: esta funcao tem como input uma mascara de pixels, usando-a para calcular o valor da mediana e do desvio padrao do background de uma lista de imagens para a regiao externa a essa mascara. A saida e um vetor contendo tais dados.
 		
 		CriaAqruivo_dadosBackground: esta funcao recebe uma lista de dois vetores, escrevendo em um arquivo chamado dadosBackground.dat o conteudo deste vetores separados em colunas.
 

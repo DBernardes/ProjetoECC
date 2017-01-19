@@ -7,7 +7,7 @@
 
 		plotGraph: esta funcao recebe dois vetores (x,y), mais um terceiro vetor do desvio padrao, plotando esses valores em um grafico. Com uma lista de parametros, imprime na tela os valores da eficiencia quantica maxima, comprimento de onda com maxima EQ e a procentagem de conversao.
 
-		parametrosGraph: esta funcao recebe uma string do lambda inicial, lambda final e passo utilizado no ensaio, para criar um vetor do espectro de luz. Recebe tambem o vator dos valores da EQ para realizar uma interpolacao. Essa interpolacao sera usada no calculo da EQmax, Lambda_max e porcentagem de conversao de luz.
+		parametrosGraph: esta funcao recebe uma string do lambda inicial, lambda final e passo utilizado no ensaio, para criar um vetor do espectro de luz. Recebe tambem o vetor dos valores da EQ para realizar uma interpolacao. Essa interpolacao sera usada no calculo da EQmax, Lambda_max e porcentagem de conversao de luz.
 
 		returnMax: dado um vetor, esta funcao retornara seu valor maximo.
 

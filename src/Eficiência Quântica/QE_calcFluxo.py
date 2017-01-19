@@ -3,22 +3,21 @@
 
 """
     Criado em 08 de Novembro de 2016  
-    
+    Laboratorio Nacional de Astrofisica, Brazil.
     @author: Denis Varise Bernardes & Eder Martioli
     Descricao: esta bibloteca possui as seguintes funcoes:
 	
-		GeraVetorFluxoCamera: esta funcao tem como entrada o header de uma imagem, o numero de imagens com o mesmo comprimento de onda e o ganho do CCD previamente medido; sua tarefa e fornecer a imagem, tempo de exposicao, o valor da mediana do background e valor do ganho de cada imagem para uma funcao chamada calcFluxo, que retornara o valor do fluxo do CCD, adicionando-o em seguida a um vetor.
-    Laboratorio Nacional de Astrofisica, Brazil.
+		GeraVetorFluxoCamera: esta funcao tem como entrada o header de uma imagem, o numero de imagens com o mesmo comprimento de onda e o ganho do CCD previamente medido; sua tarefa e fornecer a imagem, tempo de exposicao, o valor da mediana do background e valor do ganho de cada imagem para a funcao calcFluxo, que retornara o valor do fluxo do CCD, adicionando-o a um vetor.    
 
-		criaArqFluxoCamera: fornecido os vetores do fluxo da camera e desvio padrao do fluxo, esta funcao cria o arquivo Fluxo camera.dat, escrevendo o conteudo destes dois vetores em duas colunas.
+		criaArqFluxoCamera: fornecido os vetores do fluxo da camera e desvio padrao do fluxo, esta funcao cria o arquivo Fluxocamera.dat, escrevendo o conteudo destes dois vetores em duas colunas.
 
-   		calcFluxo: dado os parametros imagem, tempo de exposicao, medianBackground, stdBackground e ganho, esta funcao calculara o valor do fluxo de fotons para a regiao dentro de uma caixa de pixels. Para tanto, faz a chamada da funcao caixaPixels.
+   		calcFluxo: dado os parametros: imagem, tempo de exposicao, medianBackground, stdBackground e ganho, esta funcao calculara o valor do fluxo de fotons para a regiao dentro de uma caixa de pixels. Para tanto, faz a chamada da funcao caixaPixels.
 
 		caixaPixels: fornecida a imagen e os valores das coordenadas centrais de dimensao da caixa, retorna um array dos pixels internos a essa regiao.
 
 		getVetorEtime: dado o numero de imagens com mesmo adquiridas para o mesmo comprimento de onda, retorna o valor do tempo de exposicao da lista de imagens.
 
-		getDadosBackground: esta funcao faz a leitura dos dados do arquivo dadosBackground.dat gera anteriormente, retornando dois vetores.
+		getDadosBackground: esta funcao faz a leitura dos dados do arquivo dadosBackground.dat gerado anteriormente, retornando dois vetores: mediana e desvio padrao do background.
 
 		CalcErroDetector: esta funcao tem como proposito calcular a porcentagem do erro do detector para um dado comprimento de onda. O funcionamento desta funcao foi baseada na descricao do manual de operaçao do dispositivo (OL-750-HSD-301C,  Optronic Laboratories, Inc.).
 

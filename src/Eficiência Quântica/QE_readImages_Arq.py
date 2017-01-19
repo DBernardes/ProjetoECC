@@ -7,11 +7,11 @@
     @author: Denis Varise Bernardes & Eder Martioli
     Descricao: esta biblioteca possui as seguintes funcoes:
 
-		mkDir_saveCombinedImages: esta funcao recebe o numero de imagens adquiridas para o mesmo comprimento de onda; pela chamada da funcao LeArquivoReturnLista retorna a lista de todas as imagens adquiridas no ensaio; para um numero de nImages em nImages imagens (onde nImages é um valor fornecido) a funcao cria um vetor, retornando-o para a funcao geraArquivo: esta funcao ira combinar as imagens pela mediana, salvando-as num novo diretorio. Feito isso, a funcao cria uma lista com o nomes das novas imagens atraves da chamada da funcao criaArquivo_listaImagensCombinadas.
+		mkDir_saveCombinedImages: esta funcao recebe o numero de imagens (nImages) adquiridas para o mesmo comprimento de onda; pela chamada da funcao LeArquivoReturnLista retorna a lista de todas as imagens adquiridas no ensaio; para um numero de nImages em nImages imagens (onde nImages é um valor fornecido) a funcao cria um vetor, retornando-o para a funcao geraArquivo: esta funcao ira combinar as imagens pela mediana, salvando-as num novo diretorio. Feito isso, a funcao cria uma lista com o nomes das novas imagens atraves da chamada da funcao criaArquivo_listaImagensCombinadas.
 
-		readArqDetector: esta funcao recebe o nome do arquivo com so dados do detector, retornando um vetor com os valores medidos.
+		readArqDetector: esta funcao recebe o nome do arquivo contendo os dados do detector, retornando um vetor com os valores medidos.
 
-		ImagemUnica_returnHeader: esta funcao faz a leitura de uma unica imagem da lista, retornando o header para a retirada de informacoes.
+		ImagemUnica_returnHeader: esta funcao recebe uma unica imagem da lista, retornando o header para a retirada de informacoes.
 
 		LeArquivoReturnLista: esta funcao faz a leitura do arquivo listaImagens gerado pela funcao criaArq_listaImgInput, retornando uma lista com o nome das imagens.
 

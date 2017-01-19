@@ -3,7 +3,7 @@
 
 """
     Criado em 29 de Setembro de 2016  
-    Descricao: Este codigo reune todas as bibliotecas necessarias para a caracterizacao da Eficiencia Quantica. Nele constam a makeList_imagesInput, QE_GraphLib, QE_readImages_Arq, QE_calcFluxo, QE_calcBackground_Images. O codigo cria uma lista das imagens fornecidas e, combinando-as de n em n imagens (onde n e um parametro fornecido), cria um diretorio com com essas novas imagens combinadas. Apos isso, gera uma mascara de um caixa cuja a area e igual a area do chip do detector de referencia calculando a mediana do background para a regiao externa a essa caixa. Sobre a regiao interna e calculado o fluxo do CCD, dividindo-o pelo valor do fluxo do detector (fornecido o arquivo de dados); o resultado e um vetor utilizado para plotar o grafico da eficiencia quantica. Para mais detalhes, consulte a descricao propria das bibliotecas. 
+    Descricao: Este codigo reune todas as bibliotecas necessarias para a caracterizacao da Eficiencia Quantica. Nele constam a makeList_imagesInput, QE_GraphLib, QE_readImages_Arq, QE_calcFluxo, QE_calcBackground_Images. O codigo cria uma lista das imagens fornecidas e, combinando-as de n em n imagens (onde n e um parametro fornecido), cria um diretorio com com essas novas imagens combinadas pela mediana. Apos isso, gera uma mascara de um caixa cuja a area e igual a area do chip do detector de referencia calculando a mediana do background para a regiao externa a essa caixa. Sobre a regiao interna e calculado o fluxo do CCD, dividindo-o pelo valor do fluxo do detector (fornecido o arquivo de dados); o resultado e um vetor utilizado para plotar o grafico da eficiencia quantica. Para mais detalhes, consulte a descricao propria das bibliotecas. 
     @author: Denis Varise Bernardes & Eder Martioli
     
     Laboratorio Nacional de Astrofisica, Brazil.
@@ -68,18 +68,18 @@ nomeArqCalibDetector = options.calibD
 ganhoCCD = options.ganho
 
 #cria um arquivo contendo o nome das imagens obtidas para a caracterizacao
-criaArq_listaImgInput(nImages)
+#criaArq_listaImgInput(nImages)
 
 #le o header de uma unica imagem para retirada de informacoes de tamanho e coords. centrais
 header = ImagemUnica_returnHeader()
 
 
 #cria um diretorio com as imagens combinadas pela mediana
-mkDir_saveCombinedImages(nImages)
+#mkDir_saveCombinedImages(nImages)
 
 
 #realiza a leitura do background das imagens, salvando um arquivo com os valores medianos e respectivos desvios padrao
-LeBackgroundImagens_saveArquivoMedianBackground(header)
+#LeBackgroundImagens_saveArquivoMedianBackground(header)
 
 
 #gera os vetores de fluxo da camera e respectivo desvio padrao
