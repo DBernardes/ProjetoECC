@@ -11,10 +11,11 @@
    - Após baixar e extrair os arquivos, execute o comando via terminal sobre o diretório onde se encontram os diretórios das imagens:
    
           ./DCcompleto.py -iDirectories -bBias -dDark 
-    - A opção -i refere-se ao keyword dos diretórios (parte do nome em comum) para o código identificar quais são os diretórios que contém as imagens para as respectivas temperaturas.
-    - A opção -b refere-se ao keyword das imagens de bias (parte do nome em comum) usadas na redução dos dados.
-    - A opção -d refere-se ao keyword das imagens para caracterização da corrente de escuro (parte do nome em comum).
-    - Há uma opção -e que refere-se ao keyword usado no cabeçalho das imagens da câmera para indicar tempo de exposição (keyword varia de câmera para câmera). Caso essa opção não seja fornecida, o código irá considerar keyword='EXPOSURE'
+          
+   - A opção -i refere-se ao keyword dos diretórios (parte do nome em comum) para o código identificar quais são os diretórios que contém as imagens para as respectivas temperaturas.
+   - A opção -b refere-se ao keyword das imagens de bias (parte do nome em comum) usadas na redução dos dados.
+   - A opção -d refere-se ao keyword das imagens para caracterização da corrente de escuro (parte do nome em comum).
+   - Há uma opção -e que refere-se ao keyword usado no cabeçalho das imagens da câmera para indicar tempo de exposição (keyword varia de câmera para câmera). Caso essa opção não seja fornecida, o código irá considerar keyword='EXPOSURE'
     
  Caso haja interesse em gerar um arquivo Log contendo as informações do experimento, execute o comando:
 
