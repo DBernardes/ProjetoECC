@@ -8,18 +8,24 @@
 #### Exemplo:
   - Após baixar e extrair os arquivos, execute o comando via terminal:
   
-         ./QEcompleto.py -d'Nome_arq_fotometro' -s'lambda_min,lambda_max,passo' -n'Numero_imagens' -c'Nome_curva_de_calibração_detector' -g'Ganho' -l'Logfile'
+         ./QEcompleto.py -d'Nome_arq_fotometro' -s'lambda_min,lambda_max,passo' -n'Numero_imagens' -g'Ganho' 
          
     - A opção -d refere-se ao nome do arquivo do fotômetro onde estão os valores de fluxo;
     - A opção -s refere-se ao comprimento de onda mínimo e máximo e o passo utilizado no experimento, respectivamente;
     - A opção -n refere-se ao número de imagens obtidas para o mesmo comprimento de onda;
-    - A opção -c refere-se ao nome do arquivo contendo os valores da curva de calibração do detector (opcional);
-    - A opção -l refere-se ao nome do arquivo log gerado contendo todas as informações pertinentes ao ensaio de caracterização (opcional);
     - A opção -g refere-se ao ganho do CCD, que deve ser previamente caracterizado; caso não seja fornecido, o código adota o ganho como sendo igual a 1;    
     
 Caso deseje saber quais os pontos do espectro estão dentro de um intervalo da curva de EQ, execute o comando:
          
           ./QEcompleto.py -d'Nome_arq_fotometro' -s'lambda_min,lambda_max,passo' -n'Numero_imagens' --range=vmin,vmax
+          
+Caso haja o interesse de corrigir a curva de EQ para a curva de calibração do detector, a opção -c refere-se ao nome do arquivo contendo os valores da curva de calibração;
+    
+          ./QEcompleto.py -d'Nome_arq_fotometro' -s'lambda_min,lambda_max,passo' -n'Numero_imagens' -c'Nome_curva_de_calibração_detector'
+          
+Caso haja o interesse de gerar um arquivo com as informações do ensaio de caracterização, a opção -l refere-se ao nome do arquivo log que será gerado;
+
+          ./QEcompleto.py -d'Nome_arq_fotometro' -s'lambda_min,lambda_max,passo' -n'Numero_imagens' -l'Logfile'
 
 #### Resultados:
 ![eficiencia quantica](https://cloud.githubusercontent.com/assets/23655702/22065991/ecfadd80-dd71-11e6-8dda-74eb8a75fe9d.png)
