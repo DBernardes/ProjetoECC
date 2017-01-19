@@ -3,13 +3,13 @@
 
 """
     Criado em 08 de Novembro de 2016  
-    Descricao: este modulo reune as bibliotecas reduction, readImages, flatCorrection, plotGraph e logfile, retornando um grafico com a intensidade de luz para cada imagem em funcao da variancia dos pixels. Atraves desse grafico e feito um ajuste linear e, pela sua derivada, calculado o ganho do CCD.
+    Descricao: este codigo reune todas as bibliotecas responsaveis para a caracterizacao do ganho do CCD, sao elas: plotGraph, logfile, makeList_imagesInput e Gain_processesImages. O codigo ira criar duas listas de imagens: flat e bias, realizando o calculo da instensidade do sinal em funcao da variancia. Esses dados serao usado na plotagem de um grafico linear e, por meio do coeficiente angular de um ajuste linear calculado,  obtem-se o ganho; um segundo grafico e plotado onde aparece o resultado da subtracao dos dados obtidos pelos valores de um ajuste linear calculado.
     @author: Denis Varise Bernardes & Eder Martioli
     
     Laboratorio Nacional de Astrofisica, Brazil.
 
     
-	example: ./ganhoCompleto.py --list=list
+	example: ./ganhoCompleto.py -f'Flat','nImages' -b'Bias' 
 
 	Esta lista fornecida ao programa deve conter as imagens de bias e as imagens flat associdas em conjunto na forma
 biasA,biasB,flatA,flatB.
@@ -25,18 +25,15 @@ __copyright__ = """
 
 
 import os, sys
-import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 
-from math import sqrt
+
 from optparse import OptionParser
-from readImages import readImages
 from plotGraph import Graph_sinal_variance, Graph_residuos
 from logfile import logfile
-from flatCorrection import flatCorrection
-
-
+from makeList_imagesInput import criaArq_listaImgInput, LeArquivoReturnLista
+from Gain_processesImages import calcXY_YerrorBar_XerrorBar
 from astropy.io import fits
 
 nowInitial = datetime.datetime.now()
@@ -44,78 +41,46 @@ minute = nowInitial.minute
 second = nowInitial.second
 
 parser = OptionParser()
-parser.add_option("-i", "--list", dest="list", help="series bias e flat",type='string',default="")
 parser.add_option("-l", "--logfile", dest="logfile", help="Arquivo Log",type='string',default="")
+parser.add_option("-f", "--Flat", dest="flat", help="nome e num imagens flat",type='string',default="")
+parser.add_option("-b", "--Bias", dest="bias", help="nome imagens bias",type='string',default="")
 
 try:
     options,args = parser.parse_args(sys.argv[1:])
 except:
-    print "Error: check usage with ./calcbias.py -h ";sys.exit(1);
+    print "Error: check usage with ./ganhoCompleto.py -h ";sys.exit(1);
 
-#le cada lista de flat
-if options.list:
-	listaBiasA,listaBiasB,listaFlatA,listaFlatB=[],[],[],[]	
-	with open(options.list) as f:
-		lista = f.read().splitlines()		
-		for linha in lista:
-			Imgconjunto = linha.split(',')
-			listaBiasA.append(Imgconjunto[0])
-			listaBiasB.append(Imgconjunto[1])
-			listaFlatA.append(Imgconjunto[2])
-			listaFlatB.append(Imgconjunto[3])
-	biasA, header = readImages(listaBiasA)
-	biasB, header = readImages(listaBiasB)
-	flatA, header = readImages(listaFlatA)
-	flatB, header = readImages(listaFlatB)	
+
+if options.flat:
+	parametros = options.flat.split(',')
+	nameFlat      =	parametros[0]
+	numeroImagens =	int(parametros[1])
+if options.bias:
+	nameBias = options.bias
+#criaArq_listaImgInput(numeroImagens, nameFlat)
+#criaArq_listaImgInput(1, nameBias)
+listaBias = LeArquivoReturnLista(nameBias+'list')
+listaFlat = LeArquivoReturnLista(nameFlat+'list')
 
 
 
-def calcXY(flatA, flatB, biasA, biasB):
-	i=0
-	X, Y, g, std, sigmaEletron = [], [], [], [], []
-	
-	while i < len(flatA):
-		sigmaBias = np.std(biasA[i] - biasB[i])
-		sigmaFlat = np.std(flatA[i] - flatB[i])
-		dadoy = (np.median(flatA[i])+np.median(flatB[i]) - np.median(biasA[i]) - np.median(biasB[i]))/(sqrt(2)*sigmaBias)
-		dadox = sigmaFlat**2/(sigmaBias*sqrt(2))
-		calcg = (np.median(flatA[i])+np.median(flatB[i]) - np.median(biasA[i]) - np.median(biasB[i]))/ (sigmaFlat**2 - sigmaBias**2)
-		sigmaEletron.append(calcg*sigmaBias/sqrt(2))
-		Y.append(dadoy)
-		X.append(dadox)			
-		std.append(np.std(flatA[i])+np.std(flatB[i])+np.std(biasA[i])+np.std(biasB[i]))
-		i+=1	
-
-	return X,Y,std, np.std(sigmaEletron)
 
 
-box=0
-def returnCaixaPixels(vetor, box=100):
-	lenVetor = len(vetor)
-	i, b = 0, box/2
-	while i<lenVetor:
-		vetor[i] = vetor[i][1000-b:1000+b,1000-b:1000+b]
-		i+=1
-	return vetor
-	
 #----------------------------------------------------------------------------------------------------------------------
-flatA = returnCaixaPixels(flatA)
-flatB = returnCaixaPixels(flatB)
-biasA = returnCaixaPixels(biasA)
-biasB = returnCaixaPixels(biasB)
+X,Y,SigmaTotal, XsigmaBar = calcXY_YerrorBar_XerrorBar(listaFlat, listaBias, numeroImagens)
 
-X,Y,std, Estd = calcXY(flatA, flatB, biasA, biasB)
 plt.figure(figsize=(17,8))
-ganho = Graph_sinal_variance(X,Y, std, Estd)
-Graph_residuos(X,Y, std)
-
+ganho = Graph_sinal_variance(X,Y,SigmaTotal, XsigmaBar)
+Graph_residuos(X,Y, SigmaTotal)
 plt.savefig('ganho', format='jpg')
-plt.close()
+
+
 
 #gera arquivo log
 if options.logfile:
 	lenDados = len(flatA)*4
 	dic = {'minute':minute, 'second':second, 'lenDados':lenDados, 'ganho':ganho, 'box':box, 'header':header}
-	logfile(options.logfile, dic)	
+	logfile(options.logfile, dic)			
+		
 
 

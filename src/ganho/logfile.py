@@ -51,9 +51,8 @@ def logfile(name, dic):
 		Strcommandline += arg + ' ' 	
 	WorkDirectory = 'Diretorio atual: ' + os.getcwd()	
 	nowInitial = datetime.datetime.now()
-	minute = nowInitial.minute - minute
-	second = nowInitial.second - second
-	Tempoprocess = 'Tempo de processamento: %i min %i s' %(minute,second)
+	TimeElapsed = (nowInitial.minute - minute)*60 + nowInitial.second - second #hora final menos hora inicial 	
+	Tempoprocess = 'Tempo de processamento: %i min %i s' %(TimeElapsed/60,TimeElapsed%60)
 
 	Strbox = 'Tamanho da caixa de pixels = %i'%(box)
 	StrCCD = CCDinfo(header, lenDados)
