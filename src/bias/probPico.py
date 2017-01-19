@@ -3,7 +3,7 @@
 
 """
     Criado em 10 de Outubro de 2016  
-    Descricao: este modulo tem como entrada uma serie de dados da FFT, assim como a posicao neste vetor de cada um dos picos. Retorna um vetor com a probabilidade de cada um dos picos nao ser um sinal verdadeiro. 
+    Descricao: este modulo tem como entrada uma serie de dados da FFT, assim como a posicao neste vetor de cada um dos picos. Retorna um vetor com a probabilidade de cada um dos picos nao ser um sinal verdadeiro. Essa probabilidade e calculada pela integracao de curva normal para e media e desvio padrao dos dados, desde o ponto do valor do pico até o valor da media+3sgimas. 
     
     Laboratorio Nacional de Astrofisica, Brazil.    
 """

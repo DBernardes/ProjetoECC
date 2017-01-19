@@ -26,9 +26,8 @@ from porcentPixel import porcentPixel as porcent
 
 
 #biblioteca para binagem dos dados, fornecidos os vetores x e y, com um passo binsize
-def binagem(x,y):
+def binagem(x,y, binsize=50):
 	i=0
-	binsize= 50
 	lenDados=len(y)
 	vetorBinMean = []
 	xbin = []

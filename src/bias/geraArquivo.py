@@ -4,7 +4,7 @@
 """
     Criado em 20 de Setembro de 2016.
     
-    Descricão: este modulo tem pode input uma serie imagens obtidas pelo CCD, retornando uma imagem combinada de uma amostra dessa serie. Sobre os dados, foi realizada uma mediana para cada pixel em funcao do tempo; este resultado é utilizado pelos script gradiente.py e biashistogram.py no cálculo dos parâmetros de saída.
+    Descricão: este modulo tem pode input uma serie imagens obtidas pelo CCD, retornando uma imagem combinada de uma amostra dessa serie. Sobre os dados, foi realizada uma mediana para cada pixel, retornando um array no formato numpy.
     
     @author: Denis Varise Bernardes & Eder Martioli
     

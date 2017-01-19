@@ -3,7 +3,7 @@
 
 """
     Criado em 10 de Outubro de 2016  
-    Descricao: este modulo tem como entrada uma serie de dados e o intervalo de pontos desejado, retornando um transformada de fourier baseada em uma distribuicao normal gerada pela media e desvio padrao do vetor fornecido; retorna tambem o intervalo de frequencias dessa serie.
+    Descricao: este modulo tem como entrada uma serie de dados e o valor maximo do intervalo de pontos desejado, retornando um transformada de fourier baseada em uma distribuicao normal gerada pela media e desvio padrao do vetor fornecido; retorna tambem o intervalo de frequencias dessa serie.
     
     Laboratorio Nacional de Astrofisica, Brazil.    
 """

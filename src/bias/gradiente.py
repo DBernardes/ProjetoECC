@@ -4,6 +4,17 @@
 """
     Criado em 10 de Agosto de 2016 
     Descricao: este modulo tem como input uma imagem gerada pela biblioteca geraArquivo.py. Sobre essa imagem, o script ira criar tres graficos de saida, onde e possivel observar a variacao de contagens ao longo eixos horizontal e vertical; associado a cada um, tem-se os valores da media, desvio padrao absoluto e a quantidade de pixels inclusos dentro desse intervalo entre media +/- desvio. Ainda sobre esses dois eixos, foi tomada o valor de mediana para intervalos de bins pre-estabelecidos, assim como o desvio padrao absoluto. Foi feita uma relacao entre este desvio, e o desvio total para cada imagem, de modo que é possivel determinar se o ruido pixel-a-pixel está dentro do esperado.
+	Esta biblioteca possui as seguintes funcoes:
+
+		geraDados: esta funcao faz a leitura da imagem, retornando a media das linhas e das colunas.
+
+		caixaInfo: esta funcao recebe as principais informacoes de todos os graficos, retornando um texto editado de seus valores.
+
+		plotGradiente: esta funcao plota o vetor das medias em funcao das linhas ou das colunas da imagem.
+
+		plotImagem: esta funcao plota a imagem fornecida subtraida de sua media.
+
+		gradiente: esta funcao recebe a imagem combinada e faz o gerenciamento de todas as outras funcoes para a apresentacao do grafico.
 	
     
     @author: Denis Varise Bernardes & Eder Martioli
@@ -25,7 +36,6 @@ import matplotlib.pyplot as plt
 from binagem import binagem 
 from linhaReferencia import linhaReferencia
 from returnMax import returnMax
-from detectQuadrante import detectQuadrante
 from algarismoSig import algarismoSig
 
 
@@ -141,6 +151,8 @@ def plotGradiente(posx, posy, Vetormean, eixo = 'x'):
 
 	return meanBin,meanStdBin
 
+
+
 def plotImagem(image):
 	#imagem bidimensional dos pixels
 	font=20
@@ -158,7 +170,6 @@ def plotImagem(image):
 
 
 #-------------------------------------------------------------------------------------------------
-
 def gradiente(image):	
 	print 'Calculando gradiente da imagem ...'
 

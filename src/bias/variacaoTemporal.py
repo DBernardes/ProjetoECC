@@ -5,6 +5,20 @@
     Criado em 17 de Agosto 2016.
     
     Descricao: este modulo possui como input uma serie de dados obtidos pelo CCDs, retornando o valor da mediana dos pixels de cada imagem em funcao do tempo, assim como o desvio padrao absoluto. Alem disso, e calculada a transformada de Fourier para essa serie, permitindo uma comparacao entre os dois tipos de graficos.
+		Esta bilbioteca possui as seguintes funcoes:
+
+			geraDados: esta funcao recebe uma lista de imagens, retornando o valor de mediana e desvio padrao ao longo dessa lista. Sobre este resultado, realiza uma FFT, retornando esses valores e o intervalo de frequencias.
+
+			plotGraficoTemporal: dado dois vetores x e y, essa funcao gera um grafico destes vetores, mais um linha de referencia sobre a media dos dados.
+
+			plotGraficoFFT: esta funcao plota o grafico da FFT dos dados junto com um sinal de referencia. Para isso, realiza a chamada da funcao sinalReferencia para criar uma FFT de um conjunto de dados normais em relacao a media e desvio padrao dos dados originais. Em relacao a um limite da media+3sigma destes dados artificais, procura por um pico de frequencia nos dados reais atraves da funcao detect_peaks, retornando a quantidade e posicao dos picos no vetor.
+
+			dadosFFT: para o conjunto de picos identificados pela funcao plotGraficoFFT, esta funcao exibe o valor da frequencia, amplitude e a chance deste de cada pico ser um falso sinal. Caso nao seja encontrado nenhum, e emitida a mensagem 'Nenhum pico encontrado.'
+
+			dadosMeanTemp: esta funcao recebe as principais informacoes relativas aos graficos, retornando um texto editado desses valores.
+
+			variacaoTemporal: esta funcao faz o gerenciamento das variaveis e todas outras funcoes responsaveis pela caracterizacao da parte temporal do ensaio.
+	
     
     @author: Denis Bernardes & Eder Martioli
     
@@ -20,7 +34,6 @@ __copyright__ = """
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
-import ecc_utils as ecc
 import astropy.io.fits as fits
 
 from scipy.fftpack import fft, fftfreq
@@ -29,42 +42,34 @@ from probPico import probPico
 from sinalReferencia import sinalReferencia
 from caixaTexto import caixaTexto as caixa
 from algarismoSig import algarismoSig
-from divideLista import calcIteracao
 
 
-
-
-def geraDados(imagefiles):
+def geraDados(listaImagens):
 	#separada a lista total e fragmentos menores 
-	listaSeparada = calcIteracao(imagefiles)
-	vetorMean,vetorStddev,vetorMedAbsdev=[],[],[]
 
-	for lista in listaSeparada:		
-		dados = []
-		for img in lista:
-			dados.append(fits.getdata(img, 0)[0])	
-		for img in dados:	
-			#Dados		
-			meanvalue = np.mean(img)	
-			#Media e desvio padrao
-			vetorMean.append(meanvalue)
-			vetorStddev.append(np.std(img))	
-			# Desvio padrao absoluto
-			devscidata = np.abs(img - meanvalue)	
-			vetorMedAbsdev.append(np.std(devscidata))
-		#FFT	
-		Meanf = np.abs(fft(vetorMean))
-		interv = len(Meanf)/2	
-		Meanf = Meanf[1:interv]
-		xf = fftfreq(len(vetorMean))
-		xf = xf[1:interv]
+	vetorMean,vetorStddev=[],[]
+
+	for img in listaImagens:
+		print img		
+		imagem = fits.getdata(img)[0]
+		#Dados		
+		meanvalue = np.mean(imagem)	
+		#Media e desvio padrao
+		vetorMean.append(meanvalue)
+		vetorStddev.append(np.std(imagem))	
 			
-	
-		#Linha referencia	
-		meanTotal = range(len(vetorMean))
-		y = np.mean(vetorMean)
-		for i in meanTotal:
-			meanTotal[i] = y
+	#FFT	
+	Meanf = np.abs(fft(vetorMean))
+	interv = len(Meanf)/2	
+	Meanf = Meanf[1:interv]
+	xf = fftfreq(len(vetorMean))
+	xf = xf[1:interv]
+		
+	#Linha referencia	
+	meanTotal = range(len(vetorMean))
+	y = np.mean(vetorMean)
+	for i in meanTotal:
+		meanTotal[i] = y
 	
 	return vetorMean, vetorStddev, Meanf, xf, meanTotal, interv
 
@@ -84,6 +89,7 @@ def plotGraficoTemporal(x,y,stddev,meanTotal):
 	#linha de referencia
 	plt.plot(x,meanTotal, color='red', label=r'$\mathtt{Media \; total}$',linewidth=2)
 	plt.legend(loc='upper left')
+
 
 
 # plota grafico da FFT
