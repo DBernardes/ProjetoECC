@@ -7,7 +7,7 @@
 gradiente e variação temporal sobre os pixels das imagens;
 
 #### Exemplo:
-  - Após baixar e extrair os arquivos, execute o comando via terminal:
+  - Após baixar e extrair os arquivos, execute o comando via terminal sobre o diretório onde se encontram as imagens:
   
          ./biasCompleto.py --list=list --logfile='Nome do Arquivo'
       
