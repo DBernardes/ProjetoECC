@@ -3,7 +3,16 @@
 
 """
     Criado em 4 de Outubro de 2016  
-    Descricao: este modulo possui como entrada a serie de dados obtida pela camera, retornando dois gráficos da corrente de escuro ao longo das direcoes vertical e horizontal dessa serie.
+    Descricao: esta bilbioteca possui as seguintes funcoes:
+
+		calcDerivada_XY: esta funcao recebe uma serie de imagens e respectivos tempo de exposicao. Sobre essa serie e calculado um ajuste linear para a media dos pixels ao longo das colunas e ao longo das linhas em funcao do tempo de exposicao, sendo a derivada desta curva o valor da corrente de escuro. 
+
+		plotGrafico: esta funcao plota um grafico para os valores x e y fornecidos. Sobre essa serie de dados e tracada uma linha de referencia para media +/- desvio padrao e calculada uma binagem dos dados para cada intervalo de 50 pontos.
+
+		caixaTexto: esta funcao recebe os principais valores obtidos no plot dos grafico, expressando-os numa caixa de texto lateral.
+
+		DCderivada: esta funcao recebe uma lista de imagens de dark e o header de uma das imagens, retirando e fornecendo as informacoes necessarias para todas as outras funcoes.
+
     @author: Denis Varise Bernardes & Eder Martioli
     
     Laboratorio Nacional de Astrofisica, Brazil.
@@ -20,23 +29,21 @@ __copyright__ = """
 import os, sys
 import numpy as np
 import matplotlib.pyplot as plt
+import astropy.io.fits as fits
 
 from binagem import binagem as bins
 from caixaTexto import caixaTexto as caixa
 from linhaReferencia import linhaReferencia 
 from algarismoSig import algarismoSig
+from DC_readArq import readArq_Etime
 
 
 #gera os dados principais para plotagem dos graficos
-def geraDados(dados, etime, preamp):
-	lenLinha = len(dados[0])
-	lenColuna = len(dados[0][0])
+def calcDerivada_XY(dados, etime, preamp, lenLinha, lenColuna):	
 	xlinha = range(lenLinha)
 	xcoluna = range(lenColuna)
 	derivy = []
 	derivx = []	
-	
-
 	i=0
 	while i < lenLinha:
 		vetorlinha = []
@@ -45,7 +52,6 @@ def geraDados(dados, etime, preamp):
 		coefAjust = np.polyfit(etime,vetorlinha,1)
 		derivy.append(coefAjust[0])
 		i+=1	
-
 	
 	j=0
 	while j < lenColuna:
@@ -60,9 +66,9 @@ def geraDados(dados, etime, preamp):
 		coefAjust = np.polyfit(etime,meanColuna,1)
 		derivx.append(coefAjust[0])
 		j+=1	
-	
 
 	return derivx, derivy, xlinha, xcoluna
+
 
 
 
@@ -84,7 +90,7 @@ def plotGrafico(x,y,posx, posy, temperatura, eixo='x'):
 	plt.annotate(r'$\mathtt{Temperatura: \; %i^oC}$'%(temperatura), xy=(0.50,0.90), ha='left', va='center', size=font-2, xycoords='axes fraction')
 	
 	linhaReferencia(x,y) 
-	meanBin, meanStdbin, porcentBin = bins(x,y)
+	meanBin, meanStdbin = bins(x,y)
 
 	return mean, std, meanBin, meanStdbin
 	
@@ -120,9 +126,20 @@ def caixaTexto(mean, std, meanBin, meanStdbin, posx, posy):
 
 
 #---------------------------------------------------------------------------------------------
-def DCderivada(dados, etime, preamp, temperatura):	
+
+
+def DCderivada(listaImagens, header):	
+	VetorEtime = readArq_Etime()
+	temperatura = header['temp']
+	preamp = header['preamp']
+	lenLinha = header['naxis1']
+	lenColuna = header['naxis2']
+	dados=[]
+	for img in listaImagens:
+		dados.append(fits.getdata(img)[0])
 	
-	derivx, derivy, xlinha, xcoluna = geraDados(dados, etime,preamp)
+
+	derivx, derivy, xlinha, xcoluna = calcDerivada_XY(dados, VetorEtime,preamp, lenLinha, lenColuna)
 
 
 	mean, std, meanBin, meanStdbin = plotGrafico(xcoluna, derivx, 1, 0, temperatura)	

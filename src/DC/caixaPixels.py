@@ -18,14 +18,14 @@ __copyright__ = """
     """
 import numpy as np
 
-def caixaPixels(imagem, string):
+def caixaPixels(imagem, parametros):
 	#retira apenas uma caixa de pixels, dada as coordenadas (x,y) e seu tamanho			
-	parametros = tuple(string.split(','))
-	xcoord = int(parametros[0])
-	ycoord = int(parametros[1])
-	dimension = int(parametros[2])/2
-	working_mask = np.ones(imagem.shape,bool)
-	ym, xm = np.indices(imagem.shape, dtype='float16') 
-	mask = (ycoord-dimension<ym)*(ym<ycoord+dimension)*(xcoord-dimension<xm)*(xm<xcoord+dimension)*working_mask 
-	pixels = imagem[np.where(mask)]	
-	return pixels, xcoord, ycoord, dimension
+	xcoord = parametros[0]
+	ycoord = parametros[1]
+	dimension = parametros[2]/2
+	d = dimension	
+	newimage = imagem[xcoord-d:xcoord+d, ycoord-d:ycoord+d]	
+	return newimage
+
+
+

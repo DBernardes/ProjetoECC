@@ -4,7 +4,7 @@
 """
     Criado em 20 de Outubro de 2016.
     
-    Descricão: este modulo possui como entrada uma string, o numero de linhas e colunas (n,m) do canvas, a posicao (posx,posy) em que a caixa irá ser posicionada, retornando um texto editado para as informacoes fornecidas. 
+    Descricão: este modulo possui como entrada uma string, o numero de linhas e colunas (n,m) do canvas, a posicao (posx,posy) em que a caixa irá ser posicionada, retornando um texto editado com as informacoes fornecidas. 
     
     @author: Denis Varise Bernardes & Eder Martioli
     

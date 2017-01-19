@@ -3,7 +3,15 @@
 
 """
     Criado em 29 de Agosto de 2016  
-    Descricao: este modulo possui como entrada as series de dados obtida pela camera, retornando uma media temporal das imagens ao longo do tempo e um grafico da corrente de escuro em funcao da temperatura.
+    Descricao: esta biblioteca possui as seguintes funcoes:
+		plotCorrentTemp: esta funcao gera um grafico para os valores da mediana das contagem em funcao do tempo de exposicao fornecidos e do ajuste linear criado para os dados, identificando esse plot por uma cor e temperatura.
+
+		plotTempDC: esta funcao gera um grafico da corrente de escuro em funcao da temperatura, apresentando em forma literal o valor de cada um dos pares de coordenadas.
+
+		DCvariacaoTemporal: para cada um dos diretorios de imagens, esta funcao realiza a leitura dos arquivos de dados temporais (readArq_DadosTemporais) e do tempo de exposicao (readArq_Etime), plotando para cada um o grafico da mediana das imagens em funcao do tempo de exposicao atraves da funcao plotCorrentTemp; monta o vetor da corrente de escuro para cada uma das temperaturas (vetorCoefAJust), retornando-o para a proxima funcao - plotTempDC - para o plot do grafico da corrente de escuro em funcao da temperatura. 
+				
+		Ajustelinear: esta funcao constroi um vetor, dado o dominio da funcao, coeficiente angular e linear da curva
+		
     @author: Denis Varise Bernardes & Eder Martioli
     
     Laboratorio Nacional de Astrofisica, Brazil.
@@ -23,20 +31,8 @@ import matplotlib.pyplot as plt
 
 from scipy import stats
 from algarismoSig import algarismoSig
+from DC_readArq import readArq_DadosTemporais, readArq_Etime
 
-
-
-
-#gera dados referentes a variacao temporal
-def geraDados(dados, etime):
-	median = []
-	std = []
-	for i in dados:		
-		median.append(np.median(i))
-		std.append(np.std(i))
-	#ajuste da curva
-	coefAjust, intercept, r, p, stdLinAjust = stats.linregress(etime,median)
-	return median, std, coefAjust, intercept, stdLinAjust
 
 
 #plota grafico da DC pelo tempo
@@ -55,7 +51,7 @@ def plotCorrentTemp(x, y, std, yajust, temperatura, color):
 	
 
 
-	
+
 def plotTempDC(temperatura, DC, std):
 	ax = plt.subplot2grid((3,2),(0,1))
 	font = 15	
@@ -63,8 +59,8 @@ def plotTempDC(temperatura, DC, std):
 	#arredonda para a casa decimal com o primeiro algarismo significativo
 	while i < len(DC):
 		num = algarismoSig(std[i])
-		DC[i] = round(DC[i],num)
-		std[i] = round(std[i], num)
+		DC[i]  = round(DC[i], num)
+		std[i] = round(std[i],num)
 		i+=1
 
 	plt.plot(temperatura, DC, marker='o', c='blue')
@@ -76,12 +72,14 @@ def plotTempDC(temperatura, DC, std):
 	
 	i=0
 	while i < len(DC):
-		DC[i] = str(DC[i])
+		DC[i]  = str(DC[i])
 		std[i] = str(std[i])
 		textstr = r'$\mathtt{DC(%i^oC) \; = \quad %s^+_- \; %s \; e-/pix/s}$'%(temperatura[i], DC[i], std[i])
 		plt.text(0.05, 0.90-i*0.07,textstr,ha='left',va='center',size= font+1,transform=ax.transAxes)		
 		i+=1
 	return DC[-1]
+
+
 
 def Ajustelinear(vetorx, Acoef, Lcoef):
 	f = []
@@ -94,25 +92,24 @@ def Ajustelinear(vetorx, Acoef, Lcoef):
 
 #-------------------------------------------------------------------------------------------------
 
-def DCvariacaoTemporal(Dict):	
+def DCvariacaoTemporal(cwd, directories, vetorTemperatura):
 	colors = ['cyan','red', 'blue','green','magenta','yellow']
-	mediana   	= Dict['vetoresMediana']
-	std 	  	= Dict['vetoresStd']
-	intercept  	= Dict['vetoresInt']
-	coefAjust 	= Dict['vetoresCoef']
-	stdLinAjust = Dict['vetorStdAjust']
-	etime 	 	= Dict['vetoresEtime']
-	temperatura = Dict['vetorTemp']
-	lenEtime =	len(etime)
-	i=0
-
+	vetorCoefAJust, vetorStdLinAjust = [], []
 	ax = plt.subplot2grid((3,2),(0,0))
-	while i < lenEtime:		
-		ajust = Ajustelinear(etime[i], coefAjust[i], intercept[i])
-		plotCorrentTemp(etime[i],mediana[i], std[i], ajust, temperatura[i], colors[i]) 	
+	i=0
+	for Dir  in directories:
+		chdir = cwd + '/' + Dir
+		os.chdir(chdir)
+		VetorImgMedian, VetorStdImg, coefAjust, intercept, stdLinAjust = readArq_DadosTemporais()
+		VetorEtime = readArq_Etime()
+		vetorCoefAJust.append(coefAjust)
+		vetorStdLinAjust.append(stdLinAjust)
+		lenTemp = len(vetorTemperatura)		
+		ajust = Ajustelinear(VetorEtime, coefAjust, intercept)
+		plotCorrentTemp(VetorEtime,VetorImgMedian, VetorStdImg, ajust, vetorTemperatura[i], colors[i]) 	
 		i+=1
 	
-	DCnominal = plotTempDC(temperatura, coefAjust, stdLinAjust)	
+	DCnominal = plotTempDC(vetorTemperatura, vetorCoefAJust, vetorStdLinAjust)	
 
 	return DCnominal
 

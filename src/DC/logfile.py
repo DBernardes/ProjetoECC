@@ -31,7 +31,6 @@ def logfile(name, nowInitial, minute, second, Dict, DKnominal, box=False):
 		logf = open(name, 'w') 	
 	
 	now = datetime.datetime.now()
-	lenDados = len(Dict['cuboImagens'])
 	commandline = sys.argv		
 
 	Logdata = 'Caracterizacao da Corrente de escuro, ' + now.strftime("%Y-%m-%d %H:%M")
@@ -43,9 +42,8 @@ def logfile(name, nowInitial, minute, second, Dict, DKnominal, box=False):
 	WorkDirectory = 'Diretorio atual: ' + os.getcwd()	
 
 	nowInitial = datetime.datetime.now()
-	minute = nowInitial.minute - minute
-	second = nowInitial.second - second
-	Tempoprocess = 'Tempo de processamento: %i min %i s' %(minute,second)
+	TimeElapsed = (nowInitial.minute - minute)*60 + nowInitial.second - second #hora final menos hora inicial 	
+	Tempoprocess = 'Tempo de processamento: %i min %i s' %(TimeElapsed/60,TimeElapsed%60)
 
 	if box:
 		Strbox = 'Opcao caixa de pixels: (x,y) = (%i,%i), dimensao = %i.' %(Dict['Boxparameter'][0],Dict['Boxparameter'][1],Dict['Boxparameter'][2]*2) + '\n\n'
