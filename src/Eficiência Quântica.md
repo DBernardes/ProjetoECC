@@ -10,10 +10,10 @@
   
          ./QEcompleto.py -d'Nome_arq_fotometro' -s'lambda_min,lambda_max,passo' -n'Numero_imagens' -g'Ganho' 
          
-    - A opção -d refere-se ao nome do arquivo do fotômetro onde estão os valores de fluxo;
-    - A opção -s refere-se ao comprimento de onda mínimo e máximo e o passo utilizado no experimento, respectivamente;
-    - A opção -n refere-se ao número de imagens obtidas para o mesmo comprimento de onda;
-    - A opção -g refere-se ao ganho do CCD, que deve ser previamente caracterizado; caso não seja fornecido, o código adota o ganho como sendo igual a 1;    
+   - A opção -d refere-se ao nome do arquivo do fotômetro onde estão os valores de fluxo;
+   - A opção -s refere-se ao comprimento de onda mínimo e máximo e o passo utilizado no experimento, respectivamente;
+   - A opção -n refere-se ao número de imagens obtidas para o mesmo comprimento de onda;
+   - A opção -g refere-se ao ganho do CCD, que deve ser previamente caracterizado; caso não seja fornecido, o código adota o ganho como sendo igual a 1;    
     
 Caso deseje saber quais os pontos do espectro estão dentro de um intervalo da curva de EQ, execute o comando:
          
