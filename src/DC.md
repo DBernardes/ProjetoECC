@@ -13,9 +13,8 @@ Cada série deve estar em um diretório, junto com duas listas:
 ### Exemplo:
    - Após baixar e extrair os arquivos, execute o comando via terminal:
    
-          ./DCcompleto.py -i'Lista_diretorios' -b'Lista_bias' -d'Lista_dark' -eExposure -lLogfile
+          ./DCcompleto.py -b'Lista_bias' -d'Lista_dark' -eExposure -lLogfile
     
-    - A opção -i refere-se à lista de diretórios que contém cada série de imagens para as respectivas temperaturas.
     - A opção -d refere-se à lista de imagens de bias usadas na redução dos dados.
     - A opção -d refere-se à lista de imagens para caracterização da corrente de escuro.
     - A opção -e refere-se ao keyword usado no cabeçalho das imagens da câmera para indicar tempo de exposição (keyword varia de câmera para câmera). 
