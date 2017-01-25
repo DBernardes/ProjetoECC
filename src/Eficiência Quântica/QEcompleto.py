@@ -24,7 +24,7 @@ import numpy as np
 import logfile as l
 import datetime
 
-from makeList_imagesInput import criaArq_listaImgInput
+from QE_makeArq import criaArq_listaImgInput, criaArq_infoEnsaio
 from optparse import OptionParser
 from QE_GraphLib import plotGraph, parametrosGraph
 from QE_readImages_Arq import mkDir_saveCombinedImages, readArqDetector, ImagemUnica_returnHeader, LeArqFluxoCamera
@@ -32,14 +32,12 @@ from QE_calcFluxo import  GeraVetorFluxoCamera, FluxoRelativo
 from QE_calcBackground_Images import LeBackgroundImagens_saveArquivoMedianBackground
 
 parser = OptionParser()
-parser.add_option("-d", "--detect", dest="detect", help="detector values",type='string',default="")
-parser.add_option("-s", "--spectro", dest="spect", help="spectro values",type='string',default="")
-parser.add_option("-l", "--logfile", dest="log", help="make logfile",type='string',default="")
 parser.add_option("-v", action="store_true", dest="verbose", help="verbose",default=False)
 parser.add_option("-r",'--range',dest="Range",type = 'string', help='Intervalo do Espectro', default ='')
-parser.add_option("-n", "--nImages", dest="nImages", help="number images",type='string',default="")
-parser.add_option("-c", "--calibD", dest="calibD", help="nome arq calibracao Detector",type='string',default="")
-parser.add_option("-g", "--ganho", dest="ganho", help="Ganho do CCD",type='int',default=1)
+
+
+
+
 nowInitial = datetime.datetime.now()
 
 try:
@@ -61,11 +59,8 @@ def returnInterval(x,f):
 				print ' ',round(data,2),'\t', round(f(data),2)
 
 #------------------------------------------------------------------------------------------
-nImages = int(options.nImages) #numero de imagens para cada comprimento de onda
-intervEspectro = options.spect
-nomeArqDetector = options.detect
-nomeArqCalibDetector = options.calibD
-ganhoCCD = options.ganho
+nImages, Texp_Detector, ganhoCCD, nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro = criaArq_infoEnsaio()
+
 
 #cria um arquivo contendo o nome das imagens obtidas para a caracterizacao
 #criaArq_listaImgInput(nImages)
@@ -83,12 +78,12 @@ header = ImagemUnica_returnHeader()
 
 
 #gera os vetores de fluxo da camera e respectivo desvio padrao
-GeraVetorFluxoCamera(header, nImages, ganhoCCD)
+#GeraVetorFluxoCamera(header, nImages, ganhoCCD)
 
 #le os dados do fluxo do CCD
 vetorFluxoCamera, vetorSigmaBackground_Signal = LeArqFluxoCamera()
 #le os dados do fotometros
-valoresFotometro = readArqDetector(nomeArqDetector)
+valoresFotometro = readArqDetector(nomeArqDetector, Texp_Detector)
 
 
 #divide os valores do fluxo da camera pelo detector
@@ -100,7 +95,7 @@ espectro, interpolation, parametrosList = parametrosGraph(intervEspectro, vetorE
 
 
 #plota o grafico e imprime os valores na tela
-plotGraph(espectro, vetorEQ, vetorSigmaTotal, parametrosList)
+plotGraph(espectro, vetorEQ, vetorSigmaTotal, parametrosList, noemArqFabricante)
 
 
 #retorna no terminal os valores de EQ para um dado intervalo (opcional)
@@ -111,5 +106,6 @@ plt.savefig('Eficiencia Quantica', format='jpg')
 passo = (espectro[-1]-espectro[0])/len(espectro)+1
 dic = {'qtdImagens':len(espectro)*nImages,'minute':nowInitial.minute, 'second':nowInitial.second,'header':header,'espectro':(espectro[0],espectro[-1],passo)}
 
-l.logfile(options.log, dic)
+if nomeArqlog != '': 
+	l.logfile(nomeArqlog, dic)
 

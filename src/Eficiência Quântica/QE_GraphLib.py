@@ -30,7 +30,21 @@ import numpy as np
 from scipy.interpolate import interp1d, splrep, splev
 from scipy.integrate import quad
 
-def plotGraph(x,y, std, parametrosGraph):
+from QE_readImages_Arq import LeArq_curvaEQFabricante
+
+def plotGraph(x,y, std, parametrosGraph, name):
+
+	EQfabricante, espectroFrabricante = LeArq_curvaEQFabricante(name)
+	plt.plot(espectroFrabricante, EQfabricante, c='red',linestyle='--')
+	
+	
+	EQmaxDados, LambdaDados = returnMax(y)
+	EQmaxfacricante, LambdaFabricante = returnMax(EQfabricante)
+	FatorConversao = EQmaxfacricante/EQmaxDados
+	for i in range(len(y)-1):
+		y[i]=y[i]*FatorConversao
+
+
 	font = 15	
 	plt.plot(x,y, c='blue')
 	plt.errorbar(x,y,std, fmt='o', c='blue')

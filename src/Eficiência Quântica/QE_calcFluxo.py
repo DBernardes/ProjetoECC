@@ -44,7 +44,7 @@ chdir = cwd + '/' + 'Mediana das Imagens'
 
 
 def GeraVetorFluxoCamera(header, nImages, ganho):
-	print '\nCalculando o fluxo total da camera (W/m2)'
+	print '\nCalculando o fluxo total da camera \n'
 	coordx	   = header['naxis1']/2
 	coordy 	   = header['naxis2']/2
 	Cdimension = 815
@@ -59,7 +59,6 @@ def GeraVetorFluxoCamera(header, nImages, ganho):
 	with open('listaImagensCombinadas') as f:
 		lista = f.read().splitlines()
 		for img in lista:
-			print img
 			data = fits.getdata(img)[0]
 			data = caixaPixels(data,(coordx,coordy,Cdimension))	
 			fluxo, sigma = calcFluxo(data, etime[i], medianBackground[i], stdBackground[i], ganho)
@@ -85,12 +84,11 @@ def caixaPixels(imagem, tupla):
 def calcFluxo(data, etime, medianBackground, stdBackground, ganho):
 	Somapixels, sigmaBackground_sigmaSignal, variance = 0, 0, 0
 	Somapixels = sum(sum(data - medianBackground))*ganho #soma dos valores dos pixels subt. do Background mediano
-	for linha in data:
-		for pixel in linha:
-			fluxo_e = (pixel-medianBackground)*ganho			
-			variance += np.abs(fluxo_e) + (stdBackground*ganho)**2
 	fluxoImagem = Somapixels/etime #contagens totais pelo tempo de exposicao
-		
+	
+	variance += np.abs(data-medianBackground)+ (stdBackground*ganho)**2
+	variance = sum(sum(variance))
+	
 	return fluxoImagem, sqrt(variance)
 
 
@@ -103,18 +101,20 @@ def FluxoRelativo(Fluxocamera,Fluxodetector, Stdcamera, Strespectro, nomeArq_Cal
 	Einicial = int(Split_Str_espectro[0])
 	Efinal   = int(Split_Str_espectro[1])
 	step     = int(Split_Str_espectro[2])
-	n = (Efinal - Einicial)/step
-	espectro = np.linspace(Einicial, Efinal, n+1)
+	n = (Efinal - Einicial)/step + 1
+	espectro = np.linspace(Einicial, Efinal, n)
 
-	VetorCalibracaoDetector = LeArq_curvaCalibDetector(nomeArq_CalibDetector, n+1)
+	VetorCalibracaoDetector = LeArq_curvaCalibDetector(nomeArq_CalibDetector, n)
 
 	for i in range(len(Fluxocamera)):
-		e = 1.60217653e-19
+		h = 6.62607004e-34 
+		c = 299792458 #m/s
 		ErroPorcentDetector = CalcErroDetector(espectro[i])
-		sigmaDetector = sqrt(ErroPorcentDetector*Fluxodetector[i]**2)		
+		sigmaDetector = sqrt(ErroPorcentDetector*Fluxodetector[i]**2)
 
-		EQ = Fluxocamera[i]*e/(Fluxodetector[i]*VetorCalibracaoDetector[i])*100	
-		varianceTotal = (Stdcamera[i]*e/(Fluxodetector[i]))**2 +sigmaDetector**2
+		Rp = (Fluxodetector[i]/VetorCalibracaoDetector[i])*(espectro[i]*1e-9/(h*c))
+		EQ = (Fluxocamera[i]/Rp)*100	
+		varianceTotal = (Stdcamera[i]/Rp*100)**2 +sigmaDetector**2
 		vetorEQ.append(EQ)
 		vetorSigmaTotal.append(sqrt(varianceTotal))
 		i+=1

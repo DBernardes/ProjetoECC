@@ -73,12 +73,12 @@ def mkDir_saveCombinedImages(nImages):
 	return 
 
 
-def readArqDetector(name):
+def readArqDetector(name, Texp):
 	valores=[]
 	with open(name) as arq:
 		Strvalores = arq.read().splitlines()
 		for valor in Strvalores[1:]:
-			valores.append(float(valor))
+			valores.append(float(valor)/Texp)
 		arq.close()
 		return valores
 
@@ -148,4 +148,15 @@ def LeArq_curvaCalibDetector(nome, numeroImagens):
 			Vetordados.append(1)	
 	return Vetordados
 
+
+def LeArq_curvaEQFabricante(name):
+	espectro, vetorEQ = [], []
+	with open(name) as arq:
+		linhas = arq.read().splitlines()
+		arq.close()
+	for linha in linhas[1:]:
+		valores = linha.split('\t')
+		espectro.append(float(valores[0]))
+		vetorEQ.append(float(valores[1]))
+	return vetorEQ, espectro
 		
