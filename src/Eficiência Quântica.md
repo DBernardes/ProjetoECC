@@ -28,4 +28,4 @@ Caso haja o interesse de gerar um arquivo com as informações do ensaio de cara
           ./QEcompleto.py -d'Nome_arq_fotometro' -s'lambda_min,lambda_max,passo' -n'Numero_imagens' -l'Logfile'
 
 #### Resultados:
-![eficiencia quantica](https://cloud.githubusercontent.com/assets/23655702/22065991/ecfadd80-dd71-11e6-8dda-74eb8a75fe9d.png)
+![eficiencia quantica](https://cloud.githubusercontent.com/assets/23655702/22292054/a85a9af6-e2f0-11e6-9e26-0fcb26909616.png)
