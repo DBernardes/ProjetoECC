@@ -33,13 +33,15 @@ from scipy.integrate import quad
 from QE_readImages_Arq import LeArq_curvaEQFabricante
 
 def plotGraph(x,y, std, parametrosGraph, name):
-
+	FatorConversao = 0
 	if name != '':
 		EQfabricante, espectroFrabricante = LeArq_curvaEQFabricante(name)
 		plt.plot(espectroFrabricante, EQfabricante, c='red',linestyle='--')
+
 		EQmaxDados, LambdaDados = returnMax(y)
 		EQmaxfacricante, LambdaFabricante = returnMax(EQfabricante)
 		FatorConversao = EQmaxfacricante/EQmaxDados
+		
 		for i in range(len(y)-1):
 			y[i]=y[i]*FatorConversao
 

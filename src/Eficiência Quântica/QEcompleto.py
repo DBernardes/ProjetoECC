@@ -60,7 +60,7 @@ def returnInterval(x,f):
 
 #------------------------------------------------------------------------------------------
 nImages, Texp_Detector, ganhoCCD, nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro = criaArq_infoEnsaio()
-exit()
+
 
 #cria um arquivo contendo o nome das imagens obtidas para a caracterizacao
 #criaArq_listaImgInput(nImages)

@@ -85,7 +85,6 @@ def calcFluxo(data, etime, medianBackground, stdBackground, ganho):
 	Somapixels, sigmaBackground_sigmaSignal, variance = 0, 0, 0
 	Somapixels = sum(sum(data - medianBackground))*ganho #soma dos valores dos pixels subt. do Background mediano
 	fluxoImagem = Somapixels/etime #contagens totais pelo tempo de exposicao
-	
 	variance += np.abs(data-medianBackground)+ (stdBackground*ganho)**2
 	variance = sum(sum(variance))
 	

@@ -74,9 +74,10 @@ def criaArq_infoEnsaio():
 	with open('InformacoesEnsaio') as arq:
 		nImages, Texp_Detector, ganhoCCD = 0, 0, 0
 		nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro = '', '', '', '', ''
-		linhas = arq.read().splitlines()[2:9]
+		linhas = arq.read().splitlines()[2:10]
 		for linha in linhas:
 			dado = linha.split('=')
+			
 			if 'Espectro' in dado[0]:
 				intervEspectro = dado[1]
 
@@ -109,7 +110,7 @@ def criaArq_infoEnsaio():
 				except: 
 					print '\nErro na leitura do ganho do CCD.\n'
 					exit()		
-
+			
 		return nImages, Texp_Detector, ganhoCCD, nomeArqCalibDetector, nomeArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro
 	
 
