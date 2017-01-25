@@ -60,7 +60,7 @@ def returnInterval(x,f):
 
 #------------------------------------------------------------------------------------------
 nImages, Texp_Detector, ganhoCCD, nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro = criaArq_infoEnsaio()
-
+exit()
 
 #cria um arquivo contendo o nome das imagens obtidas para a caracterizacao
 #criaArq_listaImgInput(nImages)
@@ -70,15 +70,15 @@ header = ImagemUnica_returnHeader()
 
 
 #cria um diretorio com as imagens combinadas pela mediana
-#mkDir_saveCombinedImages(nImages)
+mkDir_saveCombinedImages(nImages)
 
 
 #realiza a leitura do background das imagens, salvando um arquivo com os valores medianos e respectivos desvios padrao
-#LeBackgroundImagens_saveArquivoMedianBackground(header)
+LeBackgroundImagens_saveArquivoMedianBackground(header)
 
 
 #gera os vetores de fluxo da camera e respectivo desvio padrao
-#GeraVetorFluxoCamera(header, nImages, ganhoCCD)
+GeraVetorFluxoCamera(header, nImages, ganhoCCD)
 
 #le os dados do fluxo do CCD
 vetorFluxoCamera, vetorSigmaBackground_Signal = LeArqFluxoCamera()

@@ -34,16 +34,16 @@ from QE_readImages_Arq import LeArq_curvaEQFabricante
 
 def plotGraph(x,y, std, parametrosGraph, name):
 
-	EQfabricante, espectroFrabricante = LeArq_curvaEQFabricante(name)
-	plt.plot(espectroFrabricante, EQfabricante, c='red',linestyle='--')
-	
-	
-	EQmaxDados, LambdaDados = returnMax(y)
-	EQmaxfacricante, LambdaFabricante = returnMax(EQfabricante)
-	FatorConversao = EQmaxfacricante/EQmaxDados
-	for i in range(len(y)-1):
-		y[i]=y[i]*FatorConversao
+	if name != '':
+		EQfabricante, espectroFrabricante = LeArq_curvaEQFabricante(name)
+		plt.plot(espectroFrabricante, EQfabricante, c='red',linestyle='--')
+		EQmaxDados, LambdaDados = returnMax(y)
+		EQmaxfacricante, LambdaFabricante = returnMax(EQfabricante)
+		FatorConversao = EQmaxfacricante/EQmaxDados
+		for i in range(len(y)-1):
+			y[i]=y[i]*FatorConversao
 
+	else: FatorConversao = 1
 
 	font = 15	
 	plt.plot(x,y, c='blue')

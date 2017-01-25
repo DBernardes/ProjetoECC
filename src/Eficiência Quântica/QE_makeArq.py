@@ -52,21 +52,29 @@ def criaArq_listaImgInput(nImages):
 	
 
 def criaArq_infoEnsaio():
+
 	Str = ['Arquivo com as informacoes necessarias para caracterizacao da eficiencia quantica do CCD.\n', 'Espectro (nm) (Einicial, Efinal, passo) = ', 'Numero de imagens para cada comprimento de onda = ', 'Tempo exposicao do detector = ', 'nome arquivo calibracao detector = ', 'nome arquivo QE do fabricante = ', 'nome arquivo detector = ', 'nome arquivo Log = ', 'ganho = ']
+
+	nota = ['\nNota: neste arquivo estao as principais informacoes referentes ao ensaio de caracterizacao da eficiencia quantica. Nele devem constar as seguintes informacoes:\n', '- Espectro (nm): espectro utilizado no ensaio (em nanometros); nele devem constar o comprimento de onda inicial, comprimento de onda final e o passo utilizado, respectivamente;', '- Numero de imagens adquiridas para cada comprimento de onda;', '- Tempo exposicao do detector;', '- nome do arquivo contendo a curva de calibracao detector (opcional);' , '- nome do arquivo contendo a curva de Eficiencia Quantica do fabricante (opcional);','- nome do arquivo contendo os dados detector;', '- nome arquivo Log (opcional)', '- ganho do CCD;','\nApos o preenchimento das informacoes pedidas, execute novamente o comando para obter a caracterizacao da curva de EQ do CCD.\n','As opcoes marcadas com \'(opcional)\' nao necessitam ser preenchidas, no momento dos calculos o codigo apenas levara em consideracao caso seja fornecido o nome de um arquivo.\n','Os arquivos contendo dados a serem lidos devem conter o mesmo numero de dados em relacao ao numero de comprimentos de onda do ensaio.\n', 'obs: nao deve haver espaco entre o nome de cada arquivo e o sinal de igualdade, caso contrario, o programa retornara um erro.'] 
+
 	try: open('InformacoesEnsaio')
 	except:
 		name = 'InformacoesEnsaio'
 		print '\n---Preencha o arquivo InformacoesEnsaio---\n'
 		arq = open(name, 'w')		
-		for dado in Str:
-			arq.write(dado+'\n')
+		for Strdado in Str:
+			arq.write(Strdado+'\n')
+		
+		for StrNota in nota:
+			arq.write(StrNota+'\n')
+
 		arq.close()
 		exit()
 
 	with open('InformacoesEnsaio') as arq:
 		nImages, Texp_Detector, ganhoCCD = 0, 0, 0
 		nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro = '', '', '', '', ''
-		linhas = arq.read().splitlines()[2:]
+		linhas = arq.read().splitlines()[2:9]
 		for linha in linhas:
 			dado = linha.split('=')
 			if 'Espectro' in dado[0]:
@@ -88,7 +96,7 @@ def criaArq_infoEnsaio():
 				nomeArqCalibDetector = dado[1]
 
 			if 'nome arquivo QE do fabricante' in dado[0]:
-				noemArqFabricante = dado[1]
+				nomeArqFabricante = dado[1]
 
 			if 'nome arquivo detector' in dado[0]:
 				nomeArqDetector = dado[1]
@@ -100,9 +108,8 @@ def criaArq_infoEnsaio():
 				try: ganhoCCD = float(dado[1])
 				except: 
 					print '\nErro na leitura do ganho do CCD.\n'
-					exit()
-		arq.close()
+					exit()		
 
-		return nImages, Texp_Detector, ganhoCCD, nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro
+		return nImages, Texp_Detector, ganhoCCD, nomeArqCalibDetector, nomeArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro
 	
 
