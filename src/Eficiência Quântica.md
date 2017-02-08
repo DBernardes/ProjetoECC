@@ -13,15 +13,13 @@
 Ao executar o comando pela primeira vez, irá aparecer uma mensagem pedindo para preencher um arquivo contendo as informações do ensaio:
   - Espectro (nm): espectro utilizado no ensaio (em nanômetros); nele devem constar o comprimento de onda inicial, comprimento de onda final e o passo utilizado, respectivamente;
   - Numero de imagens adquiridas para cada comprimento de onda;
-  - Tempo exposição do detector;
-  - nome do arquivo contendo a curva de calibração detector (opcional);
+  - nome do arquivo contendo a curva de transmissão do filtro de densidade (opcional);
   - nome do arquivo contendo a curva de Eficiência Quântica do fabricante (opcional);
   - nome do arquivo contendo os dados detector;
   - nome arquivo Log (opcional)
   - ganho do CCD.
   
 Preenchendo o arquivos com as informações, execute novamente o comando.
-[editar]
 Caso deseje saber quais os pontos do espectro estão dentro de um intervalo da curva de EQ, execute o comando:
          
           ./QEcompleto.py --range=vmin,vmax          
