@@ -26,26 +26,21 @@ __copyright__ = """
 
 import matplotlib.pyplot as plt
 import numpy as np
+import copy
 
 from scipy.interpolate import interp1d, splrep, splev
 from scipy.integrate import quad
 
-from QE_readImages_Arq import LeArq_curvaEQFabricante
+from QE_reduceImgs_readArq import LeArq_curvaEQFabricante
 
 def plotGraph(x,y, std, parametrosGraph, name):
 	FatorConversao = 0
 	if name != '':
 		EQfabricante, espectroFrabricante = LeArq_curvaEQFabricante(name)
 		plt.plot(espectroFrabricante, EQfabricante, c='red',linestyle='--')
-
-		EQmaxDados, LambdaDados = returnMax(y)
-		EQmaxfacricante, LambdaFabricante = returnMax(EQfabricante)
-		FatorConversao = EQmaxfacricante/EQmaxDados
 		
-		for i in range(len(y)-1):
-			y[i]=y[i]*FatorConversao
-
-	else: FatorConversao = 1
+		CopyY = copy.copy(y) 
+		EQmaxDados, LambdaDados = returnMax(CopyY)	
 
 	font = 15	
 	plt.plot(x,y, c='blue')
@@ -53,7 +48,8 @@ def plotGraph(x,y, std, parametrosGraph, name):
 	plt.xlabel(r'$\mathtt{Comprimento \quad de \quad onda \; (nm)}$', size=font)
 	plt.ylabel(r'$\mathtt{EQ \quad (}$' + '%' + r'$\mathtt{)}$', size=font)
 	plt.title(r'$\mathtt{Curva \quad de \quad Efici\^encia \quad Qu\^antica}$', size=font)
-	plt.xlim(xmin=x[0], xmax=x[-1])
+	plt.xlim(xmin=x[0]*0.99, xmax=x[-1])
+	plt.ylim(ymin = 0, ymax=100)
 
 	plt.annotate(r'$\mathtt{EQ_{max} \; = \; %.1f}$' %(parametrosGraph[0]) + ' %', xy=(0.62,0.95), xycoords='axes fraction',  ha='left', va='center', size=font)
 	plt.annotate(r'$\mathtt{Comp. \; onda \; = \; %.2f \; (nm)}$' %(parametrosGraph[1]), xy=(0.62,0.9), xycoords='axes fraction',  ha='left', va='center', size=font)

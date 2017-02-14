@@ -37,38 +37,37 @@ import astropy.io.fits as fits
 import numpy as np
 import os
 from math import sqrt
-from QE_readImages_Arq import LeArquivoReturnLista, LeArq_curvaCalibDetector
+from QE_reduceImgs_readArq import LeArquivoReturnLista, LeArq_curvaCalibFiltroDensidade
+from QE_GraphLib import returnMax
 
 cwd = os.getcwd()
-chdir = cwd + '/' + 'Mediana das Imagens'
+chdir = cwd + '/' + 'Imagens_reduzidas'
 
 
-def GeraVetorFluxoCamera(header, nImages, ganho):
+def GeraVetorFluxoCamera(header, nImages, ganho, tagDado, tagRef):
 	print '\nCalculando o fluxo total da camera \n'
 	coordx	   = header['naxis1']/2
 	coordy 	   = header['naxis2']/2
 	Cdimension = 815
 	
-	etime = getVetorEtime(nImages)
-	dadosBackground = getDadosBackground()
-	medianBackground = dadosBackground[0]
-	stdBackground = dadosBackground[1]
+	etime2 = getVetorEtime(nImages, tagDado)
+	etime1 = getVetorEtime(nImages, tagRef)
+	VetorStdDiff = getStdDiffImages()
 
 	os.chdir(chdir)
-	vetorFluxoCamera, vetorSigmaBackground_Signal, i = [], [], 0
-	with open('listaImagensCombinadas') as f:
+	vetorFluxoCamera, i = [], 0
+	with open('listaImagensReduzidas') as f:
 		lista = f.read().splitlines()
 		for img in lista:
-			data = fits.getdata(img)[0]
+			data = fits.getdata(img)
 			data = caixaPixels(data,(coordx,coordy,Cdimension))	
-			fluxo, sigma = calcFluxo(data, etime[i], medianBackground[i], stdBackground[i], ganho)
-			vetorFluxoCamera.append(fluxo)
-			vetorSigmaBackground_Signal.append(sigma)			
-			i+=1				
+			fluxo = calcFluxo(data, etime2[i]- etime1[i], ganho)
+			vetorFluxoCamera.append(fluxo)						
+			i+=1						
 		f.close()
 		os.chdir(cwd)	
-	criaArqFluxoCamera(vetorFluxoCamera, vetorSigmaBackground_Signal)
-	
+	criaArqFluxoCamera(vetorFluxoCamera, VetorStdDiff)	
+
 
 
 def caixaPixels(imagem, tupla):
@@ -81,20 +80,16 @@ def caixaPixels(imagem, tupla):
 	return imagem
 
 
-def calcFluxo(data, etime, medianBackground, stdBackground, ganho):
-	Somapixels, sigmaBackground_sigmaSignal, variance = 0, 0, 0
-	Somapixels = sum(sum(data - medianBackground))*ganho #soma dos valores dos pixels subt. do Background mediano
-	fluxoImagem = Somapixels/etime #contagens totais pelo tempo de exposicao
-	variance += np.abs(data-medianBackground)+ (stdBackground*ganho)**2
-	variance = sum(sum(variance))
+
+def calcFluxo(data, etime, ganho):
+	Somapixels = sum(sum(data))*ganho #soma dos valores dos pixels subt. do Background mediano
+	fluxoImagem = Somapixels/etime #contagens totais pelo tempo de exposicao	
 	
-	return fluxoImagem, sqrt(variance)
+	return fluxoImagem
 
 
 
-
-def FluxoRelativo(Fluxocamera,Fluxodetector, Stdcamera, Strespectro, nomeArq_CalibDetector):
-	
+def FluxoRelativo(Fluxocamera,Fluxodetector, Stdcamera, Strespectro, nomeArq_CalibFiltroDensidade):	
 	vetorEQ, vetorSigmaTotal = [], []
 	Split_Str_espectro = Strespectro.split(',')
 	Einicial = int(Split_Str_espectro[0])
@@ -103,28 +98,26 @@ def FluxoRelativo(Fluxocamera,Fluxodetector, Stdcamera, Strespectro, nomeArq_Cal
 	n = (Efinal - Einicial)/step + 1
 	espectro = np.linspace(Einicial, Efinal, n)
 
-	VetorCalibracaoDetector = LeArq_curvaCalibDetector(nomeArq_CalibDetector, n)
-
+	VetorFiltroDensidade = LeArq_curvaCalibFiltroDensidade(nomeArq_CalibFiltroDensidade, n)
 	for i in range(len(Fluxocamera)):
 		h = 6.62607004e-34 
-		c = 299792458 #m/s
+		c = 299792458 #m/s		
 		ErroPorcentDetector = CalcErroDetector(espectro[i])
-		sigmaDetector = sqrt(ErroPorcentDetector*Fluxodetector[i]**2)
-
-		Rp = (Fluxodetector[i]/VetorCalibracaoDetector[i])*(espectro[i]*1e-9/(h*c))
+		sigmaDetector = sqrt(ErroPorcentDetector*Fluxodetector[i]**2)		
+		#caso nao seja fornecido o nome do arquivo do filtro de densidade, a funcao retornara um vetor contendo apenas o valor 1.
+		Rp = VetorFiltroDensidade[i]*Fluxodetector[i]*espectro[i]*1e-9/(h*c)
 		EQ = (Fluxocamera[i]/Rp)*100	
 		varianceTotal = (Stdcamera[i]/Rp*100)**2 +sigmaDetector**2
 		vetorEQ.append(EQ)
 		vetorSigmaTotal.append(sqrt(varianceTotal))
 		i+=1
-
 	return vetorEQ, vetorSigmaTotal
 
 
 
 
-def getVetorEtime(nImages):
-	arquivoListaImagens = 'listaImagens'
+def getVetorEtime(nImages, tagDado):
+	arquivoListaImagens = tagDado+'List.txt'
 	vetorEtime = []
 	listaImagens = LeArquivoReturnLista(arquivoListaImagens)
 	for i in range(len(listaImagens))[::nImages]:
@@ -135,16 +128,14 @@ def getVetorEtime(nImages):
 		
 
 
-def getDadosBackground():
-	dadosBackground = [[],[]]
-	with open('dadosBackground.dat') as arq:
+def getStdDiffImages():
+	StdDiff = []
+	with open('StdDiffImages') as arq:
 		listaValues = arq.read().splitlines()
-		for linha in listaValues[1:]:
-			values = linha.split('\t\t')
-			dadosBackground[0].append(float(values[0]))
-			dadosBackground[1].append(float(values[1]))
+		for linha in listaValues[1:]:			
+			StdDiff.append(float(linha))			
 		arq.close()
-	return dadosBackground
+	return StdDiff
 
 
 
@@ -174,7 +165,7 @@ def criaArqFluxoCamera(VetorF, vetorSigma):
 	except:
 		nome.remove()
 		arq = open(nome, 'w')
-	arq.write(' Fluxo (W/m²)			Sigma\n')
+	arq.write(' Fluxo (e/s)			Sigma (e/s)\n')
 	for i in range(len(VetorF)):
 		arq.write('%e \t\t\t %f\n' %(VetorF[i], vetorSigma[i]))
 	arq.close()

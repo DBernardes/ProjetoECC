@@ -24,19 +24,16 @@ import numpy as np
 import logfile as l
 import datetime
 
-from QE_makeArq import criaArq_listaImgInput, criaArq_infoEnsaio
 from optparse import OptionParser
+
+from QE_makeArq import criaArq_listaImgMedidas, criaArq_infoEnsaio
 from QE_GraphLib import plotGraph, parametrosGraph
-from QE_readImages_Arq import mkDir_saveCombinedImages, readArqDetector, ImagemUnica_returnHeader, LeArqFluxoCamera
+from QE_reduceImgs_readArq import mkDir_saveCombinedImages, mkDir_ImgPair, readArqDetector, ImagemUnica_returnHeader, LeArqFluxoCamera
 from QE_calcFluxo import  GeraVetorFluxoCamera, FluxoRelativo
-from QE_calcBackground_Images import LeBackgroundImagens_saveArquivoMedianBackground
 
 parser = OptionParser()
 parser.add_option("-v", action="store_true", dest="verbose", help="verbose",default=False)
 parser.add_option("-r",'--range',dest="Range",type = 'string', help='Intervalo do Espectro', default ='')
-
-
-
 
 nowInitial = datetime.datetime.now()
 
@@ -47,6 +44,7 @@ except:
 
 if options.verbose:
     print 'Lista de imagens: ', options.list
+
 
 #retorna os valores de espectro para um intervalo de EQ
 def returnInterval(x,f):
@@ -59,31 +57,28 @@ def returnInterval(x,f):
 				print ' ',round(data,2),'\t', round(f(data),2)
 
 #------------------------------------------------------------------------------------------
-nImages, Texp_Detector, ganhoCCD, nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro = criaArq_infoEnsaio()
-
+nImages, ganhoCCD, nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro, tagDado, tagRef = criaArq_infoEnsaio()
 
 #cria um arquivo contendo o nome das imagens obtidas para a caracterizacao
-#criaArq_listaImgInput(nImages)
+#criaArq_listaImgMedidas(nImages, tagDado)
+#criaArq_listaImgMedidas(nImages, tagRef)
+
 
 #le o header de uma unica imagem para retirada de informacoes de tamanho e coords. centrais
-header = ImagemUnica_returnHeader()
+header = ImagemUnica_returnHeader(tagDado)
 
 
 #cria um diretorio com as imagens combinadas pela mediana
-mkDir_saveCombinedImages(nImages)
-
-
-#realiza a leitura do background das imagens, salvando um arquivo com os valores medianos e respectivos desvios padrao
-LeBackgroundImagens_saveArquivoMedianBackground(header)
+mkDir_ImgPair(nImages, tagDado, tagRef, ganhoCCD)
 
 
 #gera os vetores de fluxo da camera e respectivo desvio padrao
-GeraVetorFluxoCamera(header, nImages, ganhoCCD)
+GeraVetorFluxoCamera(header, nImages, ganhoCCD, tagDado, tagRef)
 
 #le os dados do fluxo do CCD
 vetorFluxoCamera, vetorSigmaBackground_Signal = LeArqFluxoCamera()
 #le os dados do fotometros
-valoresFotometro = readArqDetector(nomeArqDetector, Texp_Detector)
+valoresFotometro = readArqDetector(nomeArqDetector)
 
 
 #divide os valores do fluxo da camera pelo detector

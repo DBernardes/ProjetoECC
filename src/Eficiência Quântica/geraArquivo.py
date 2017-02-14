@@ -41,9 +41,12 @@ def geraArquivo(inputlist,n):
 	combinedImage = Combiner(x)
 	combinedImageMedian = combinedImage.median_combine() #average_combine
 	NPcombinedImage = np.asarray(combinedImageMedian)
+	return NPcombinedImage
 
+
+'''
 	if n < 10: string = '00%i'%(n)
-	if 10 <= n < 99: string = '0%i'%(n)
+	if 10 <= n < 100: string = '0%i'%(n)
 	if n >= 100: string = '%i'%(n)
 
 	try:
@@ -53,7 +56,7 @@ def geraArquivo(inputlist,n):
 		print 'Erro ao salvar o arquivo.'	
 	return 
 
-
+'''
 
 
 
