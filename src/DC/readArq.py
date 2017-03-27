@@ -14,7 +14,7 @@ Laboratorio Nacional de Astrofisica, Brazil
 
 def readArq_returnListDirectories() :
 	with open('Directories') as f:
-   		lines = f.read().splitlines()
+   		lines = f.read().splitlines()	
 	return lines
 
 

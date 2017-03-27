@@ -22,14 +22,26 @@ import datetime
 import os, sys
 
 from CCDinfo import CCDinfo
+from astropy.io import fits
+from readArq import readArq_returnListDirectories, readArq_returnListImages
 
-def logfile(name, nowInitial, minute, second, Dict, DKnominal, box=False):
-	try:
-		logf = open(name, 'w') 
-	except:
-		name.remove()
-		logf = open(name, 'w') 	
-	
+
+cwd = os.getcwd()
+
+def logfile(Dic, DKnominal):
+
+	minute = Dic['minute']
+	second = Dic['second']
+	header = Dic['header']
+	tagBias = Dic['tagBias']
+	tagDark = Dic['tagDark']
+	parametrosBox = Dic['parametrosBox']	
+	qtdImagesBias = Dic['qtdImagesBias']
+	qtdImagesDark = Dic['qtdImagesDark']
+	coordxBox = parametrosBox[0]
+	coordyBox = parametrosBox[1]	
+	dimensao = parametrosBox[2]
+		
 	now = datetime.datetime.now()
 	commandline = sys.argv		
 
@@ -42,18 +54,45 @@ def logfile(name, nowInitial, minute, second, Dict, DKnominal, box=False):
 	WorkDirectory = 'Diretorio atual: ' + os.getcwd()	
 
 	nowInitial = datetime.datetime.now()
-	TimeElapsed = (nowInitial.minute - minute)*60 + nowInitial.second - second #hora final menos hora inicial 	
+	TimeElapsed = (nowInitial.minute - minute)*60 + (nowInitial.second - second) #hora final menos hora inicial 	
 	Tempoprocess = 'Tempo de processamento: %i min %i s' %(TimeElapsed/60,TimeElapsed%60)
 
-	if box:
-		Strbox = 'Opcao caixa de pixels: (x,y) = (%i,%i), dimensao = %i.' %(Dict['Boxparameter'][0],Dict['Boxparameter'][1],Dict['Boxparameter'][2]*2) + '\n\n'
-	else:
-		Strbox = ''
+	Strbox = 'Opcao caixa de pixels: (x,y) = (%i,%i), dimensao = %i.' %(coordxBox,coordyBox,dimensao) + '\n\n'
+	
+	CCDstr = CCDinfo(header, qtdImagesBias,qtdImagesDark)
+	DKnominal = 'Corrente de escuro calculada: %s e-/pix/s' %(DKnominal)
 
-	CCDstr = CCDinfo(Dict['header'], Dict['qtdImagens'], Dict['vetorTemp'] )
-	DKnominal = 'Corrente de escuro nominal: %s e-/pix/s' %(DKnominal)
 
-	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n'+ Tempoprocess+'\n\n'+ Strbox + CCDstr+ '\n\n'+ DKnominal
+	StrNomeImagens =  '\t\tArquivo\t\t\t CDDTemp (ºC)\t Texp (s)\n'
+	StrNomeImagens += '--------------------------------------------------------\n'
+	directories = readArq_returnListDirectories()
+	for Dir  in directories:
+		chdir = cwd + '/' + Dir
+		os.chdir(chdir)
+		listaImgBias = readArq_returnListImages(tagBias)
+		listaImgDark = readArq_returnListImages(tagDark)
+		for img in listaImgBias:
+			header = fits.getheader(img)
+			StrNomeImagens += img + '\t\t' + str(header['temp']) + '\t\t\t' + str(header['exposure']) +'\n' 
+	for Dir  in directories:
+		chdir = cwd + '/' + Dir
+		os.chdir(chdir)
+		listaImgBias = readArq_returnListImages(tagBias)
+		listaImgDark = readArq_returnListImages(tagDark)
+		for img in listaImgDark:
+			header = fits.getheader(img)
+			StrNomeImagens += img + '\t\t' + str(header['temp']) + '\t\t\t' + str(header['exposure']) +'\n' 
+	os.chdir(cwd)
+	
 
+	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n'+ Tempoprocess+'\n\n'+ Strbox + CCDstr+ '\n\n'+ DKnominal + '\n\n\n\n' + StrNomeImagens
+
+	BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
+	os.chdir(BackDir)
+	try:
+		logf = open('DCLog', 'w') 
+	except:
+		name.remove()
+		logf = open('DCLog', 'w') 	
 	logf.write(dados)
 	logf.close()	

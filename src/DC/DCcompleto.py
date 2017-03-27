@@ -36,6 +36,7 @@ from caixaPixels import caixaPixels
 from makeList_cwd import criaArq_listaImgInput, criaArq_listaDirectories, criaListas_Dark_Bias
 from logfile import logfile
 from readArq import readArq_returnListDirectories, readArq_returnListImages
+from criaArq_resultadoCaract import arquivoCaract
 
 from optparse import OptionParser
 
@@ -48,10 +49,10 @@ parser.add_option("-i", "--directories", dest="directories", help="Keyword para 
 parser.add_option("-b", "--bias", dest="bias", help="Keyword para imagens bias",type='string',default="")
 parser.add_option("-d", "--dark", dest="dark", help="Keyword para imagens dark",type='string',default="")
 parser.add_option("-e", "--etimekey", dest="etimekey", help="Keyword para tempo de exposicao",type='string',default="EXPOSURE")
-parser.add_option("-l", "--logfile", dest="logfile", help="Log file name",type='string',default="")
+parser.add_option("-l", "--logfile", action='store_true', dest="logfile", help="Log file name", default=False)
 parser.add_option("-v", action="store_true", dest="verbose", help="verbose",default=False)
 parser.add_option("-c", "--box", dest="box", help="caixa de pixels",type='string',default="")
-
+parser.add_option("-g", "--gain", dest="gain", help="ganho do CCD",type='int',default=1)
 try:
     options,args = parser.parse_args(sys.argv[1:])
 except:
@@ -63,29 +64,29 @@ if options.verbose:
 
 
 cwd = os.getcwd()
-Dict = {'header':0, 'qtdImagens':0, 'Boxparameter':[], 'vetorTemp':[]}
-
-
-
-#criaArq_listaDirectories(options.directories)
+criaArq_listaDirectories(options.directories)
 directories = readArq_returnListDirectories()
-#criaListas_Dark_Bias(cwd, directiories, options.bias, options.dark)
+criaListas_Dark_Bias(cwd, directories, options.bias, options.dark)
 
 
-for Dir  in directories:
+
+
+Dic = {'qtdImagesBias':0, 'qtdImagesDark':0, 'minute':minute, 'second':second, 'tagBias':options.bias, 'tagDark':options.dark}
+for Dir in directories:
 	chdir = cwd + '/' + Dir
 	os.chdir(chdir)
 	print chdir
 	
 	#cria imagem bias para reducao dos dados
-	listaImgBias = readArq_returnListImages(options.bias)
+	listaImgBias = readArq_returnListImages(options.bias)	
 	criaImgBias_Reduction(listaImgBias)
+	Dic['qtdImagesBias'] += len(listaImgBias)
 
-	listaImgDark = readArq_returnListImages(options.dark)
-	header = fits.getheader(listaImgDark[-1])		
-	Dict['vetorTemp'].append(header['temp'])
-	Dict['qtdImagens']+= len(listaImgDark)	
-	Dict['header'] = header
+	listaImgDark = readArq_returnListImages(options.dark)	
+	header = fits.getheader(listaImgDark[0])
+	Dic['header'] = header
+	Dic['qtdImagesDark'] += len(listaImgDark)		
+	
 	if options.box:
 		parametros = tuple(options.box.split(','))
 		xcoord = int(parametros[0])
@@ -95,30 +96,38 @@ for Dir  in directories:
 		xcoord = header['naxis1']/2
 		ycoord = header['naxis2']/2
 		dimension = 100
+	parametrosBox = [xcoord,ycoord,dimension]	
+	Dic['parametrosBox'] = parametrosBox
+	criaArq_DadosTemporais(listaImgDark,parametrosBox)
 
-	parametros = [xcoord,ycoord,dimension]
-	Dict['Boxparameter'] = parametros	
-	criaArq_DadosTemporais(listaImgDark,parametros)
 
-
+#verifica qual o diretorio com a menor temperatura e retorna seu nome
+vetorTemp=[]
+TempMin= 0
+for Dir  in directories:
+	chdir = cwd + '/' + Dir
+	os.chdir(chdir)
+	listaImgDark = readArq_returnListImages(options.dark)
+	header=fits.getheader(listaImgDark[0])
+	vetorTemp.append(header['temp'])
+	if header['temp'] < TempMin:
+		TempMin = header['temp']
+		DiretorioTempMin = Dir		
+	os.chdir(cwd)
+	
+chdir = cwd + '/' + Dir
+os.chdir(chdir)
+listaImgDark = readArq_returnListImages(options.dark)
 fig = plt.figure(figsize=(15,17))
-DCnominal = DCvariacaoTemporal(cwd, directories, Dict['vetorTemp'])
-#recebe as imagens do ultimo diretorio da lista
-DCderivada(listaImgDark, header)
-
-
+DCnominal = DCvariacaoTemporal(cwd, directories, vetorTemp)
+DCderivada(listaImgDark, options.gain)
 os.chdir(cwd)
-plt.savefig('Relatório DC', format='pdf')
-plt.close() 
-
-
 
 # Gera arquivo log
 if options.logfile :
-	if options.box:
-		logfile(options.logfile, nowInitial, minute, second, Dict, DCnominal, box=True)
-	else:
-		logfile(options.logfile, nowInitial, minute, second, Dict, DCnominal)
+	logfile(Dic, DCnominal)
+plt.savefig('Relatório DC', format='pdf')
 
-
+arqCaract = arquivoCaract()
+arqCaract.criaArq(arqCaract)
 

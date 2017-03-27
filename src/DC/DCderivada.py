@@ -39,7 +39,7 @@ from DC_readArq import readArq_Etime
 
 
 #gera os dados principais para plotagem dos graficos
-def calcDerivada_XY(dados, etime, preamp, lenLinha, lenColuna):	
+def calcDerivada_XY(dados, etime, gain, lenLinha, lenColuna):	
 	xlinha = range(lenLinha)
 	xcoluna = range(lenColuna)
 	derivy = []
@@ -48,7 +48,7 @@ def calcDerivada_XY(dados, etime, preamp, lenLinha, lenColuna):
 	while i < lenLinha:
 		vetorlinha = []
 		for img in dados:
-			vetorlinha.append(np.mean(img[i])*preamp)
+			vetorlinha.append(np.mean(img[i])*gain)
 		coefAjust = np.polyfit(etime,vetorlinha,1)
 		derivy.append(coefAjust[0])
 		i+=1	
@@ -62,7 +62,7 @@ def calcDerivada_XY(dados, etime, preamp, lenLinha, lenColuna):
 			while i < lenLinha:
 				vetorcoluna.append(img[i][j])
 				i+=1			
-			meanColuna.append(np.mean(vetorcoluna)*preamp)					
+			meanColuna.append(np.mean(vetorcoluna)*gain)					
 		coefAjust = np.polyfit(etime,meanColuna,1)
 		derivx.append(coefAjust[0])
 		j+=1	
@@ -128,18 +128,19 @@ def caixaTexto(mean, std, meanBin, meanStdbin, posx, posy):
 #---------------------------------------------------------------------------------------------
 
 
-def DCderivada(listaImagens, header):	
-	VetorEtime = readArq_Etime()
+def DCderivada(listaImagens, gain):
+	print '\nCalculando a distribuicao da corrente de escuro pelo CCD.\n'
+	header = fits.getheader(listaImagens[0])
+	VetorEtime 	= readArq_Etime()
 	temperatura = header['temp']
-	preamp = header['preamp']
-	lenLinha = header['naxis1']
-	lenColuna = header['naxis2']
+	lenLinha 	= header['naxis1']
+	lenColuna 	= header['naxis2']
 	dados=[]
 	for img in listaImagens:
 		dados.append(fits.getdata(img)[0])
 	
 
-	derivx, derivy, xlinha, xcoluna = calcDerivada_XY(dados, VetorEtime,preamp, lenLinha, lenColuna)
+	derivx, derivy, xlinha, xcoluna = calcDerivada_XY(dados, VetorEtime, gain, lenLinha, lenColuna)
 
 
 	mean, std, meanBin, meanStdbin = plotGrafico(xcoluna, derivx, 1, 0, temperatura)	

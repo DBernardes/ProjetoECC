@@ -61,11 +61,9 @@ def criaArq_listaDirectories(directories):
 	s,i='',0	
 	listaArquivos = os.listdir(cwd)
 	listaArquivos.sort()
-
 	for arq in listaArquivos:
 		if directories in arq:
 			s += str(arq)+'\n'
-		
 	try:
 		logf = open('Directories', 'w') 
 	except:
@@ -76,7 +74,7 @@ def criaArq_listaDirectories(directories):
 
 
 
-def criaListas_Dark_Bias(cwd, directiories, KW_bias, KW_dark):
+def criaListas_Dark_Bias(cwd, directories, KW_bias, KW_dark):
 	for Dir in directories:
 		chdir = cwd + '/' + Dir
 		os.chdir(chdir)
