@@ -30,30 +30,44 @@ import copy
 
 from scipy.interpolate import interp1d, splrep, splev
 from scipy.integrate import quad
+from math import sqrt
 
 from QE_reduceImgs_readArq import LeArq_curvaEQFabricante
 
 def plotGraph(x,y, std, parametrosGraph, name):
-	FatorConversao = 0
+
+	errorSourceEstabilization = 0.07714 #erro calculado para estabilizacao da fonte
+	comprimentoOnda = range(300,1200,100)
+	errorPlanAlignment = [0.0, 0.00693, 0.01726, 0.02870, 0.03922, 0.04652, 0.06385, 0.07628, 0.05585]
+	Interpolation = interp1d(comprimentoOnda, errorPlanAlignment, kind='cubic')
+	ErroExperimental = []
+	for Lambda in x:
+		ErroExperimental.append(sqrt((Interpolation(Lambda)**2 + errorSourceEstabilization**2)*100**2))
+
 	if name != '':
 		EQfabricante, espectroFrabricante = LeArq_curvaEQFabricante(name)
-		plt.plot(espectroFrabricante, EQfabricante, c='red',linestyle='--')
-		
-		CopyY = copy.copy(y) 
-		EQmaxDados, LambdaDados = returnMax(CopyY)	
+		plt.plot(espectroFrabricante, EQfabricante,'-', c='green', linewidth=2, label=r'$\mathtt{Fabricante}$')		
+
+	CopyY = copy.copy(y) 
+	EQmaxDados, LambdaDados = returnMax(CopyY)	
+	x,y,ErroExperimental = np.asarray(x), np.asarray(y), np.asarray(ErroExperimental)
 
 	font = 15	
-	plt.plot(x,y, c='blue')
+	plt.plot(x,y, c='blue', label=r'$\mathtt{EQ_{medida}}$')
 	plt.errorbar(x,y,std, fmt='o', c='blue')
+	plt.plot(x, y - ErroExperimental , c='red',linestyle='--')
+	plt.plot(x, y + ErroExperimental , c='red',linestyle='--')
+
 	plt.xlabel(r'$\mathtt{Comprimento \quad de \quad onda \; (nm)}$', size=font)
 	plt.ylabel(r'$\mathtt{EQ \quad (}$' + '%' + r'$\mathtt{)}$', size=font)
 	plt.title(r'$\mathtt{Curva \quad de \quad Efici\^encia \quad Qu\^antica}$', size=font)
 	plt.xlim(xmin=x[0]*0.99, xmax=x[-1])
 	plt.ylim(ymin = 0, ymax=100)
+	plt.legend(loc='lower left')
 
-	plt.annotate(r'$\mathtt{EQ_{max} \; = \; %.1f}$' %(parametrosGraph[0]) + ' %', xy=(0.62,0.95), xycoords='axes fraction',  ha='left', va='center', size=font)
-	plt.annotate(r'$\mathtt{Comp. \; onda \; = \; %.2f \; (nm)}$' %(parametrosGraph[1]), xy=(0.62,0.9), xycoords='axes fraction',  ha='left', va='center', size=font)
-	plt.annotate(r'$\mathtt{Convers\~ao \; = \; %.2f}$' %(parametrosGraph[2]) + ' %', xy=(0.62, 0.85), xycoords='axes fraction',  ha='left', va='center', size=font)
+	plt.annotate(r'$\mathtt{EQ_{max} \; = \; %.1f}$' %(parametrosGraph[0]) + ' %', xy=(0.32,0.15), xycoords='axes fraction',  ha='left', va='center', size=font)
+	plt.annotate(r'$\mathtt{Comp. \; onda \; = \; %.2f \; (nm)}$' %(parametrosGraph[1]), xy=(0.32,0.10), xycoords='axes fraction',  ha='left', va='center', size=font)
+	plt.annotate(r'$\mathtt{Convers\~ao \; = \; %.2f}$' %(parametrosGraph[2]) + ' %', xy=(0.32, 0.05), xycoords='axes fraction',  ha='left', va='center', size=font)
 
 
 def parametrosGraph(string, dados):
@@ -74,10 +88,6 @@ def parametrosGraph(string, dados):
 	parametrosGraph= [fmax, x[i], absPorcent]
 
 	return x, f, parametrosGraph
-
-
-
-
 
 
 #retorna valor maximo da curva de EQ

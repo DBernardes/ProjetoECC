@@ -36,9 +36,13 @@ __copyright__ = """
 import astropy.io.fits as fits
 import numpy as np
 import os
-from math import sqrt
+
+from math import sqrt, cos
+from scipy.interpolate import interp1d
 from QE_reduceImgs_readArq import LeArquivoReturnLista, LeArq_curvaCalibFiltroDensidade
 from QE_GraphLib import returnMax
+
+import matplotlib.pyplot as plt
 
 cwd = os.getcwd()
 chdir = cwd + '/' + 'Imagens_reduzidas'
@@ -61,7 +65,7 @@ def GeraVetorFluxoCamera(header, nImages, ganho, tagDado, tagRef):
 		for img in lista:
 			data = fits.getdata(img)
 			data = caixaPixels(data,(coordx,coordy,Cdimension))	
-			fluxo = calcFluxo(data, etime2[i]- etime1[i], ganho)
+			fluxo = calcFluxo(data, etime2[i]-etime1[i], ganho)
 			vetorFluxoCamera.append(fluxo)						
 			i+=1						
 		f.close()
@@ -97,17 +101,21 @@ def FluxoRelativo(Fluxocamera,Fluxodetector, Stdcamera, Strespectro, nomeArq_Cal
 	step     = int(Split_Str_espectro[2])
 	n = (Efinal - Einicial)/step + 1
 	espectro = np.linspace(Einicial, Efinal, n)
+	
+	
 
 	VetorFiltroDensidade = LeArq_curvaCalibFiltroDensidade(nomeArq_CalibFiltroDensidade, n)
 	for i in range(len(Fluxocamera)):
 		h = 6.62607004e-34 
 		c = 299792458 #m/s		
-		ErroPorcentDetector = CalcErroDetector(espectro[i])
-		sigmaDetector = sqrt(ErroPorcentDetector*Fluxodetector[i]**2)		
+		ErroPorcentDetector = CalcErroDetector(espectro[i])	
+		
 		#caso nao seja fornecido o nome do arquivo do filtro de densidade, a funcao retornara um vetor contendo apenas o valor 1.
-		Rp = VetorFiltroDensidade[i]*Fluxodetector[i]*espectro[i]*1e-9/(h*c)
-		EQ = (Fluxocamera[i]/Rp)*100	
-		varianceTotal = (Stdcamera[i]/Rp*100)**2 +sigmaDetector**2
+		A = Fluxocamera[i]*100
+		B = VetorFiltroDensidade[i]*Fluxodetector[i]*espectro[i]*1e-9/(h*c)
+		sigmaDetector = ErroPorcentDetector*B
+		EQ = A/B		
+		varianceTotal = EQ**2*((Stdcamera[i]/A)**2+(sigmaDetector/B)**2)
 		vetorEQ.append(EQ)
 		vetorSigmaTotal.append(sqrt(varianceTotal))
 		i+=1
@@ -150,10 +158,11 @@ def CalcErroDetector(Comp_onda):
 	if 900< Comp_onda < 1000:
 		photodiodeError = 0.022
 	if 1000< Comp_onda < 1100:
-		photodiodeError = 0.022
+		photodiodeError = 0.022	
 	
-	ErroDetector = NIST_OLSD**2 + photodiodeError**2
-	return ErroDetector
+	ErroDetector = NIST_OLSD**2 + photodiodeError**2 
+
+	return sqrt(ErroDetector)
 
 
 

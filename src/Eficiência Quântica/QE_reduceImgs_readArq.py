@@ -9,7 +9,7 @@
 
 		mkDir_saveCombinedImages: esta funcao recebe o numero de imagens (nImages) adquiridas para o mesmo comprimento de onda; pela chamada da funcao LeArquivoReturnLista retorna a lista de todas as imagens adquiridas no ensaio; para um numero de nImages em nImages imagens (onde nImages é um valor fornecido) a funcao cria um vetor, retornando-o para a funcao geraArquivo: esta funcao ira combinar as imagens pela mediana, salvando-as num novo diretorio. Feito isso, a funcao cria uma lista com o nomes das novas imagens atraves da chamada da funcao criaArquivo_listaImagensCombinadas.
 
-		readArqDetector: esta funcao recebe o nome do arquivo contendo os dados do detector, retornando um vetor com os valores medidos.
+		readArqDetector: esta funcao recebe o nome do arquivo contendo os PAR2s do detector, retornando um vetor com os valores medidos.
 
 		ImagemUnica_returnHeader: esta funcao recebe uma unica imagem da lista, retornando o header para a retirada de informacoes.
 
@@ -19,7 +19,7 @@
 
 		LeArqFluxoCamera: esta funcao faz a leitura do arquivo Fluxo camera.dat gerado pela funcao criaArqFluxoCamera, retornado dois vetores com os valores do fluxo e dos desvio padrao.
 
-		LeArq_curvaCalibDetector: dado o nome do arquivo da curva de calibracao do detector e o numero do conjunto de imagens, esta funcao retornara um vetor contendo os valores da curva caso a opcao seja fornecida; caso contrario, a funcao retorna um vetor contendo o valor 1.	
+		LeArq_curvaCalibDetector: PAR2 o nome do arquivo da curva de calibracao do detector e o numero do conjunto de imagens, esta funcao retornara um vetor contendo os valores da curva caso a opcao seja fornecida; caso contrario, a funcao retorna um vetor contendo o valor 1.	
 
 
     Laboratorio Nacional de Astrofisica, Brazil.
@@ -37,9 +37,7 @@ __copyright__ = """
 
 import astropy.io.fits as fits
 import numpy as np
-
 import os
-
 
 from math import sqrt
 from geraArquivo import geraArquivo
@@ -48,7 +46,6 @@ cwd = os.getcwd()
 if not os.path.exists('Imagens_reduzidas'):
 	os.makedirs('Imagens_reduzidas')
 chdir = cwd + '/' + 'Imagens_reduzidas'
-
 	
 def mkDir_saveCombinedImages(nImages):
 	print 'Criando diretorio: Mediana das Imagens'
@@ -61,53 +58,53 @@ def mkDir_saveCombinedImages(nImages):
 			imagem = fits.getdata(lista[i])
 			VetorImagens.append(imagem)			 
 			os.chdir(chdir)
-			ga.geraArquivo(VetorImagens, n)
+			geraArquivo(VetorImagens, n)
 			os.chdir(cwd)
 			VetorImagens = []			
 			n+=1			
 		else:
 			imagem = fits.getdata(lista[i])
 			VetorImagens.append(imagem)
-	criaArquivo_listaImagensCombinadas()		
+	criaArquivo_listaImagensReduzidas()		
 	return 
 
 
 
-def mkDir_ImgPair(nImages, tagDado, tagRef, ganho):
+def mkDir_ImgPair(nImages, tagPAR2, tagPAR1, ganho):
 	print 'Criando diretorio: Imagens reduzidas'
 	#recebe uma lista de imagens de retorna um diretorio com as imagens reduzidas de raios cosmicos e erro do shutter
-	listaDado = LeArquivoReturnLista(tagDado+'List.txt')	
-	listaRef = LeArquivoReturnLista(tagRef  +'List.txt')
+	listaPAR2 = LeArquivoReturnLista(tagPAR2+'List.txt')	
+	listaPAR1 = LeArquivoReturnLista(tagPAR1  +'List.txt')
 
 	VetorImagens = [[],[]]
 	i,n, string, VetorStdSignal = 0, 0, '', []
-	for i in range(len(listaDado)):		
+	for i in range(len(listaPAR2)):		
 		if i%nImages == nImages-1:			
-			imagemDado = fits.getdata(listaDado[i])[0].astype(float)
-			imagemRef = fits.getdata(listaRef[i])[0].astype(float)
-			VetorImagens[0].append(imagemDado)
-			VetorImagens[1].append(imagemRef)
+			imagemPAR2 = fits.getdata(listaPAR2[i])[0].astype(float)
+			imagemPAR1 = fits.getdata(listaPAR1[i])[0].astype(float)
+			VetorImagens[0].append(imagemPAR2)
+			VetorImagens[1].append(imagemPAR1)
 	
 			ImgCombinedPAR2 = geraArquivo(VetorImagens[0], n)
 			ImgCombinedPAR1 = geraArquivo(VetorImagens[1], n)			
 					
-			imgReducePAR = imagemDado - imagemRef
-			VetorStdSignal.append(sqrt(sum(sum(imagemDado + imagemRef))*ganho))
+			imgReducePAR = ImgCombinedPAR2 - ImgCombinedPAR1
+			VetorStdSignal.append(sqrt(sum(sum(ImgCombinedPAR2 + ImgCombinedPAR1))*ganho))
 		
 			os.chdir(chdir)
 			if n < 10: string = '00%i'%(n)
 			if 10 <= n < 100: string = '0%i'%(n)
 			if n >= 100: string = '%i'%(n) 
 			print 'ImagemReduzida%s.fits'%(string)
-			fits.writeto('ImagemReduzida_%s.fits'%(string), imgReducePAR, clobber=True)
+			fits.writeto('ImagemReduzida_%s.fits'%(string),imgReducePAR, clobber=True)
 			os.chdir(cwd)
 			VetorImagens = [[],[]]
 			n+=1
 		else:
-			imagemDado = fits.getdata(listaDado[i])[0]
-			imagemRef = fits.getdata(listaRef[i])[0]
-			VetorImagens[0].append(imagemDado)
-			VetorImagens[1].append(imagemRef)
+			imagemPAR2 = fits.getdata(listaPAR2[i])[0]
+			imagemPAR1 = fits.getdata(listaPAR1[i])[0]
+			VetorImagens[0].append(imagemPAR2)
+			VetorImagens[1].append(imagemPAR1)
 	criaArquivo_StdDiffImagens(VetorStdSignal)
 	criaArquivo_listaImagensReduzidas()		
 	return 
@@ -124,8 +121,8 @@ def readArqDetector(name):
 
 
 
-def ImagemUnica_returnHeader(tagDado):
-	with open(tagDado+'List.txt') as arq:
+def ImagemUnica_returnHeader(tagPAR2):
+	with open(tagPAR2+'List.txt') as arq:
 		imagem = arq.read().splitlines()[0].split(',')[0]
 		arq.close()
 	header = fits.getheader(imagem)
@@ -190,17 +187,17 @@ def LeArqFluxoCamera():
 
 
 def LeArq_curvaCalibFiltroDensidade(nome, numeroImagens):
-	Vetordados=[]
+	VetorPAR2s=[]
 	if nome != '':
 		with open(nome) as arq:
 			linhas = arq.read().splitlines()
 		arq.close()
-		for dado in linhas[1:]:
-			Vetordados.append(float(dado))
+		for PAR2 in linhas[1:]:
+			VetorPAR2s.append(float(PAR2))
 	else:
 		for i in range(numeroImagens):
-			Vetordados.append(1)	
-	return Vetordados
+			VetorPAR2s.append(1)	
+	return VetorPAR2s
 
 
 def LeArq_curvaEQFabricante(name):
@@ -214,28 +211,4 @@ def LeArq_curvaEQFabricante(name):
 		vetorEQ.append(float(valores[1]))
 	return vetorEQ, espectro
 
-'''
-
-
-
-
-------------------------------
-
-
-imagemDado = fits.getdata(listaDado[i])[0].astype(float)
-		imagemRef = fits.getdata(listaRef[i])[0].astype(float)
-			
-		imgReducePAR = imagemDado - imagemRef		
-		VetorStdSignal.append(sqrt(sum(sum(imagemDado + imagemRef))*ganho))
-
-		os.chdir(chdir)
-		if n < 10: string = '00%i'%(n)
-		if 10 <= n < 100: string = '0%i'%(n)
-		if n >= 100: string = '%i'%(n) 
-		print 'ImagemReduzida%s.fits'%(string)
-		fits.writeto('ImagemReduzida_%s.fits'%(string), imgReducePAR, clobber=True)
-		os.chdir(cwd)
-		
-		n+=1		
-'''
 		

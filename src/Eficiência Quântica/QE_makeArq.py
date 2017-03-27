@@ -80,7 +80,7 @@ def criaArq_listaImgMedidas(nImages, tag):
 
 def criaArq_infoEnsaio():
 
-	Str = ['Arquivo com as informacoes necessarias para caracterizacao da eficiencia quantica do CCD.\n', '->', 'Espectro (nm) (Einicial, Efinal, passo) =', 'Numero de imagens para cada comprimento de onda =','nome arquivo calibracao filtro densidade =', 'nome arquivo QE do fabricante =', 'nome arquivo detector =', 'nome arquivo Log =','tag do nome das imagens (dado,referencia) =','ganho =', '<-']
+	Str = ['Arquivo com as informacoes necessarias para caracterizacao da eficiencia quantica do CCD.\n', '->', 'Espectro (nm) (Einicial, Efinal, passo) =', 'Numero de imagens para cada comprimento de onda =','nome arquivo calibracao filtro densidade =', 'nome arquivo QE do fabricante =', 'nome arquivo detector =', 'nome arquivo Log =','tag do nome das imagens (PAR2,PAR1) =','ganho =', '<-']
 
 	nota = ['\nNota: neste arquivo estao as principais informacoes referentes ao ensaio de caracterizacao da eficiencia quantica. Nele devem constar as seguintes informacoes:\n', '- Espectro (nm): espectro utilizado no ensaio (em nanometros); nele devem constar o comprimento de onda inicial, comprimento de onda final e o passo utilizado, respectivamente;', '- Numero de imagens adquiridas para cada comprimento de onda;', '- nome do arquivo contendo a curva de calibracao do filtro de densidade (opcional); nele devem constar os valores da curva de transmissao do filtro de densidade utilizado no ensaio. Caso esta opcao nao seja fornecida, o programa ira plotar a curva de EQ sem levar em consideracao a correcao do filtro;' , '- nome do arquivo contendo a curva de Eficiencia Quantica do fabricante (opcional);nele devem constar o par coordenado do comprimento de onda (em nm) pela eficiencia quantica do fabricante; Caso esse opcao nao seja fornecida, o codigo ira plotar apenas a curva de EQ obtida pelo ensaio de caracterizacao;','- nome do arquivo contendo os dados detector;este arquivo precisa conter apenas o valores medidos pelo detector (sem o comprimento de onda utilizado);', '- nome arquivo Log (opcional);','- uma tag (nome ou parte do nome) das imagens, separados por virgulas, obtidas como dados e das imagens obtidas como referencia para que o programa possa separar cada serie de imagens em uma lista diferente;', '- ganho do CCD;','\nApos o preenchimento das informacoes pedidas, execute novamente o comando para obter a caracterizacao da curva de EQ do CCD.\n','As opcoes marcadas com \'(opcional)\' nao necessitam ser preenchidas, no momento dos calculos o codigo apenas levara em consideracao caso seja fornecido o nome de um arquivo.\n','O codigo apenas levara em consideracao os parametros situados dentro das tags \'->\' e \'<-\'; respeitando essa opcao, a organizacao dos dados pode ser feita da forma mais conveniente, permitindo comentarios e espacamento de linhas.\n','Os arquivos contendo dados a serem lidos devem conter o mesmo numero de dados em relacao ao numero de comprimentos de onda do ensaio.\n', 'obs: nao deve haver espaco entre o nome de cada arquivo e o sinal de igualdade, caso contrario, o programa retornara um erro.'] 
 
@@ -133,7 +133,7 @@ def criaArq_infoEnsaio():
 
 				if 'nome arquivo Log' in dado[0]: nomeArqlog = dado[1]
 
-				if 'tag do nome das imagens (dado,referencia)' in dado[0]: tagDado, tagRef = dado[1].split(',')
+				if 'tag do nome das imagens (PAR2,PAR1)' in dado[0]: tagPAR2, tagPAR1 = dado[1].split(',')
 
 				if 'ganho' in dado[0]:
 					try: ganhoCCD = float(dado[1])
@@ -142,7 +142,6 @@ def criaArq_infoEnsaio():
 						exit()		
 			if '<-' in linha: break
 		
-
-		return nImages, ganhoCCD, nomeArqCalibDetector, nomeArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro, tagDado, tagRef
+		return nImages, ganhoCCD, nomeArqCalibDetector, nomeArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro, tagPAR2, tagPAR1
 	
 

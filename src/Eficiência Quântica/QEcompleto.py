@@ -30,6 +30,7 @@ from QE_makeArq import criaArq_listaImgMedidas, criaArq_infoEnsaio
 from QE_GraphLib import plotGraph, parametrosGraph
 from QE_reduceImgs_readArq import mkDir_saveCombinedImages, mkDir_ImgPair, readArqDetector, ImagemUnica_returnHeader, LeArqFluxoCamera
 from QE_calcFluxo import  GeraVetorFluxoCamera, FluxoRelativo
+from criaArq_resultadoCaract import arquivoCaract
 
 parser = OptionParser()
 parser.add_option("-v", action="store_true", dest="verbose", help="verbose",default=False)
@@ -45,35 +46,28 @@ except:
 if options.verbose:
     print 'Lista de imagens: ', options.list
 
+minute = nowInitial.minute
+second = nowInitial.second
 
-#retorna os valores de espectro para um intervalo de EQ
-def returnInterval(x,f):
-	if options.Range:
-		vetor = tuple(options.Range.split(','))
-		vetor = [int(vetor[0]),int(vetor[1])]
-		print 'Espectro (nm)\t'+'EQ (%)'
-		for data in x:	
-			if vetor[0] < f(data) < vetor[1]:
-				print ' ',round(data,2),'\t', round(f(data),2)
 
 #------------------------------------------------------------------------------------------
-nImages, ganhoCCD, nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro, tagDado, tagRef = criaArq_infoEnsaio()
+nImages, ganhoCCD, nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro, tagPAR2, tagPAR1 = criaArq_infoEnsaio()
 
 #cria um arquivo contendo o nome das imagens obtidas para a caracterizacao
-#criaArq_listaImgMedidas(nImages, tagDado)
-#criaArq_listaImgMedidas(nImages, tagRef)
+criaArq_listaImgMedidas(nImages, tagPAR2)
+criaArq_listaImgMedidas(nImages, tagPAR1)
 
 
 #le o header de uma unica imagem para retirada de informacoes de tamanho e coords. centrais
-header = ImagemUnica_returnHeader(tagDado)
+header = ImagemUnica_returnHeader(tagPAR2)
 
 
 #cria um diretorio com as imagens combinadas pela mediana
-mkDir_ImgPair(nImages, tagDado, tagRef, ganhoCCD)
+mkDir_ImgPair(nImages, tagPAR2, tagPAR1, ganhoCCD)
 
 
 #gera os vetores de fluxo da camera e respectivo desvio padrao
-GeraVetorFluxoCamera(header, nImages, ganhoCCD, tagDado, tagRef)
+GeraVetorFluxoCamera(header, nImages, ganhoCCD, tagPAR2, tagPAR1)
 
 #le os dados do fluxo do CCD
 vetorFluxoCamera, vetorSigmaBackground_Signal = LeArqFluxoCamera()
@@ -93,14 +87,14 @@ espectro, interpolation, parametrosList = parametrosGraph(intervEspectro, vetorE
 plotGraph(espectro, vetorEQ, vetorSigmaTotal, parametrosList, noemArqFabricante)
 
 
-#retorna no terminal os valores de EQ para um dado intervalo (opcional)
-returnInterval(espectro, interpolation)
-
-
 plt.savefig('Eficiencia Quantica', format='jpg')
-passo = (espectro[-1]-espectro[0])/len(espectro)+1
-dic = {'qtdImagens':len(espectro)*nImages,'minute':nowInitial.minute, 'second':nowInitial.second,'header':header,'espectro':(espectro[0],espectro[-1],passo)}
+passo = (espectro[-1]-espectro[0])/(len(espectro)-1)
+dic = {'qtdImagens':len(espectro)*nImages*2,'minute':minute,'second':second,'header':header,'espectro':(espectro[0],espectro[-1],passo), 'tagPAR2':tagPAR2, 'tagPAR1':tagPAR1, 'ValoresEspectro':espectro, 'ValoresEQ':vetorEQ}
 
 if nomeArqlog != '': 
-	l.logfile(nomeArqlog, dic)
+	l.logfile(dic)
+
+os.chdir(os.path.normpath(os.getcwd() + os.sep + os.pardir))
+arqCaract = arquivoCaract()
+arqCaract.criaArq(arqCaract)
 
