@@ -55,11 +55,11 @@ def criaArq_listaImgInput(nImages, name):
 
 
 
-def LeArquivoReturnLista(arquivo):
+def LeArquivoReturnLista(arquivo):	
 	with open(arquivo) as arq:
 		lista = []
 		linhas = arq.read().splitlines()
-		for lin in linhas:
+		for lin in linhas:			
 			for img in lin.split(','):
 				lista.append(img)
 		arq.close()

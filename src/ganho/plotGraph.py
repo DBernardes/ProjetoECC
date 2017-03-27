@@ -66,7 +66,7 @@ def Graph_residuos(x,y, std):
 	plt.errorbar(x, residuo, err, c='blue', fmt='o')
 	plt.xlabel(r'$\mathtt{Vari\^ancia \quad (adu)}$', size=font)
 	plt.ylabel(r'$\mathtt{Intensidade \quad do \quad sinal \quad (e-)}$', size=font)
-	plt.title(r'$\mathtt{Curva: \quad res\acuteiduos \quad = \quad sinal \quad - \quad ajuste \quad linear}$'+'\n', size=font)
+	plt.title(r'$\mathtt{Curva: \quad res \acute\iota duos \quad = \quad sinal \quad - \quad ajuste \quad linear}$'+'\n', size=font)
 	plt.xlim(xmin=0.99*x[0], xmax=1.01*x[-1])
 	linhaReferencia(x,residuo)
 

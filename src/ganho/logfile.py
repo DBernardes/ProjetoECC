@@ -23,22 +23,18 @@ import getpass
 import socket
 
 from CCDinfo import CCDinfo
+from astropy.io import fits
 
 
 # Gera arquivo log
-def logfile(name, dic):	
-	
-	lenDados  = dic['lenDados']
-	minute 	  = dic['minute']	
-	second 	  = dic['second']
-	header 	  = dic['header']
-	ganho 	  = dic['ganho']
-	box 	  = dic['box']
-	try:
-		logf = open(name, 'w') 
-	except:
-		name.remove()
-		logf = open(name, 'w')
+def logfile(dic, listaFlat, listaBias):	
+	nImagesFlat   = dic['nImagesFlat']
+	nImagesBias   = dic['nImagesBias']
+	parametrosBox = dic['box']
+	minute = dic['minute']	
+	second = dic['second']
+	ganho  = dic['ganho']
+	header 	  = fits.getheader(listaFlat[0])
 
 	now = datetime.datetime.now()	
 	commandline = sys.argv	
@@ -53,12 +49,27 @@ def logfile(name, dic):
 	nowInitial = datetime.datetime.now()
 	TimeElapsed = (nowInitial.minute - minute)*60 + nowInitial.second - second #hora final menos hora inicial 	
 	Tempoprocess = 'Tempo de processamento: %i min %i s' %(TimeElapsed/60,TimeElapsed%60)
+	
+	Strbox = 'Parametros da caixa de pixels: coordenadas (%i,%i) e dimensao %i'%(parametrosBox[0],parametrosBox[1],parametrosBox[2]*2)
+	StrCCD = CCDinfo(header, nImagesFlat, nImagesBias)
+	Strganho = 'Ganho calculado: %.2f e-/ADU'%(ganho)
 
-	Strbox = 'Tamanho da caixa de pixels = %i'%(box)
-	StrCCD = CCDinfo(header, lenDados)
-	Strganho = 'Ganho calculado: %.2f'%(ganho)
+	StrNomeImagens =  '\t\tArquivo\t\t\t CDDTemp (ºC)\t Texp (s)\n'
+	StrNomeImagens += '--------------------------------------------------------\n'
+	for Nomeimg in listaFlat:
+		header = fits.getheader(Nomeimg)
+		StrNomeImagens += Nomeimg + '\t\t' + str(header['temp']) + '\t\t\t' + str(header['exposure']) +'\n' 
+	for Nomeimg in listaBias:
+		header = fits.getheader(Nomeimg)
+		StrNomeImagens += Nomeimg + '\t\t' + str(header['temp']) + '\t\t\t' + str(header['exposure']) +'\n' 
 
-	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n'+ Tempoprocess+'\n\n'+ Strbox + '\n\n' + StrCCD+ '\n\n'+ Strganho
+	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n'+ Tempoprocess+'\n\n'+ Strbox + '\n\n' + StrCCD+ '\n\n'+ Strganho + '\n\n\n\n' + StrNomeImagens
 
+	BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
+	os.chdir(BackDir)
+	try: logf = open('GanhoLog', 'w') 
+	except:
+		name.remove()
+		logf = open('GanhoLog', 'w')
 	logf.write(dados)
 	logf.close()	

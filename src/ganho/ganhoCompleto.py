@@ -33,7 +33,9 @@ from optparse import OptionParser
 from plotGraph import Graph_sinal_variance, Graph_residuos
 from logfile import logfile
 from makeList_imagesInput import criaArq_listaImgInput, LeArquivoReturnLista
-from Gain_processesImages import calcXY_YerrorBar_XerrorBar
+from Gain_processesImages import calcXY_YerrorBar_XerrorBar, parametrosCaixaPixels
+from criaArq_resultadoCaract import arquivoCaract
+
 from astropy.io import fits
 
 nowInitial = datetime.datetime.now()
@@ -41,10 +43,10 @@ minute = nowInitial.minute
 second = nowInitial.second
 
 parser = OptionParser()
-parser.add_option("-l", "--logfile", dest="logfile", help="Arquivo Log",type='string',default="")
+parser.add_option("-l", "--logfile", action='store_true', dest="logfile", help="Arquivo Log",default="")
 parser.add_option("-f", "--Flat", dest="flat", help="nome e num imagens flat",type='string',default="")
 parser.add_option("-b", "--Bias", dest="bias", help="nome imagens bias",type='string',default="")
-
+parser.add_option("-c", "--caixaPixels", dest="caixaP", help="parametros caixa pixel",type='string',default="")
 try:
     options,args = parser.parse_args(sys.argv[1:])
 except:
@@ -57,30 +59,29 @@ if options.flat:
 	numeroImagens =	int(parametros[1])
 if options.bias:
 	nameBias = options.bias
-#criaArq_listaImgInput(numeroImagens, nameFlat)
-#criaArq_listaImgInput(1, nameBias)
+
+criaArq_listaImgInput(numeroImagens, nameFlat)
+criaArq_listaImgInput(1, nameBias)
 listaBias = LeArquivoReturnLista(nameBias+'list')
 listaFlat = LeArquivoReturnLista(nameFlat+'list')
 
-
-
-
-
 #----------------------------------------------------------------------------------------------------------------------
-X,Y,SigmaTotal, XsigmaBar = calcXY_YerrorBar_XerrorBar(listaFlat, listaBias, numeroImagens)
+parametersBox = parametrosCaixaPixels(options.caixaP, listaFlat[0])		
+X,Y,SigmaTotal, XsigmaBar = calcXY_YerrorBar_XerrorBar(listaFlat, listaBias, numeroImagens, parametersBox)
 
 plt.figure(figsize=(17,8))
 ganho = Graph_sinal_variance(X,Y,SigmaTotal, XsigmaBar)
 Graph_residuos(X,Y, SigmaTotal)
 plt.savefig('ganho', format='jpg')
 
-
-
 #gera arquivo log
 if options.logfile:
-	lenDados = len(flatA)*4
-	dic = {'minute':minute, 'second':second, 'lenDados':lenDados, 'ganho':ganho, 'box':box, 'header':header}
-	logfile(options.logfile, dic)			
-		
+	nImagesFlat = len(listaFlat)
+	nImagesBias = len(listaBias)
+	
+	dic = {'minute':minute, 'second':second, 'nImagesFlat':nImagesFlat,'nImagesBias':nImagesBias, 'ganho':ganho, 'box':parametersBox}
+	logfile(dic, listaFlat, listaBias)			
 
+arqCaract = arquivoCaract()
+arqCaract.criaArq(arqCaract)
 

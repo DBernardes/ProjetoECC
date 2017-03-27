@@ -35,12 +35,18 @@ from math import sqrt, factorial
 
 
 
-def parametrosCaixaPixels(imagem, box=100):
-	header = fits.getheader(imagem)
-	coordx	   = header['naxis1']/2
-	coordy 	   = header['naxis2']/2
-	b = box/2
-	return coordx, coordy, b
+def parametrosCaixaPixels(parametros, imagem, box=100):
+	if parametros == '':
+		header = fits.getheader(imagem)
+		coordx	   = header['naxis1']/2
+		coordy 	   = header['naxis2']/2
+		b = box/2
+	else:
+		parametros = parametros.split(',')
+		coordx = int(parametros[0])
+		coordy = int(parametros[1])
+		b = int(parametros[2])/2
+	return [coordx, coordy, b]
 
 
 def organizaCombinacoes(lista, newlist=[[],[]]):	
@@ -57,7 +63,7 @@ def organizaCombinacoes(lista, newlist=[[],[]]):
 def recebeListaImgs_geraArqListaCombinacoes(listaFlat, numeroImagens):
 	for z in range(len(listaFlat))[::numeroImagens]:
 		listaConjuntos = listaFlat[z:z+numeroImagens]
-	 	listaCombinacoes = organizaCombinacoes(listaConjuntos)
+	 	listaCombinacoes = organizaCombinacoes(listaConjuntos)		
 
 	name = 'arquivoListaCombinacoes'
 	try:arq = open(name, 'w')
@@ -84,46 +90,47 @@ def LeArqImgsFlat_retornaListaImgs():
 
 
 #----------------------------------------------------------------------------------------------------------------------------------
-def calcXY_YerrorBar_XerrorBar(listaFlat, listaBias, numeroImagens):	
+def calcXY_YerrorBar_XerrorBar(listaFlat, listaBias, numeroImagens, parametersBox):	
+	coordx = parametersBox[0]
+	coordy = parametersBox[1]
+	b = parametersBox[2]
 	X, Y, SigmaTotal = [], [], []
 	VetorEixoX, VetorEixoY,VetorStdEixoY, VetorStdEixoX,XsigmaBar = [], [], [], [], []
 	lenListaBias = len(listaBias)
 
-	recebeListaImgs_geraArqListaCombinacoes(listaFlat, numeroImagens)			
+	recebeListaImgs_geraArqListaCombinacoes(listaFlat, numeroImagens)	
+	nCombinacoes = factorial(numeroImagens)/(factorial(2)*factorial(numeroImagens-2))
 	listaImgs = LeArqImgsFlat_retornaListaImgs()
 
 	#le imagens de flat
 	for i in range(len(listaImgs))[::2]:
 		FlatA = fits.getdata(listaImgs[i])  [0]
 		FlatB = fits.getdata(listaImgs[i+1])[0]
-		BiasA = fits.getdata(listaBias[i%lenListaBias])    [0]
-		BiasB = fits.getdata(listaBias[(i+1)%lenListaBias])[0]	
-		
-		coordx, coordy, b = parametrosCaixaPixels(listaImgs[0])		
-		FlatA = FlatA[coordx-b:coordx+b,coordy-b:coordy+b]
-		FlatB = FlatB[coordx-b:coordx+b,coordy-b:coordy+b]
-		BiasA = BiasA[coordx-b:coordx+b,coordy-b:coordy+b]
-		BiasB = BiasB[coordx-b:coordx+b,coordy-b:coordy+b]
+		BiasA = fits.getdata(listaBias[(i/2)%lenListaBias])    [0]
+		BiasB = fits.getdata(listaBias[((i+2)/2)%lenListaBias])[0]	
+				
+		FlatA = FlatA[coordx-b:coordx+b,coordy-b:coordy+b].astype(float)
+		FlatB = FlatB[coordx-b:coordx+b,coordy-b:coordy+b].astype(float)
+		BiasA = BiasA[coordx-b:coordx+b,coordy-b:coordy+b].astype(float)
+		BiasB = BiasB[coordx-b:coordx+b,coordy-b:coordy+b].astype(float)
 
 		sigmaBias = np.std(BiasA - BiasB)
 		sigmaFlat = np.std(FlatA - FlatB)
 		Eixoy = (np.median(FlatA)+np.median(FlatB)-np.median(BiasA)-np.median(BiasB))/(sqrt(2)*sigmaBias)
 		Eixox = sigmaFlat**2/(sigmaBias*sqrt(2))
-		StdEixoY = sqrt(np.std(FlatA)**2+np.std(FlatB)**2+np.std(BiasA)**2+np.std(BiasB)**2)
-		
+		StdEixoY = sqrt(np.std(FlatA)**2 + np.std(FlatB)**2 + np.std(BiasA)**2 + np.std(BiasB)**2)/(sqrt(2)*sigmaBias)
 
 		VetorEixoX.append(Eixox)
 		VetorEixoY.append(Eixoy)
-		VetorStdEixoY.append(StdEixoY)
-	
-		if i%numeroImagens == numeroImagens-1:
+		VetorStdEixoY.append(StdEixoY)	
+		
+		if (i/2)%nCombinacoes == nCombinacoes-1:				
 			Y.append(np.mean(VetorEixoY))
 			X.append(np.mean(VetorEixoX))
-			SigmaTotal.append(np.mean(VetorStdEixoY))
-			XsigmaBar.append(np.std(VetorEixoX))
-			VetorEixoX, VetorEixoY, VetorStdEixoY, VetorEixoX = [], [], [], []
+			SigmaTotal.append(np.mean(VetorStdEixoY))		
+			XsigmaBar.append(np.std(VetorEixoX))			
+			VetorEixoX, VetorEixoY, VetorStdEixoY, VetorEixoX = [], [], [], []	
 	
-		
 	return X,Y,SigmaTotal, XsigmaBar
 	
 
