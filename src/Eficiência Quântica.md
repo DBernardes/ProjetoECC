@@ -28,5 +28,4 @@ Caso deseje saber quais os pontos do espectro estão dentro de um intervalo da c
 
 
 #### Resultados:
-![eficiencia quantica](https://cloud.githubusercontent.com/assets/23655702/22942751/eab0a792-f2d1-11e6-8595-950f6cd60535.jpg)
-
+![eficiencia quantica](https://cloud.githubusercontent.com/assets/23655702/24375236/fe9b28fc-130d-11e7-9fbc-8605472cd353.png)
