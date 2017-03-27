@@ -147,7 +147,7 @@ def plotGradiente(posx, posy, Vetormean, eixo = 'x'):
 	plt.gca().get_yaxis().get_major_formatter().set_useOffset(False)
 	plt.text(0.05,0.90, textstr, va='center', ha='left', size=20,  transform=ax.transAxes)
 	linhaReferencia(Vetormean)
-	meanBin, meanStdBin, porcentBin = binagem(x,Vetormean)
+	meanBin, meanStdBin = binagem(x,Vetormean)
 
 	return meanBin,meanStdBin
 
@@ -164,7 +164,7 @@ def plotImagem(image):
 	plt.imshow(img,cmap='Blues',vmin=mean-std,vmax=mean+std,origin='lower', aspect='auto')
 	plt.xlabel(r'$\mathtt{x (pixel)}$',size=font)
 	plt.ylabel(r'$\mathtt{y (pixel)}$',size=font)
-	plt.title (r'$\mathtt{Res\acuteiduos:Rij=Fij-mediana}$',size=font) 	
+	plt.title (r'$\mathtt{Res \acute\iota duos:Rij=Fij-mediana}$',size=font) 	
 
 
 

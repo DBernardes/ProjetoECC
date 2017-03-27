@@ -22,7 +22,6 @@ __copyright__ = """
 import numpy as np
 import matplotlib.pyplot as plt
 
-from porcentPixel import porcentPixel as porcent
 
 
 #biblioteca para binagem dos dados, fornecidos os vetores x e y, com um passo binsize
@@ -44,5 +43,5 @@ def binagem(x,y, binsize=50):
 
 	meanBin = np.mean(vetorBinMean)
 	meanStdbin = np.mean(stdBin)
-	porcentBin = porcent(vetorBinMean)
-	return meanBin, meanStdbin, porcentBin
+	
+	return meanBin, meanStdbin

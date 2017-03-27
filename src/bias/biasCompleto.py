@@ -11,7 +11,7 @@
     Laboratorio Nacional de Astrofisica, Brazil.
 
     
-	example: ./biasCompleto.py 
+	example: ./biasCompleto.py --list=list
    
     """
 
@@ -36,26 +36,34 @@ from CCDinfo import CCDinfo
 from caixaTexto import caixaTexto as caixa
 from logfile import logfile
 from makeList_imagesInput import criaArq_listaImgInput, readArq_returnlistImages
+from criaArq_resultadoCaract import arquivoCaract
 
 from optparse import OptionParser
 
 nowInitial = datetime.datetime.now()
 minute = nowInitial.minute
 second = nowInitial.second
+cwd = os.getcwd()
+BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
 
 parser = OptionParser()
 parser.add_option("-v", action="store_true", dest="verbose", help="verbose",default=False)
-parser.add_option("-l", "--logfile", dest="logfile", help="Log file name",type='string',default="")
+parser.add_option("-l","--logfile", action="store_true", dest="logfile", help="Log file",default=False)
 
-try: options,args = parser.parse_args(sys.argv[1:])
-except:print "Error: check usage with ./calcbias.py -h ";sys.exit(1);
-if options.verbose:print 'Lista de imagens: ', options.img
+try:
+    options,args = parser.parse_args(sys.argv[1:])
+except:
+    print "Error: check usage with ./calcbias.py -h ";sys.exit(1);
+
+if options.verbose:
+    print 'Lista de imagens: ', options.img
+
 
 criaArq_listaImgInput()
 listaImagens = readArq_returnlistImages()
 header = fits.getheader(listaImagens[0]) #aquisicao do header
-tempoExperimento = header['KCT']*len(listaImagens) # tempo total do experimento
 Strtemperatura = [r'$\mathtt{Temperatura: %i^oC}$' %(header['temp'])]
+tempoExperimento =	header['KCT']*len(listaImagens) # tempo total do experimento
 
 plt.figure(figsize=(22,28))
 CombinedImage = geraArquivo(listaImagens)
@@ -65,14 +73,17 @@ variacaoTemporal(listaImagens, tempoExperimento)
 
 textstr =  Strtemperatura+ textGradiente + textHistograma
 caixa(textstr, 4, 3, 0, 2, font=24, space=0.05, rspan=2)	
+
+os.chdir(BackDir)
 plt.savefig('Relatório Bias', format='pdf')
-plt.close()
-
-
-lenDados = len(listaImagens)
-dic = {'minute':minute, 'second':second, 'lenDados':lenDados, 'header':header, 'biasNominal':BiasNominal, 'tempoExperimento':tempoExperimento }
+os.chdir(cwd)
+dic = {'minute':minute, 'second':second,'biasNominal':BiasNominal, 'header':header}
 if options.logfile :
 	print 'Criando arquivo log', '\n'
-	logfile(options.logfile,dic)	
+	logfile(dic, listaImagens)	
+
+os.chdir(BackDir)
+arqCaract = arquivoCaract()
+arqCaract.criaArq(arqCaract)
 
 

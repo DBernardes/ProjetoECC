@@ -23,21 +23,22 @@ import getpass
 import socket
 
 from CCDinfo import CCDinfo
+from astropy.io import fits
 
-
+cwd = os.getcwd()
+BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
 # Gera arquivo log
-def logfile(name, dic):	
-	
-	lenDados  = dic['lenDados']
-	minute 	  = dic['minute']	
-	second 	  = dic['second']
-	header 	  = dic['header']
+def logfile(dic, listaImagens):		
+	header      = dic['header'] 
+	minute 	    = dic['minute']	
+	second 	    = dic['second']	
 	biasNominal = dic['biasNominal']
-	TE     = dic['tempoExperimento']	
+	TempoExp    =	header['KCT']*len(listaImagens) # tempo total do experimento
+	nImages = len(listaImagens)
 	
 	nowInitial = datetime.datetime.now()
 	commandline = sys.argv	
-	Logdata = 'Caracterizacao do bias, ' + nowInitial.strftime("%Y-%m-%d %H:%M")
+	Logdata = 'Caracterizacao do ruido de leitura, ' + nowInitial.strftime("%Y-%m-%d %H:%M")
 	user = 'Usuario: %s' %(getpass.getuser())
 	IP = 'IP local: %s' %(socket.gethostbyname(socket.gethostname()))
 	Strcommandline = 'Linha de comando: '
@@ -46,20 +47,29 @@ def logfile(name, dic):
 	WorkDirectory = 'Diretorio atual: ' + os.getcwd()	
 
 			
-	TimeElapsed = (nowInitial.minute*60+nowInitial.second) - minute*60+second #hora final menos hora inicial 
+	TimeElapsed = (nowInitial.minute*60+nowInitial.second) - (minute*60+second) #hora final menos hora inicial 
 	Tempoprocess = 'Tempo de processamento: %i min %i s' %(TimeElapsed/60,TimeElapsed%60)
-	Ehoras, Eminutos, Esegundos = TE/3600, (TE%3600)/60, (TE%3600)%60	
+	Ehoras, Eminutos, Esegundos = TempoExp/3600, (TempoExp%3600)/60, (TempoExp%3600)%60	
 	TempoExperimento = 'Tempo do experimento: %i h %i m %i s' %(Ehoras, Eminutos, Esegundos)	
-	StrCCD = CCDinfo(header, lenDados)
-	biasNominal = 'Ruido de Leitura nominal: %.2f adu' %(biasNominal)
+	StrCCD = CCDinfo(header, nImages)
+	biasNominal = 'Ruido de Leitura calculado: %.2f adu' %(biasNominal)
+
+	StrNomeImagens =  '\t\tArquivo\t\t\t CDDTemp (ºC)\t Texp (s)\n'
+	StrNomeImagens += '--------------------------------------------------------\n'
+	for Nomeimg in listaImagens:
+		header = fits.getheader(Nomeimg)
+		StrNomeImagens += Nomeimg + '\t\t' + str(header['TEMP']) + '\t\t\t' + str(header['exposure']) +'\n' 
 
 
-	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n\n'+ Tempoprocess+ '\n'+ TempoExperimento+ '\n\n' + StrCCD+ '\n\n'+ biasNominal
 
+	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n\n'+ Tempoprocess+ '\n'+ TempoExperimento+ '\n\n' + StrCCD+ '\n\n'+ biasNominal + '\n\n\n\n' + StrNomeImagens
+	
+	os.chdir(BackDir)
 	try:
+		name = 'BiasLog'
 		logf = open(name, 'w') 
 	except:
 		name.remove()
 		logf = open(name, 'w')
 	logf.write(dados)
-	logf.close()	
+	logf.close()		

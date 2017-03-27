@@ -114,7 +114,7 @@ def plotGraficoFFT(x,y,vetorDados,interv):
 	plt.title(r'$\mathtt{Transformada \quad de \quad Fourier}$',size=font)
 	plt.xlabel(r'$\mathtt{Frequ\^encia \; (Hz)}$',size=font)
 	plt.ylabel(r'$\mathtt{Amplitude}$',size=font)	
-	plt.legend(loc='lower right')
+	plt.legend(loc='upper right')
 
 	if npicos != 0:
 		for i in npicos:
