@@ -28,4 +28,4 @@
 
 
 ### Resultados:
-![relatorio dc](https://cloud.githubusercontent.com/assets/23655702/21142571/fee9d168-c129-11e6-9115-24d5dad37bbb.png)
+![relatorio dc](https://cloud.githubusercontent.com/assets/23655702/24375268/1c07d16a-130e-11e7-9b2d-52bd9cc9737b.png)
