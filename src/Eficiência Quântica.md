@@ -17,7 +17,7 @@ Ao executar o comando pela primeira vez, irá aparecer uma mensagem pedindo para
   - nome do arquivo contendo a curva de Eficiência Quântica do fabricante (opcional);
   - nome do arquivo contendo os dados detector;
   - nome arquivo Log (opcional)
-  - tag (nome ou parte do nome) das imagens dos dados e referencia; esta opção servirá para o código separar quais as imagens de referência e quais as imagens de fluxo;
+  - tag (nome ou parte do nome) do par de imagens; esta opção servirá para o código separar quais as imagens de referência e quais as imagens de fluxo;
   - ganho do CCD.
   
 Preenchendo o arquivos com as informações, execute novamente o comando.
