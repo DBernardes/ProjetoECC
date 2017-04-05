@@ -86,15 +86,11 @@ espectro, interpolation, parametrosList = parametrosGraph(intervEspectro, vetorE
 #plota o grafico e imprime os valores na tela
 plotGraph(espectro, vetorEQ, vetorSigmaTotal, parametrosList, noemArqFabricante)
 
-
-plt.savefig('Eficiencia Quantica', format='jpg')
 passo = (espectro[-1]-espectro[0])/(len(espectro)-1)
 dic = {'qtdImagens':len(espectro)*nImages*2,'minute':minute,'second':second,'header':header,'espectro':(espectro[0],espectro[-1],passo), 'tagPAR2':tagPAR2, 'tagPAR1':tagPAR1, 'ValoresEspectro':espectro, 'ValoresEQ':vetorEQ}
 
-if nomeArqlog != '': 
-	l.logfile(dic)
-
-os.chdir(os.path.normpath(os.getcwd() + os.sep + os.pardir))
+if nomeArqlog != '': l.logfile(dic)
+plt.savefig('Eficiencia Quantica', format='jpg')
 arqCaract = arquivoCaract()
 arqCaract.criaArq(arqCaract)
 

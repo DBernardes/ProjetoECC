@@ -23,11 +23,9 @@ from algarismoSig import algarismoSig
 def linhaReferencia(y):
 	lenY = len(y)
 	mean = np.mean(y)
-
-	num = algarismoSig(mean)
-	mean = round(mean, num)
-
 	std = np.std(y)
+	num = algarismoSig(std)
+	mean = round(mean, num)
 	linhaR = []
 	lisStd = []
 	i=0

@@ -72,7 +72,7 @@ X,Y,SigmaTotal, XsigmaBar = calcXY_YerrorBar_XerrorBar(listaFlat, listaBias, num
 plt.figure(figsize=(17,8))
 ganho = Graph_sinal_variance(X,Y,SigmaTotal, XsigmaBar)
 Graph_residuos(X,Y, SigmaTotal)
-plt.savefig('ganho', format='jpg')
+
 
 #gera arquivo log
 if options.logfile:
@@ -82,6 +82,7 @@ if options.logfile:
 	dic = {'minute':minute, 'second':second, 'nImagesFlat':nImagesFlat,'nImagesBias':nImagesBias, 'ganho':ganho, 'box':parametersBox}
 	logfile(dic, listaFlat, listaBias)			
 
+plt.savefig('ganho', format='jpg')
 arqCaract = arquivoCaract()
 arqCaract.criaArq(arqCaract)
 

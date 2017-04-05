@@ -27,6 +27,7 @@ from CCDinfo import CCDinfo
 from QE_reduceImgs_readArq import LeArquivoReturnLista
 
 
+
 # Gera arquivo log
 def logfile(dic):	
 	
@@ -40,13 +41,6 @@ def logfile(dic):
 	lenDados  = dic['qtdImagens']
 	ValoresEspectro = dic['ValoresEspectro']
 	
-
-	try:
-		logf = open('EQLog', 'w') 
-	except:
-		name.remove()
-		logf = open('EQLog', 'w')
-
 	now = datetime.datetime.now()	
 	commandline = sys.argv	
 	
@@ -83,7 +77,14 @@ def logfile(dic):
 		StrNomeImagens += Nomeimg + '\t\t' + str(header['temp']) + '\t\t\t' + str(header['exposure']) +'\n' 
 
 
-
+	
+	BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
+	os.chdir(BackDir)
 	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n'+ Tempoprocess+ '\n\n'+ StrEspectro + '\n\n' + StrCCD+ '\n\n\n\n' + StrTabelaEQ + '\n\n\n\n' + StrNomeImagens
+	try:
+		logf = open('EQLog', 'w') 
+	except:
+		name.remove()
+		logf = open('EQLog', 'w')
 	logf.write(dados)
 	logf.close()	

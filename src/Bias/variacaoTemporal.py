@@ -48,16 +48,27 @@ def geraDados(listaImagens):
 	#separada a lista total e fragmentos menores 
 
 	vetorMean,vetorStddev=[],[]
+	header = fits.getheader(listaImagens[0])
+	width = header['naxis1']
+	height = header['naxis2']
+	nPixels = width*height
 
 	for img in listaImagens:
 		print img		
 		imagem = fits.getdata(img)[0]
 		#Dados		
 		meanvalue = np.mean(imagem)	
+		#i=0
+		# teste somando e dividindo pelo num de pixels + teste pela mediao do DS9
+		#for linha in imagem:
+	#		for pixel in linha:
+	#			i+=float(pixel)
+	#	print meanvalue, i/float(nPixels)
+		
+
 		#Media e desvio padrao
 		vetorMean.append(meanvalue)
-		vetorStddev.append(np.std(imagem))	
-			
+		vetorStddev.append(np.std(imagem))			
 	#FFT	
 	Meanf = np.abs(fft(vetorMean))
 	interv = len(Meanf)/2	

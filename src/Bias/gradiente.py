@@ -135,11 +135,11 @@ def plotGradiente(posx, posy, Vetormean, eixo = 'x'):
 	if eixo == 'x':
 		textstr =r'$\mathtt{\barF_y = %s_-^+ \; %s \quad adu}$' %(mean, std)	
 		strX = r'$\mathtt{x (pixel)}$'
-		strY = r'$\mathtt{Mediana \; das \; contagens \; em \; Y}$'
+		strY = r'$\mathtt{M \acutee dia \; das \; contagens \; em \; Y}$'
 	else:
 		textstr =r'$\mathtt{\barF_x = %s_-^+ \; %s \quad adu }$' %(mean, std)		
 		strX =  r'$\mathtt{y (pixel)}$'
-		strY =  r'$\mathtt{Mediana \; das \; contagens \; em \; X}$'
+		strY =  r'$\mathtt{M \acutee dia \; das \; contagens \; em \; X}$'
 	plt.plot(x,Vetormean, color='gray',alpha=0.8)
 	plt.xlim(0,nDados)
 	plt.xlabel(strX,size=font)

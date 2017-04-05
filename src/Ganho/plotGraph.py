@@ -37,7 +37,9 @@ def Graph_sinal_variance(X, Y, yerr, xerr):
 	font = 17	
 	global coefAng, intercept, stdLinAjust
 	coefAng, intercept, r, p, stdLinAjust = stats.linregress(X,Y)
-	ajust = np.poly1d((coefAng,intercept))	
+	ajust = np.poly1d((coefAng,intercept))
+	readNoise, stdReadNoise = sqrt(-intercept*coefAng), sqrt(stdLinAjust*coefAng)
+	
 	ax = plt.subplot(121)
 	plt.plot(X, Y, '-', c='blue')	
 	plt.errorbar(X,Y,yerr, xerr, fmt='o', c='blue')
@@ -48,7 +50,7 @@ def Graph_sinal_variance(X, Y, yerr, xerr):
 	plt.xlim(xmin=0.99*X[0], xmax=1.01*X[-1])
 	plt.ylim(ymin=0.99*Y[0], ymax=1.01*Y[-1])
 	plt.text(0.50,0.15, r'$\mathtt{Ganho: \quad %.2f^+_- %.2f}$'%(coefAng, stdLinAjust), va='center', ha='left', size=font+5,transform=ax.transAxes)	
-	plt.text(0.50,0.08, r'$\mathtt{\sigma_e = \; %.2f^+_- %.2f}$'%(intercept, stdLinAjust), va='center', ha='left', size=font+5, transform=ax.transAxes)
+	plt.text(0.50,0.08, r'$\mathtt{\sigma_e = \; %.2f^+_- %.2f}$'%(readNoise, stdReadNoise), va='center', ha='left', size=font+5, transform=ax.transAxes)
 
 	return coefAng
 
