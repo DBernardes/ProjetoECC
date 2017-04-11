@@ -9,3 +9,7 @@
   - ccdproc;
   - math;
   - os, sys;
+  
+  Obs: para a instalação da biblioteca ccdproc, utilize o comando
+  
+      pip install ccdproc
