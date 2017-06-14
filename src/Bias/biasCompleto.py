@@ -66,18 +66,17 @@ Strtemperatura = [r'$\mathtt{Temperatura: %i^oC}$' %(header['temp'])]
 tempoExperimento =	header['KCT']*len(listaImagens) # tempo total do experimento
 
 plt.figure(figsize=(22,28))
-CombinedImage = geraArquivo(listaImagens)
-textGradiente = gradiente(CombinedImage)
-textHistograma, BiasNominal = histograma(CombinedImage)
-variacaoTemporal(listaImagens, tempoExperimento)
-
+CombinedImage  = geraArquivo(listaImagens)
+textGradiente  = gradiente(CombinedImage)
+textHistograma = histograma(CombinedImage)
+ruidoNominal = variacaoTemporal(listaImagens, tempoExperimento)
 textstr =  Strtemperatura+ textGradiente + textHistograma
 caixa(textstr, 4, 3, 0, 2, font=24, space=0.05, rspan=2)	
 
 os.chdir(BackDir)
 plt.savefig('Relatório Bias', format='pdf')
 os.chdir(cwd)
-dic = {'minute':minute, 'second':second,'biasNominal':BiasNominal, 'header':header}
+dic = {'minute':minute, 'second':second,'ruidoNominal':ruidoNominal, 'header':header}
 if options.logfile :
 	print 'Criando arquivo log', '\n'
 	logfile(dic, listaImagens)	

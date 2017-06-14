@@ -32,7 +32,7 @@ def logfile(dic, listaImagens):
 	header      = dic['header'] 
 	minute 	    = dic['minute']	
 	second 	    = dic['second']	
-	biasNominal = dic['biasNominal']
+	ruidoNominal = dic['ruidoNominal']
 	TempoExp    =	header['KCT']*len(listaImagens) # tempo total do experimento
 	nImages = len(listaImagens)
 	
@@ -52,7 +52,7 @@ def logfile(dic, listaImagens):
 	Ehoras, Eminutos, Esegundos = TempoExp/3600, (TempoExp%3600)/60, (TempoExp%3600)%60	
 	TempoExperimento = 'Tempo do experimento: %i h %i m %i s' %(Ehoras, Eminutos, Esegundos)	
 	StrCCD = CCDinfo(header, nImages)
-	biasNominal = 'Ruido de Leitura calculado: %.2f adu' %(biasNominal)
+	biasNominal = 'Ruido de Leitura: %s adu' %(ruidoNominal)
 
 	StrNomeImagens =  '\t\tArquivo\t\t\t CDDTemp (ºC)\t Texp (s)\n'
 	StrNomeImagens += '--------------------------------------------------------\n'

@@ -24,8 +24,11 @@ def linhaReferencia(y):
 	lenY = len(y)
 	mean = np.mean(y)
 	std = np.std(y)
+
 	num = algarismoSig(std)
 	mean = round(mean, num)
+	std = round(std,num)
+
 	linhaR = []
 	lisStd = []
 	i=0
@@ -33,6 +36,8 @@ def linhaReferencia(y):
 		linhaR.append(mean)		
 		i+=1
 	x = np.linspace(0,lenY, lenY)
+	linhaR = np.asarray(linhaR)
 	plt.plot(x,linhaR, '-', c='red', linewidth=1.5)
 	plt.plot(x,linhaR - std, '--', c='red', linewidth=1.5)
 	plt.plot(x,linhaR + std, '--', c='red', linewidth=1.5)
+

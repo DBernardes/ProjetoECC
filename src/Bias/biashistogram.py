@@ -32,26 +32,32 @@ __copyright__ = """
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
+import returnMax
+import copy
 
+from scipy.stats import mode
 from scipy.interpolate import interp1d
 from algarismoSig import algarismoSig
 
 #gera os dados principais do histograma
-def geraDados(image):	
-	mean = np.mean(image)
+def geraDados(image):
+
+	
 	median = np.median(image)
 	std = np.std(image)
 	stdAbs = np.std(np.abs(image - median))
 
-	value,base = np.histogram(image, bins= np.linspace((median-7*stdAbs),(median+7*stdAbs),18), normed=1)
+	value,base = np.histogram(image, bins=np.linspace(median-7*stdAbs,median+7*stdAbs,18) , normed=1)
+	ValorMax, indiceValor = returnMax.returnMax(copy.copy(value))
+	mean = base[indiceValor]
+
 	x = np.linspace(base[0],base[-1],100)
-	y = mlab.normpdf(x, mean, std)
+	y = mlab.normpdf(x, mean, std)	
 
 	i=0
 	while i<len(value):
 		value[i]*=100
 		i+=1
-
 	i=0
 	while i<len(y):
 		y[i]*=100
@@ -81,10 +87,10 @@ def plothist(base, value, x, y, mean, median, std, stdAbs):
 	index16 = returnIndex(x,x16)
 	index84 = returnIndex(x,x84)
 	plt.ylim(ymax=1.1*f(x50))
-	plt.plot(median, f(median),'o')
+	plt.plot(mean, f(mean),'o')
 	drawLine(x16,0,f(x16),'1', pos='left')
 	drawLine(x84,0,f(x84),'3')	
-	plt.annotate('2',xy=(median*1.0001,f(median)*1.001),xycoords='data',size=17)
+	plt.annotate('2',xy=(mean*1.0001,f(mean)*1.001),xycoords='data',size=17)
 	plt.annotate('',xy=(x16,f(x16)/2), xycoords='data',xytext=(x84,f(x16)/2), textcoords='data',arrowprops=dict(arrowstyle="<->"),)
 	plt.annotate(r'$\mathtt{\sigma^+_-}$', xy=(x50*0.9999,1.08*f(x16)/2), xycoords='data',fontsize=14)
 
@@ -140,6 +146,6 @@ def histograma(image):
 
 	mean, median, std, stdAbs, value, base, x, y = geraDados(image)
 	textstr = plothist(base, value, x, y, mean, median, std, stdAbs)									
-	return textstr, mean
+	return textstr
 
 		

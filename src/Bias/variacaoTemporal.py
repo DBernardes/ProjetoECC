@@ -36,6 +36,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import astropy.io.fits as fits
 
+from astropy.time import Time
 from scipy.fftpack import fft, fftfreq
 from detect_peaks import detect_peaks
 from probPico import probPico
@@ -45,30 +46,29 @@ from algarismoSig import algarismoSig
 
 
 def geraDados(listaImagens):
-	#separada a lista total e fragmentos menores 
-
-	vetorMean,vetorStddev=[],[]
+	#separada a lista total e fragmentos menores
+	vetorMean,vetorStddev, vetorTempo = [],[], []
 	header = fits.getheader(listaImagens[0])
+	t0 = Time(header['frame'], format='isot', scale='utc')
 	width = header['naxis1']
 	height = header['naxis2']
-	nPixels = width*height
-
+	nPixels = width*height	
+	
 	for img in listaImagens:
-		print img		
-		imagem = fits.getdata(img)[0]
+		print img	
+		imagem, hdr = fits.getdata(img, header=True)
+		imagem = imagem[0]
+		Timg = (Time(hdr['frame'], format='isot', scale='utc') - t0).sec + hdr['exposure']/2.0		
+		vetorTempo.append(Timg)
 		#Dados		
+		sigma = np.std(imagem)
 		meanvalue = np.mean(imagem)	
-		#i=0
-		# teste somando e dividindo pelo num de pixels + teste pela mediao do DS9
-		#for linha in imagem:
-	#		for pixel in linha:
-	#			i+=float(pixel)
-	#	print meanvalue, i/float(nPixels)
-		
-
 		#Media e desvio padrao
 		vetorMean.append(meanvalue)
-		vetorStddev.append(np.std(imagem))			
+		vetorStddev.append(np.std(imagem))	
+	
+		
+						
 	#FFT	
 	Meanf = np.abs(fft(vetorMean))
 	interv = len(Meanf)/2	
@@ -82,9 +82,7 @@ def geraDados(listaImagens):
 	for i in meanTotal:
 		meanTotal[i] = y
 	
-	return vetorMean, vetorStddev, Meanf, xf, meanTotal, interv
-
-
+	return vetorMean, vetorTempo, vetorStddev, Meanf, xf, meanTotal, interv
 
 
 #Grafico da media pelo tempo
@@ -112,7 +110,6 @@ def plotGraficoFFT(x,y,vetorDados,interv):
 	meanDados = np.mean(y)
 	stdDados = np.std(y)
 
-
 	picos = detect_peaks(y,threshold = meanSinal+3*stdSinal)
 	npicos = range(len(picos))
 	if len(picos) == 0:
@@ -120,7 +117,7 @@ def plotGraficoFFT(x,y,vetorDados,interv):
 		
 	
 	ax2 = plt.subplot2grid((4,3),(3,0),colspan=2)
-	plt.plot(x,y, label = r'$\mathtt{fft \; dos \; Dados}$ ',marker='o',c='blue')
+	plt.plot(x,y, label = r'$\mathtt{fft \quad dos \quad Dados}$ ',marker='o',c='blue')
 	plt.plot(x,sinalf, label = r'$\mathtt{sinal \; de \; refer\^encia}$', color='red',alpha=0.9)
 	plt.title(r'$\mathtt{Transformada \quad de \quad Fourier}$',size=font)
 	plt.xlabel(r'$\mathtt{Frequ\^encia \; (Hz)}$',size=font)
@@ -146,7 +143,7 @@ def dadosFFT(vetory, vetorx, npicos, picos):
 	if npicos != 0:	
 		for i in npicos:
 			if i < 8:		
-				textstr = r'$\mathtt{pico \; %i: \;(%.3f \;\; Hz,%.2f \;\;adu, \; %.3f \;}$' %(1+i,vetorx[picos[i]-1],vetory[picos[i]-1], vetorProb[i]*100)  +'%' + r'$\mathtt{)}$'
+				textstr = r'$\mathtt{pico \; %i: \;(%.3f \;\; Hz,%.2f \;, \; %.3f \;}$' %(1+i,vetorx[picos[i]-1],vetory[picos[i]-1], vetorProb[i]*100)  +'%' + r'$\mathtt{)}$'
 				plt.text(0.03, 0.94-0.1*i, textstr, ha='left', va='center', size=20)
 			else:
 				plt.text(0.03, 0.92-0.1*i, r'$\mathtt{Quantidade \;\; de \;\; picos}$'+'\n'+ r'$\mathtt{ \;\; muito \;\; alta.}$', ha='left', va='center', size=21)
@@ -162,17 +159,24 @@ def dadosMeanTemp(vetor,vetorstd):
 	mean = np.mean(vetor)
 	std = np.std(vetor)
 	meanStd = np.mean(vetorstd)
-	ratio = meanStd/std
-
+	
 	num = algarismoSig(std)
-	mean = str(round(mean,num))
-	std = str(round(std,num))	
+	mean = round(mean,num)
+	std = round(std,num)
 
 	meanFrame = vetor[0]
 	stdFrame  = vetorstd[0]
 	num = algarismoSig(stdFrame)
-	meanFrame = str(round(meanFrame,num))
-	stdFrame = str(round(stdFrame,num))	
+	meanFrame = round(meanFrame, num)
+	stdFrame = round(stdFrame, num)	
+
+	ratio = stdFrame/std
+
+
+	mean = str(mean)
+	std = str(std)	
+	meanFrame = str(meanFrame)
+	stdFrame = str(stdFrame)	
 
 	
 	sinal=None
@@ -192,24 +196,25 @@ def dadosMeanTemp(vetor,vetorstd):
 	textstr = [textstr0,textstr1,textstr2,textstr3,textstr4]
 	caixa(textstr, 4, 3, 2, 2, font=26, space=0.15)
 
+	return stdFrame
+
 #--------------------------------------------------------------------------------------------
 
 
 def variacaoTemporal(inputlist, tempoExp):
 	print 'Plotando variaçao temporal das imagens...'
-	vetorMean, vetorStddev, Meanf, xf, meanTotal,interv = geraDados(inputlist)	
-	x = np.linspace(0,tempoExp,len(inputlist))		
+	vetorMean, vetorTempo, vetorStddev, Meanf, xf, meanTotal,interv = geraDados(inputlist)			
 
 	#Grafico media das imagens pelo tempo
-	plotGraficoTemporal(x,vetorMean,vetorStddev,meanTotal)	
+	plotGraficoTemporal(vetorTempo,vetorMean,vetorStddev,meanTotal)	
 	#Caixa de texto com dados da media temporal
-	dadosMeanTemp(vetorMean,vetorStddev)	
+	ruidoNominal = dadosMeanTemp(vetorMean,vetorStddev)	
 	#Grafico da FFT
 	npicos, picos = plotGraficoFFT(xf,Meanf,vetorMean,interv)
 	#Caixa de texto da FFT	
 	dadosFFT(Meanf[1:interv],xf[1:interv], npicos, picos)
 
-	
+	return ruidoNominal
 	 
 
   

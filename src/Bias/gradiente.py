@@ -69,22 +69,34 @@ def geraDados(image):
 
 
 #Caixa de texto com media, mediana e seus desvios
-def caixaInfo(vetorx,vetory, meanBinX,stdBinX, meanBinY,stdBinY):	
-	
-	stdx = np.std(vetorx)		
+def caixaInfo(vetorx,vetory, meanBinX, stdBinX, meanBinY,stdBinY):	
+
+	stdx = np.std(vetorx)
+	num = algarismoSig(stdx)
+	stdx = round(stdx, num)
+
+	num = algarismoSig(stdBinX)
+	meanBinX = round(meanBinX,num)
+	stdBinX  = round(stdBinX,num)
+
 	stdRelativeX = stdx/stdBinX
+
 	stdy = np.std(vetory)	
+	num  = algarismoSig(stdy)
+	stdy = round(stdy, num)
+
+	num = algarismoSig(stdBinY)
+	meanBinY = round(meanBinY,num)
+	stdBinY  = round(stdBinY,num)
+	
 	stdRelativeY = stdy/stdBinY
 	
 
-	num = algarismoSig(stdBinX)
-	meanBinX = str(round(meanBinX,num))
-	stdBinX  = str(round(stdBinX,num))
-	
-	num = algarismoSig(stdBinY)
-	meanBinY = str(round(meanBinY,num))
-	stdBinY  = str(round(stdBinY,num))
-	
+	meanBinX = str(meanBinX)
+	stdBinX  = str(stdBinX)
+	meanBinY = str(meanBinY)
+	stdBinY  = str(stdBinY)
+
 
 	fonte = 24	
 	sinal=None
@@ -148,6 +160,7 @@ def plotGradiente(posx, posy, Vetormean, eixo = 'x'):
 	plt.text(0.05,0.90, textstr, va='center', ha='left', size=20,  transform=ax.transAxes)
 	linhaReferencia(Vetormean)
 	meanBin, meanStdBin = binagem(x,Vetormean)
+	
 
 	return meanBin,meanStdBin
 
