@@ -59,7 +59,7 @@ def logfile(dic):
 	Tempoprocess = 'Tempo de processamento: %i min %i s' %(TimeElapsed/60,TimeElapsed%60)
 
 	
-	StrTabelaEQ = ' Espectro (nm) \t EQ (%)\n'
+	StrTabelaEQ = ' Lambda (nm) \t EQ (%)\n'
 	StrTabelaEQ += '-------------------------\n'
 	for i in range(len(ValoresEQ)):
 		StrTabelaEQ += '\t' + str(ValoresEspectro[i]) + '\t\t' + str(round(ValoresEQ[i],2)) + '\n'

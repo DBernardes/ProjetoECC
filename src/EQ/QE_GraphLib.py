@@ -26,7 +26,7 @@ __copyright__ = """
 
 import matplotlib.pyplot as plt
 import numpy as np
-import copy
+import copy, os
 
 from scipy.interpolate import interp1d, splrep, splev
 from scipy.integrate import quad
@@ -34,7 +34,7 @@ from math import sqrt
 
 from QE_reduceImgs_readArq import LeArq_curvaEQFabricante
 
-def plotGraph(x,y, std, parametrosGraph, name):
+def plotGraph(x,y, std, parametrosGraph, name):	
 
 	errorSourceEstabilization = 0.07714 #erro calculado para estabilizacao da fonte
 	comprimentoOnda = range(300,1200,100)
@@ -67,7 +67,13 @@ def plotGraph(x,y, std, parametrosGraph, name):
 
 	plt.annotate(r'$\mathtt{EQ_{max} \; = \; %.1f}$' %(parametrosGraph[0]) + ' %', xy=(0.32,0.15), xycoords='axes fraction',  ha='left', va='center', size=font)
 	plt.annotate(r'$\mathtt{Comp. \; onda \; = \; %.2f \; (nm)}$' %(parametrosGraph[1]), xy=(0.32,0.10), xycoords='axes fraction',  ha='left', va='center', size=font)
-	plt.annotate(r'$\mathtt{Convers\~ao \; = \; %.2f}$' %(parametrosGraph[2]) + ' %', xy=(0.32, 0.05), xycoords='axes fraction',  ha='left', va='center', size=font)
+	plt.annotate(r'$\mathtt{EQ_{eff} \; = \; %.2f}$' %(parametrosGraph[2]) + ' %', xy=(0.32, 0.05), xycoords='axes fraction',  ha='left', va='center', size=font)
+
+	cwd = os.getcwd()
+	BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
+	os.chdir(BackDir)
+	plt.savefig('Eficiencia Quantica', format='png')
+	os.chdir(cwd)
 
 
 def parametrosGraph(string, dados):

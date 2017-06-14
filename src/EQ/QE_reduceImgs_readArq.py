@@ -7,7 +7,7 @@
     @author: Denis Varise Bernardes & Eder Martioli
     Descricao: esta biblioteca possui as seguintes funcoes:
 
-		mkDir_saveCombinedImages: esta funcao recebe o numero de imagens (nImages) adquiridas para o mesmo comprimento de onda; pela chamada da funcao LeArquivoReturnLista retorna a lista de todas as imagens adquiridas no ensaio; para um numero de nImages em nImages imagens (onde nImages é um valor fornecido) a funcao cria um vetor, retornando-o para a funcao geraArquivo: esta funcao ira combinar as imagens pela mediana, salvando-as num novo diretorio. Feito isso, a funcao cria uma lista com o nomes das novas imagens atraves da chamada da funcao criaArquivo_listaImagensCombinadas.
+		mkDir_saveCombinedImages: pela chamada da funcao LeArquivoReturnLista retorna a lista de todas as imagens adquiridas no ensaio; realiza a subtração entre cada par de imagens, salvando o resultado em um novo diretório 'Imagens_reduzidas' . Feito isso, a funcao cria uma lista com o nomes das novas imagens atraves da chamada da funcao criaArquivo_listaImagensCombinadas.
 
 		readArqDetector: esta funcao recebe o nome do arquivo contendo os PAR2s do detector, retornando um vetor com os valores medidos.
 
@@ -70,7 +70,7 @@ def mkDir_saveCombinedImages(nImages):
 
 
 
-def mkDir_ImgPair(nImages, tagPAR2, tagPAR1, ganho):
+def mkDir_ImgPair(tagPAR2, tagPAR1, ganho):
 	print 'Criando diretorio: Imagens reduzidas'
 	#recebe uma lista de imagens de retorna um diretorio com as imagens reduzidas de raios cosmicos e erro do shutter
 	listaPAR2 = LeArquivoReturnLista(tagPAR2+'List.txt')	
@@ -79,32 +79,21 @@ def mkDir_ImgPair(nImages, tagPAR2, tagPAR1, ganho):
 	VetorImagens = [[],[]]
 	i,n, string, VetorStdSignal = 0, 0, '', []
 	for i in range(len(listaPAR2)):		
-		if i%nImages == nImages-1:			
-			imagemPAR2 = fits.getdata(listaPAR2[i])[0].astype(float)
-			imagemPAR1 = fits.getdata(listaPAR1[i])[0].astype(float)
-			VetorImagens[0].append(imagemPAR2)
-			VetorImagens[1].append(imagemPAR1)
-	
-			ImgCombinedPAR2 = geraArquivo(VetorImagens[0], n)
-			ImgCombinedPAR1 = geraArquivo(VetorImagens[1], n)			
+		imagemPAR2 = fits.getdata(listaPAR2[i])[0].astype(float)
+		imagemPAR1 = fits.getdata(listaPAR1[i])[0].astype(float)		
 					
-			imgReducePAR = ImgCombinedPAR2 - ImgCombinedPAR1
-			VetorStdSignal.append(sqrt(sum(sum(ImgCombinedPAR2 + ImgCombinedPAR1))*ganho))
+		imgReducePAR = imagemPAR2 - imagemPAR1
+		VetorStdSignal.append(sqrt(sum(sum(imagemPAR2 + imagemPAR1))*ganho))
 		
-			os.chdir(chdir)
-			if n < 10: string = '00%i'%(n)
-			if 10 <= n < 100: string = '0%i'%(n)
-			if n >= 100: string = '%i'%(n) 
-			print 'ImagemReduzida%s.fits'%(string)
-			fits.writeto('ImagemReduzida_%s.fits'%(string),imgReducePAR, clobber=True)
-			os.chdir(cwd)
-			VetorImagens = [[],[]]
-			n+=1
-		else:
-			imagemPAR2 = fits.getdata(listaPAR2[i])[0]
-			imagemPAR1 = fits.getdata(listaPAR1[i])[0]
-			VetorImagens[0].append(imagemPAR2)
-			VetorImagens[1].append(imagemPAR1)
+		os.chdir(chdir)
+		if n < 10: string = '00%i'%(n)
+		if 10 <= n < 100: string = '0%i'%(n)
+		if n >= 100: string = '%i'%(n) 
+		print 'ImagemReduzida%s.fits'%(string)
+		fits.writeto('ImagemReduzida_%s.fits'%(string),imgReducePAR, clobber=True)
+		os.chdir(cwd)
+		VetorImagens = [[],[]]
+		n+=1		
 	criaArquivo_StdDiffImagens(VetorStdSignal)
 	criaArquivo_listaImagensReduzidas()		
 	return 

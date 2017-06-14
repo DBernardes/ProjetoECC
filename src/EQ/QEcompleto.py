@@ -51,11 +51,12 @@ second = nowInitial.second
 
 
 #------------------------------------------------------------------------------------------
-nImages, ganhoCCD, nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog, intervEspectro, tagPAR2, tagPAR1 = criaArq_infoEnsaio()
+intervEspectro, nomeArqCalibDetector, noemArqFabricante, nomeArqDetector, nomeArqlog,  tagPAR2, tagPAR1, ganhoCCD, lenPixel, Dfotometro = criaArq_infoEnsaio()
+
 
 #cria um arquivo contendo o nome das imagens obtidas para a caracterizacao
-criaArq_listaImgMedidas(nImages, tagPAR2)
-criaArq_listaImgMedidas(nImages, tagPAR1)
+criaArq_listaImgMedidas(tagPAR2)
+criaArq_listaImgMedidas(tagPAR1)
 
 
 #le o header de uma unica imagem para retirada de informacoes de tamanho e coords. centrais
@@ -63,11 +64,11 @@ header = ImagemUnica_returnHeader(tagPAR2)
 
 
 #cria um diretorio com as imagens combinadas pela mediana
-mkDir_ImgPair(nImages, tagPAR2, tagPAR1, ganhoCCD)
+mkDir_ImgPair(tagPAR2, tagPAR1, ganhoCCD)
 
 
 #gera os vetores de fluxo da camera e respectivo desvio padrao
-GeraVetorFluxoCamera(header, nImages, ganhoCCD, tagPAR2, tagPAR1)
+GeraVetorFluxoCamera(header, ganhoCCD, tagPAR2, tagPAR1, lenPixel, Dfotometro)
 
 #le os dados do fluxo do CCD
 vetorFluxoCamera, vetorSigmaBackground_Signal = LeArqFluxoCamera()
@@ -84,13 +85,15 @@ espectro, interpolation, parametrosList = parametrosGraph(intervEspectro, vetorE
 
 
 #plota o grafico e imprime os valores na tela
+
 plotGraph(espectro, vetorEQ, vetorSigmaTotal, parametrosList, noemArqFabricante)
 
 passo = (espectro[-1]-espectro[0])/(len(espectro)-1)
-dic = {'qtdImagens':len(espectro)*nImages*2,'minute':minute,'second':second,'header':header,'espectro':(espectro[0],espectro[-1],passo), 'tagPAR2':tagPAR2, 'tagPAR1':tagPAR1, 'ValoresEspectro':espectro, 'ValoresEQ':vetorEQ}
+dic = {'qtdImagens':len(espectro),'minute':minute,'second':second,'header':header,'espectro':(espectro[0],espectro[-1],passo), 'tagPAR2':tagPAR2, 'tagPAR1':tagPAR1, 'ValoresEspectro':espectro, 'ValoresEQ':vetorEQ}
 
 if nomeArqlog != '': l.logfile(dic)
-plt.savefig('Eficiencia Quantica', format='jpg')
 arqCaract = arquivoCaract()
 arqCaract.criaArq(arqCaract)
+
+
 

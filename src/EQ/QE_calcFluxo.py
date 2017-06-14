@@ -48,14 +48,14 @@ cwd = os.getcwd()
 chdir = cwd + '/' + 'Imagens_reduzidas'
 
 
-def GeraVetorFluxoCamera(header, nImages, ganho, tagDado, tagRef):
+def GeraVetorFluxoCamera(header,ganho, tagDado, tagRef, lenPixel, Dfotometro):
 	print '\nCalculando o fluxo total da camera \n'
 	coordx	   = header['naxis1']/2
 	coordy 	   = header['naxis2']/2
-	Cdimension = 815
+	Cdimension = int(Dfotometro/(lenPixel*1e-3)) #dimensao do fotometro dividido pelo tamanho do pixel do CCD = numero de pixels necessarios para a dimensao da caixa de pixels. 
 	
-	etime2 = getVetorEtime(nImages, tagDado)
-	etime1 = getVetorEtime(nImages, tagRef)
+	etime2 = getVetorEtime(tagDado)
+	etime1 = getVetorEtime(tagRef)
 	VetorStdDiff = getStdDiffImages()
 
 	os.chdir(chdir)
@@ -124,11 +124,11 @@ def FluxoRelativo(Fluxocamera,Fluxodetector, Stdcamera, Strespectro, nomeArq_Cal
 
 
 
-def getVetorEtime(nImages, tagDado):
+def getVetorEtime(tagDado):
 	arquivoListaImagens = tagDado+'List.txt'
 	vetorEtime = []
 	listaImagens = LeArquivoReturnLista(arquivoListaImagens)
-	for i in range(len(listaImagens))[::nImages]:
+	for i in range(len(listaImagens)):
 		header = fits.getheader(listaImagens[i])
 		vetorEtime.append(header['exposure'])
 	return vetorEtime
