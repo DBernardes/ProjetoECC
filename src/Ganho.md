@@ -22,4 +22,4 @@ Caso haja o interesse de gerar um arquivo Log com as informações do experiment
           
           
 #### Resultados:
-![relatorioganho](https://cloud.githubusercontent.com/assets/23655702/24375322/415d04a8-130e-11e7-9df7-56661ced647c.png)
+![ganho](https://cloud.githubusercontent.com/assets/23655702/24704658/0506ea50-19df-11e7-93a8-33a354e74cd3.png)
