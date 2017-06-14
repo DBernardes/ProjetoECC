@@ -52,7 +52,7 @@ def logfile(dic, listaFlat, listaBias):
 	
 	Strbox = 'Parametros da caixa de pixels: coordenadas (%i,%i) e dimensao %i'%(parametrosBox[0],parametrosBox[1],parametrosBox[2]*2)
 	StrCCD = CCDinfo(header, nImagesFlat, nImagesBias)
-	Strganho = 'Ganho calculado: %.2f e-/ADU'%(ganho)
+	Strganho = 'Ganho: %.2f +/- %.2f e-/ADU'%(ganho[0], ganho[1])
 
 	StrNomeImagens =  '\t\tArquivo\t\t\t CDDTemp (ºC)\t Texp (s)\n'
 	StrNomeImagens += '--------------------------------------------------------\n'

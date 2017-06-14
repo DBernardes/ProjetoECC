@@ -82,7 +82,7 @@ if options.logfile:
 	dic = {'minute':minute, 'second':second, 'nImagesFlat':nImagesFlat,'nImagesBias':nImagesBias, 'ganho':ganho, 'box':parametersBox}
 	logfile(dic, listaFlat, listaBias)			
 
-plt.savefig('ganho', format='jpg')
+
 arqCaract = arquivoCaract()
 arqCaract.criaArq(arqCaract)
 

@@ -26,6 +26,7 @@ __copyright__ = """
 
 import matplotlib.pyplot as plt
 import numpy as np
+import os 
 
 from scipy import stats
 from math import sqrt
@@ -52,7 +53,7 @@ def Graph_sinal_variance(X, Y, yerr, xerr):
 	plt.text(0.50,0.15, r'$\mathtt{Ganho: \quad %.2f^+_- %.2f}$'%(coefAng, stdLinAjust), va='center', ha='left', size=font+5,transform=ax.transAxes)	
 	plt.text(0.50,0.08, r'$\mathtt{\sigma_e = \; %.2f^+_- %.2f}$'%(readNoise, stdReadNoise), va='center', ha='left', size=font+5, transform=ax.transAxes)
 
-	return coefAng
+	return (coefAng, stdLinAjust)
 
 
 def Graph_residuos(x,y, std):
@@ -78,6 +79,12 @@ def Graph_residuos(x,y, std):
 	if  '-0.0' == mean:
 		mean = mean[1:]
 	plt.text(0.05,0.9, r'$\mathtt{M\acuteedia \; = \; %s^+_- \; %s \quad el\acuteetrons}$'%(mean,std), va='center', ha='left', size=font+3, transform=ax.transAxes)
+
+	cwd = os.getcwd()
+	BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
+	os.chdir(BackDir)
+	plt.savefig('ganho', format='png')
+	os.chdir(cwd)
 	
 	
 	
