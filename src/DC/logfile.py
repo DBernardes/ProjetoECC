@@ -28,7 +28,7 @@ from readArq import readArq_returnListDirectories, readArq_returnListImages
 
 cwd = os.getcwd()
 
-def logfile(Dic, DKnominal):
+def logfile(Dic, DCnominal):
 
 	minute = Dic['minute']
 	second = Dic['second']
@@ -60,7 +60,7 @@ def logfile(Dic, DKnominal):
 	Strbox = 'Opcao caixa de pixels: (x,y) = (%i,%i), dimensao = %i.' %(coordxBox,coordyBox,dimensao) + '\n\n'
 	
 	CCDstr = CCDinfo(header, qtdImagesBias,qtdImagesDark)
-	DKnominal = 'Corrente de escuro calculada: %s e-/pix/s' %(DKnominal)
+	DCnominal = 'Corrente de escuro: %s +/- %s e-/pix/s' %(DCnominal[0], DCnominal[1])
 
 
 	StrNomeImagens =  '\t\tArquivo\t\t\t CDDTemp (ºC)\t Texp (s)\n'
@@ -85,7 +85,7 @@ def logfile(Dic, DKnominal):
 	os.chdir(cwd)
 	
 
-	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n'+ Tempoprocess+'\n\n'+ Strbox + CCDstr+ '\n\n'+ DKnominal + '\n\n\n\n' + StrNomeImagens
+	dados = Logdata + '\n\n'+ user + '\n'+ IP + '\n' + Strcommandline+'\n'+ WorkDirectory +'\n'+ Tempoprocess+'\n\n'+ Strbox + CCDstr+ '\n\n'+ DCnominal + '\n\n\n\n' + StrNomeImagens
 
 	BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
 	os.chdir(BackDir)

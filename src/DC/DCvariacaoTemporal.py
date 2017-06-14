@@ -77,7 +77,7 @@ def plotTempDC(temperatura, DC, std):
 		textstr = r'$\mathtt{DC(%i^oC) \; = \quad %s^+_- \; %s \; e-/pix/s}$'%(temperatura[i], DC[i], std[i])
 		plt.text(0.05, 0.90-i*0.07,textstr,ha='left',va='center',size= font+1,transform=ax.transAxes)		
 		i+=1
-	return DC[-1]
+	return (DC[-1],std[-1])
 
 
 

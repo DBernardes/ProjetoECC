@@ -52,7 +52,7 @@ parser.add_option("-e", "--etimekey", dest="etimekey", help="Keyword para tempo 
 parser.add_option("-l", "--logfile", action='store_true', dest="logfile", help="Log file name", default=False)
 parser.add_option("-v", action="store_true", dest="verbose", help="verbose",default=False)
 parser.add_option("-c", "--box", dest="box", help="caixa de pixels",type='string',default="")
-parser.add_option("-g", "--gain", dest="gain", help="ganho do CCD",type='int',default=1)
+parser.add_option("-g", "--gain", dest="gain", help="ganho do CCD",type='string',default='')
 try:
     options,args = parser.parse_args(sys.argv[1:])
 except:

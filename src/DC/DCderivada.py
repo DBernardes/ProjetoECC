@@ -44,6 +44,7 @@ def calcDerivada_XY(dados, etime, gain, lenLinha, lenColuna):
 	xcoluna = range(lenColuna)
 	derivy = []
 	derivx = []	
+	gain = float(gain)
 	i=0
 	while i < lenLinha:
 		vetorlinha = []
@@ -96,20 +97,27 @@ def plotGrafico(x,y,posx, posy, temperatura, eixo='x'):
 	
 
 def caixaTexto(mean, std, meanBin, meanStdbin, posx, posy):
-	ratio = std/meanStdbin
 	sinal = None
 
 	num = algarismoSig(std)
-	mean = str(round(mean,num))
-	std = str(round(std,num))
+	mean = round(mean,num)
+	std = round(std,num)
 
 	num = algarismoSig(meanStdbin)
-	meanBin = str(round(meanBin,num))
-	meanStdbin = str(round(meanStdbin,num))
+	meanBin = round(meanBin,num)
+	meanStdbin = round(meanStdbin,num)
+
+	ratio = std/meanStdbin
+
+	mean = str(mean)
+	std = str(std)
+	meanBin = str(meanBin)
+	meanStdbin = str(meanStdbin)
+
 
 	textstr1 = r'$\mathtt{\barM = \; %s_-^+ \; %s \;\; e-/pix/s}$' %(mean,std)
 	textstr2 = r'$\mathtt{\barM_{bin} = \; %s_-^+ \; %s \;\; e-/pix/s}$' %(meanBin,meanStdbin)
-	textstr3 = r'$\mathtt{\sigma = \; %.1f \; \sigma_{bin}}$' %(ratio)
+	textstr3 = r'$\mathtt{\sigma = \; %.2f \; \sigma_{bin}}$' %(ratio)
 	
 	if 0.9 < ratio < 1.1:
 		sinal = [r'$\mathtt{\approx}$', '']	

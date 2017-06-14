@@ -76,7 +76,7 @@ def criaArq_listaDirectories(directories):
 
 def criaListas_Dark_Bias(cwd, directories, KW_bias, KW_dark):
 	for Dir in directories:
-		chdir = cwd + '/' + Dir
+		chdir = cwd + '/' + Dir		
 		os.chdir(chdir)
 		criaArq_listaImgInput(KW_bias)
 		criaArq_listaImgInput(KW_dark)
