@@ -21,7 +21,7 @@ __copyright__ = """
 import matplotlib.pyplot as plt
 
 #caixa de texto com informacoes do grafico
-def caixaTexto(Str, n, m, posx, posy,font, space=0.1,rspan=1, cspan=1):		
+def textBox(Str, n, m, posx, posy,font, space=0.1,rspan=1, cspan=1):		
 	i=0
 	ax = plt.subplot2grid((n,m),(posx,posy), rowspan=rspan, colspan=cspan)
 	plt.xticks(())

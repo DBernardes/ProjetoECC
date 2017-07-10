@@ -45,7 +45,7 @@ from caixaTexto import caixaTexto as caixa
 from algarismoSig import algarismoSig
 
 
-def geraDados(listaImagens):
+def calcMedian_FFT(listaImagens):
 	#separada a lista total e fragmentos menores
 	vetorMean,vetorStddev, vetorTempo = [],[], []
 	header = fits.getheader(listaImagens[0])
@@ -201,20 +201,20 @@ def dadosMeanTemp(vetor,vetorstd):
 #--------------------------------------------------------------------------------------------
 
 
-def variacaoTemporal(inputlist, tempoExp):
+def variacaoTemporal(inputlist):
 	print 'Plotando variaçao temporal das imagens...'
-	vetorMean, vetorTempo, vetorStddev, Meanf, xf, meanTotal,interv = geraDados(inputlist)			
+	vetorMean, vetorTempo, vetorStddev, Meanf, xf, meanTotal,interv = calcMedian_FFT(inputlist)			
 
 	#Grafico media das imagens pelo tempo
 	plotGraficoTemporal(vetorTempo,vetorMean,vetorStddev,meanTotal)	
 	#Caixa de texto com dados da media temporal
-	ruidoNominal = dadosMeanTemp(vetorMean,vetorStddev)	
+	ruidoCalculado = dadosMeanTemp(vetorMean,vetorStddev)	
 	#Grafico da FFT
 	npicos, picos = plotGraficoFFT(xf,Meanf,vetorMean,interv)
 	#Caixa de texto da FFT	
 	dadosFFT(Meanf[1:interv],xf[1:interv], npicos, picos)
 
-	return ruidoNominal
+	return ruidoCalculado
 	 
 
   

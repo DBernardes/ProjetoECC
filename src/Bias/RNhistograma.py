@@ -40,7 +40,7 @@ from scipy.interpolate import interp1d
 from algarismoSig import algarismoSig
 
 #gera os dados principais do histograma
-def geraDados(image):
+def calcHistograma(image):
 
 	
 	median = np.median(image)
@@ -72,7 +72,7 @@ def geraDados(image):
 def plothist(base, value, x, y, mean, median, std, stdAbs):
 	ax= plt.subplot2grid((4,3),(1,1),colspan=1)
 	font=20
-	plt.plot(base[:-1],value,c='blue')
+	plt.plot(base[:-1],value,c='blue')	
 	plt.plot(x,y,'--',c='red')
 	plt.xlabel(r'$\mathtt{Contagens \; (adu)}$',size=font)
 	plt.ylabel(r'$\mathtt{Frequ\^encia\;}$'+'(%)',size=font)
@@ -144,7 +144,7 @@ def drawLine(x1,y1,y2,text,font=17,pos='right'):
 def histograma(image):
 	print 'Calculando histograma', '\n'
 
-	mean, median, std, stdAbs, value, base, x, y = geraDados(image)
+	mean, median, std, stdAbs, value, base, x, y = calcHistograma(image)
 	textstr = plothist(base, value, x, y, mean, median, std, stdAbs)									
 	return textstr
 

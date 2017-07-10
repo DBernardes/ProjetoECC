@@ -38,9 +38,7 @@ from linhaReferencia import linhaReferencia
 from returnMax import returnMax
 from algarismoSig import algarismoSig
 
-
-
-def geraDados(image):
+def CalcMean_Lin_Col(image):
 	#variaveis de controle	
 	meanLinha = []
 	meanColuna = []
@@ -189,7 +187,7 @@ def gradiente(image):
 	plotImagem(image)
 
 	#gera vetor com media de linhas e colunas
-	MeanLinha, MeanColuna = geraDados(image)	
+	MeanLinha, MeanColuna = CalcMean_Lin_Col(image)	
 	#plota graficos em cada direcao
 	meanBinX,StdBinX = plotGradiente(0,1,MeanLinha,eixo='y')	
 	meanBinY,StdBinY = plotGradiente(1,0,MeanColuna)
@@ -198,6 +196,6 @@ def gradiente(image):
 
 	return textstr
 	
-
+	
 
 
