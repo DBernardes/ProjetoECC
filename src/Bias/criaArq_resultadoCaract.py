@@ -27,7 +27,7 @@ date = 'Data: ' + str(datetime.datetime.now()).split('.')[0].split(' ')[0]
 
 class arquivoCaract:
 	def __init__(self):
-		self.dic = {'StrEspectroEQ':[], 'TemperaturaDC':'', 'nomeCamera':'', 'DCCalculado':'', 'ganhoCalculado':'', 'biasCalculado':''}
+		self.dic = {'StrEspectroEQ':[], 'TemperaturaDC':'', 'nomeCamera':'', 'DCCalculado':'', 'ganhoCalculado':'', 'RNCalculado':''}
 
 		
 	def testArqExists(self):
@@ -42,14 +42,14 @@ class arquivoCaract:
 		StrEspectroEQ = []
 		Object.testArqExists()	
 
-		biasCalculado, DCCalculado, TemperaturaDC, ganhoCalculado, taxaLeitura, preAmp, Vshift, StrEspectroEQ = '','','','','','','',[]
+		RNCalculado, DCCalculado, TemperaturaDC, ganhoCalculado, taxaLeitura, preAmp, Vshift, StrEspectroEQ, Data = '','','','','','','',[],''
 		for arq in self.ListaArquivos:
 			with open(arq) as arq:
 				linhas = arq.read().splitlines()
 				ArqDC = False
 				for linha in linhas:								
 					if 'Ruido de Leitura:' in linha: 
-						biasCalculado = linha.split(':')[1]
+						RNCalculado = linha.split(':')[1]
 					if 'Corrente de escuro:' in linha: 
 						DCCalculado = linha.split(':')[1]
 						ArqDC = True				
@@ -72,12 +72,15 @@ class arquivoCaract:
 						Vshift = linha.split(':')[1]
 					if 'Pre-amplificacao:' in linha:
 						preAmp = linha.split(':')[1]
-
+					if 'Data do experimento:' in linha:
+						Data = linha.split(':')[1]
+					if 'Tabela para pagina wiki' in linha:
+						break
  
 
 				
 				arq.close()
-		listValues = [biasCalculado, DCCalculado,TemperaturaDC, ganhoCalculado, StrEspectroEQ, nomeCamera, taxaLeitura, preAmp, Vshift]					
+		listValues = [RNCalculado, DCCalculado,TemperaturaDC, ganhoCalculado, StrEspectroEQ, nomeCamera, taxaLeitura, preAmp, Vshift, Data]					
 		return listValues
 			
 		
@@ -87,19 +90,53 @@ class arquivoCaract:
 			
 		Object.getValuesArqCaract()
 		listValues = Object.getValues(Object)	
-		Object.atualizaVariavel(listValues)
+		Object.atualizaVariavel(listValues)		
+		listaEQ = self.dic['StrEspectroEQ'][2:]
+		StrEQ = ''
+		for linha in listaEQ:
+			StrEQ += '|' + linha.split('\t\t')[0][1:] + '||' + linha.split('\t\t')[1] + '\n' + '|-' + '\n'
 
 		StrNomeCamera = 'Camera:%s' %(self.dic['nomeCamera']) 
 		StrTaxaLeitura = 'Taxa  de  leitura:%s' %(self.dic['taxaLeitura'])
 		StrPreAmp = 'Pre-amplificacao:%s' %(self.dic['preAmp'])
 		StrVShift = 'VShift Speed:%s' %(self.dic['Vshift'])
 		StrTemp = 'Temperatura minima:%s ºC' %(self.dic['TemperaturaDC'])
-		StrBias = 'Ruido de Leitura:%s' %(self.dic['biasCalculado'])
+		StrBias = 'Ruido de Leitura:%s' %(self.dic['RNCalculado'])
 		StrDC = 'Corrente de escuro:%s' %(self.dic['DCCalculado'])
 		StrGanho = 'Ganho:%s' %(self.dic['ganhoCalculado'])
+		StrTabelaWiki = ['\n\n\n', 'Tabela para pagina wiki', '------------------------','\n',
+'{| class="wikitable floatleft" style="text-align: center;"',  
+'! style="background: #808080;"| Câmera: || style="background: #808080;" | %s'%(self.dic['nomeCamera']),
+'|-', 
+'| Taxa de Leitura: || %s'%(self.dic['taxaLeitura']),
+'|-', 	
+'| Pré-amplificação: || %s'%(self.dic['preAmp']),
+'|-',
+'| VShift Speed: || %s'%(self.dic['Vshift']),
+'|-',
+'| Data: || %s'%(self.dic['Data']), 
+'|-',
+'| Temperatura minima: || %s ºC'%(self.dic['TemperaturaDC']),
+'|-',
+'| Ruido de Leitura: || %s'%(self.dic['RNCalculado']),
+'|-',
+'| Corrente de escuro: || %s'%(self.dic['DCCalculado']),
+'|-',
+'| Ganho: || %s'%(self.dic['ganhoCalculado']),
+'|-',
+'!  style="background: #808080;"| Lambda (nm) ||  style="background: #808080;"| EQ (%)',
+'|-',
+StrEQ+'|}']
+
+
+
+
+
 		StrArqTexto = [StrNomeCamera, StrTaxaLeitura, StrPreAmp, StrVShift, date, StrTemp, StrBias, StrDC, StrGanho] + [''] + self.dic['StrEspectroEQ']
 		arqCaract = open('arquivoCaracterizacao', 'w')
 		for Str in StrArqTexto:
+			arqCaract.write(Str+'\n')
+		for Str in StrTabelaWiki:
 			arqCaract.write(Str+'\n')
 		arqCaract.close()
 		
@@ -112,7 +149,7 @@ class arquivoCaract:
 				arq.close()		
 			for linha in linhas:					
 				if 'Ruido de Leitura' in linha: 					
-					self.dic['biasCalculado'] = linha.split(':')[1]
+					self.dic['RNCalculado'] = linha.split(':')[1]
 				if 'Corrente de escuro' in linha: 
 					self.dic['DCCalculado'] = linha.split(':')[1]
 				if 'Ganho' in linha: 
@@ -124,12 +161,14 @@ class arquivoCaract:
 					self.dic['TemperaturaDC'] = linha.split(':')[1].split(' ')[0]
 				if 'Camera' in linha:
 					self.dic['nomeCamera'] = linha.split(':')[1]
+				if 'Tabela para pagina wiki' in linha:
+					break
 		except: 1
 		
 
 	def atualizaVariavel(self, lista):		
 		i=0
-		listaVariaveis = ['biasCalculado', 'DCCalculado', 'TemperaturaDC', 'ganhoCalculado', 'StrEspectroEQ', 'nomeCamera', 'taxaLeitura', 'preAmp', 'Vshift']
+		listaVariaveis = ['RNCalculado', 'DCCalculado', 'TemperaturaDC', 'ganhoCalculado', 'StrEspectroEQ', 'nomeCamera', 'taxaLeitura', 'preAmp', 'Vshift', 'Data']
 		for dado in lista:
 			if dado != '':
 				self.dic[listaVariaveis[i]] = dado		
