@@ -131,6 +131,6 @@ def calcXY_YerrorBar_XerrorBar(listaFlat, listaBias, numeroImagens, parametersBo
 			XsigmaBar.append(np.std(VetorEixoX))			
 			VetorEixoX, VetorEixoY, VetorStdEixoY, VetorEixoX = [], [], [], []	
 	
-	return X,Y,SigmaTotal, XsigmaBar
+	return X,Y,SigmaTotal, XsigmaBar, sigmaBias
 	
 

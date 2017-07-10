@@ -34,13 +34,12 @@ from linhaReferencia import linhaReferencia
 from algarismoSig import algarismoSig
 
 
-def Graph_sinal_variance(X, Y, yerr, xerr):
+def Graph_sinal_variance(X, Y, yerr, xerr, sigmaBias):
 	font = 17	
 	global coefAng, intercept, stdLinAjust
 	coefAng, intercept, r, p, stdLinAjust = stats.linregress(X,Y)
 	ajust = np.poly1d((coefAng,intercept))
-	readNoise, stdReadNoise = sqrt(-intercept*coefAng), sqrt(stdLinAjust*coefAng)
-	
+	readNoise, stdReadNoise = coefAng*sigmaBias/sqrt(2), stdLinAjust*sigmaBias/sqrt(2)
 	ax = plt.subplot(121)
 	plt.plot(X, Y, '-', c='blue')	
 	plt.errorbar(X,Y,yerr, xerr, fmt='o', c='blue')

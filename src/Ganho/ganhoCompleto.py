@@ -67,10 +67,10 @@ listaFlat = LeArquivoReturnLista(nameFlat+'list')
 
 #----------------------------------------------------------------------------------------------------------------------
 parametersBox = parametrosCaixaPixels(options.caixaP, listaFlat[0])		
-X,Y,SigmaTotal, XsigmaBar = calcXY_YerrorBar_XerrorBar(listaFlat, listaBias, numeroImagens, parametersBox)
+X,Y,SigmaTotal, XsigmaBar, sigmaBias = calcXY_YerrorBar_XerrorBar(listaFlat, listaBias, numeroImagens, parametersBox)
 
 plt.figure(figsize=(17,8))
-ganho = Graph_sinal_variance(X,Y,SigmaTotal, XsigmaBar)
+ganho = Graph_sinal_variance(X,Y,SigmaTotal, XsigmaBar, sigmaBias)
 Graph_residuos(X,Y, SigmaTotal)
 
 
