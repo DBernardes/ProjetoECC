@@ -9,11 +9,12 @@
 #### Exemplo:
   - Após baixar e extrair os arquivos, execute o comando via terminal sobre o diretório onde se encontram as imagens:
   
-         ./biasCompleto.py 
+         ./ReadNoiseCharact.py
+
       
 Caso haja o interesse em criar um arquivo log contendo todas as informações do experimento, execute o comando:
 
-    ./biasCompleto.py -l
+    ./ReadNoiseCharact.py
 
 #### Resultados:
 ![relatorio bias](https://user-images.githubusercontent.com/23655702/28124600-86354f1e-66fa-11e7-8024-ada05c0da8a3.png)
