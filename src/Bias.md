@@ -16,6 +16,5 @@ Caso haja o interesse em criar um arquivo log contendo todas as informações do
     ./biasCompleto.py -l
 
 #### Resultados:
-![relatorio bias](https://cloud.githubusercontent.com/assets/23655702/24375199/d8c0128c-130d-11e7-8ad6-1c73da2c893a.png)
-
+![relatorio bias](https://user-images.githubusercontent.com/23655702/28124600-86354f1e-66fa-11e7-8024-ada05c0da8a3.png)
   
