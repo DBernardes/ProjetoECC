@@ -16,7 +16,7 @@
    - A opção -b refere-se ao keyword das imagens de bias (parte do nome em comum) usadas na redução dos dados.
    - A opção -d refere-se ao keyword das imagens para caracterização da corrente de escuro (parte do nome em comum).
    - A opção -g refere-se ao ganho do CCD para as respectivas taxas de leitura e pré - amplificação;
-   - A opção -c refere-se aos parâmetros da caixa onde serão retirados os pixels de cada imagem para a caracterização temporal da corrente de escuro, seguindo a formatação (xcoord, ycoord, dimensão).
+   - A opção -c refere-se aos parâmetros da caixa onde serão retirados os pixels de cada imagem para a caracterização temporal da corrente de escuro, seguindo a formatação (xcoord, ycoord, dimensão).
    - Há uma opção -e que refere-se ao keyword usado no cabeçalho das imagens da câmera para indicar tempo de exposição (keyword varia de câmera para câmera). Caso essa opção não seja fornecida, o código irá considerar keyword='EXPOSURE'
     
  Caso haja interesse em gerar um arquivo Log contendo as informações do experimento, execute o comando:
