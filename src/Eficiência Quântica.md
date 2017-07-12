@@ -21,10 +21,6 @@ Ao executar o comando pela primeira vez, irá aparecer uma mensagem pedindo para
   - ganho do CCD.
   
 Preenchendo o arquivos com as informações, execute novamente o comando.
-Caso deseje saber quais os pontos do espectro estão dentro de um intervalo da curva de EQ, execute o comando:
-         
-          ./QEcompleto.py --range=vmin,vmax          
-
 
 
 #### Resultados:
