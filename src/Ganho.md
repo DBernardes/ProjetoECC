@@ -11,14 +11,14 @@
 #### Exemplo:
   - Após baixar e extrair os arquivos, execute o comando via terminal sobre o diretório onde se encontram as imagens:
   
-         ./ganhoCompleto.py -fFlat,5 -bBias 
+         ./ganhoCompleto.py -bBias -fFlat,5 -c612,588,100 
       
    - A opção -f refere-se à uma indicação para o código do nome das imagens de flat (parte do nome em comum) e o número de imagens adquiridas para cada intensidade de luz;
    - A opção -b refere-se à uma indicação para o código do nome das imagens de bias (parte do nome em comum); Os resultados aparecerão no diretório atual;
-   
+   - A opção -c refere-se ao parâmetros da caixa onde serão retirados os pixels de cada imagem, seguindo a formatação (xcoord, ycoord,dimensão)
 Caso haja o interesse de gerar um arquivo Log com as informações do experimento, executar o seguinte comando:
 
-         ./ganhoCompleto.py -fFlat,5  -bBias -l
+         ./ganhoCompleto.py -bBias -fFlat,5 -c612,588,100 -l
           
           
 #### Resultados:
