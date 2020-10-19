@@ -83,15 +83,16 @@ def calcMedian_FFT(listaImagens):
 						
 	#FFT	
 	Meanf = np.abs(fft(vetorMean))
-	interv = len(Meanf)/2	
+	interv = round(len(Meanf)/2)	
 	Meanf = Meanf[1:interv]
 	xf = fftfreq(len(vetorMean))
 	xf = xf[1:interv]
 		
 	#Linha referencia	
-	meanTotal = range(len(vetorMean))
+	range_vector = range(len(vetorMean))
+	meanTotal = np.zeros(len(vetorMean))
 	y = np.mean(vetorMean)
-	for i in meanTotal:
+	for i in range_vector:
 		meanTotal[i] = y
 	
 	return vetorMean, vetorTempo, vetorStddev, Meanf, xf, meanTotal, interv

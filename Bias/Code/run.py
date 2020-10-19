@@ -18,7 +18,7 @@ __copyright__ = """
 import ReadNoiseCharact as RNC
 import matplotlib.pyplot as plt
 
-dir_path = r'C:\Users\observer\Desktop\ProjetoECC\Bias\Images'
+dir_path = r'C:\Users\denis\Desktop\ProjetoECC\Bias\Images'
 RNobject = RNC.ReadNoiseCharact(dir_path)
 plt.figure(figsize=(22,28))
 RNobject.combinaImagensBias()

@@ -44,7 +44,7 @@ from RNhistograma import histograma
 from CreateLogFile import logfile
 from criaArq_resultadoCaract import arquivoCaract
 
-#from ccdproc import Combiner, CCDData
+from ccdproc import Combiner, CCDData
 from optparse import OptionParser
 
 
@@ -58,6 +58,7 @@ class ReadNoiseCharact:
 		nowInitial = datetime.datetime.now()
 		self.minute, self.second = nowInitial.minute, nowInitial.second 	
 		self.BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
+		os.chdir(dir_path)
 
 
 
@@ -93,28 +94,27 @@ class ReadNoiseCharact:
 
 
 	def readArq_returnlistImages(self):
-		with open('listaImagens') as arq:
+                with open('listaImagens') as arq:
                     self.listaImagensBias = arq.read().splitlines()
                     arq.close()
 
 
 
 	def combinaImagensBias(self, numeroImagens=10):
-            #newlist, dados, i = [], [], 0
-            #step = len(self.listaImagensBias)/numeroImagens
-            #while i < numeroImagens:
-            #    newlist.append(self.listaImagensBias[i*step])		
-            #    i+=1
-            #for img in newlist:
-            #    dados.append(fits.getdata(img, 0)[0])		
+            newlist, dados, i = [], [], 0
+            step = round(len(self.listaImagensBias)/numeroImagens)
+            while i < numeroImagens:
+                newlist.append(self.cwd + '\\' + self.listaImagensBias[i*step])		
+                i+=1
+            for img in newlist:
+                dados.append(fits.getdata(img, 0))		
             #gera um outro vetor na classe CCDData
-            #x = []
-            #for img in dados:
-            #    x.append(CCDData(img, unit = 'adu'))
-            #    i+=1
-            
-            #combinedImage = Combiner(x)
-            #combinedImageMedian = combinedImage.average_combine() #average_median
+            x = []
+            for img in dados:
+                x.append(CCDData(img, unit = 'adu'))
+                i+=1
+            combinedImage = Combiner(x)
+            combinedImageMedian = combinedImage.average_combine() #average_median
             self.NPcombinedImage = np.asarray(fits.getdata(self.cwd + '\\' + self.listaImagensBias[0])[0])
 
 
@@ -138,17 +138,17 @@ class ReadNoiseCharact:
 
 	def salvaArquivosResultados(self):
             os.chdir(self.BackDir)
-            plt.savefig('Relatório Bias', format='pdf')
+            plt.savefig('Relatório Bias.pdf', format='pdf')
             os.chdir(self.cwd)
 
             dic = {'minute':self.minute, 'second':self.second,'ruidoNominal':self.ruidoCalculado, 'header':self.header}
-            if options.logfile :
-                    print('Criando arquivo log', '\n')
-                    logfile(dic, self.NPcombinedImage)	
-
-            os.chdir(self.BackDir)
-            arqCaract = arquivoCaract()
-            arqCaract.criaArq(arqCaract)
+##            
+##            print('Criando arquivo log', '\n')
+##            logfile(dic, self.NPcombinedImage)	
+##
+##            os.chdir(self.BackDir)
+##            arqCaract = arquivoCaract()
+##            arqCaract.criaArq(arqCaract)
 
 
 

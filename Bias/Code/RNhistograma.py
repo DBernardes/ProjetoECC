@@ -38,7 +38,7 @@ __copyright__ = """
 
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
+from scipy.stats import norm
 import returnMax
 import copy
 
@@ -59,7 +59,7 @@ def calcHistograma(image):
 	mean = base[indiceValor]
 
 	x = np.linspace(base[0],base[-1],100)
-	y = mlab.normpdf(x, mean, std)	
+	y = norm.pdf(x, mean, std)	
 
 	i=0
 	while i<len(value):
