@@ -40,4 +40,4 @@ email: edermartioli@gmail.com
 
 ## License
 
-Este projeto está licenciado sob a Licença MIT - consulte o arquivo [LICENSE.md] (LICENSE.md) para obter detalhes
+Este projeto está licenciado sob a Licença MIT - consulte o arquivo [LICENSE.md](https://github.com/DBernardes/ProjetoECC/blob/master/LICENSE) para obter detalhes
