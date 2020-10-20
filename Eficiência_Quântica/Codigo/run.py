@@ -38,23 +38,6 @@ from QE_reduceImgs_readArq import mkDir_saveCombinedImages, mkDir_ImgPair, readA
 from QE_calcFluxo import  GeraVetorFluxoCamera, FluxoRelativo
 from criaArq_resultadoCaract import arquivoCaract
 
-##parser = OptionParser()
-##parser.add_option("-v", action="store_true", dest="verbose", help="verbose",default=False)
-##parser.add_option("-r",'--range',dest="Range",type = 'string', help='Intervalo do Espectro', default ='')
-##
-##nowInitial = datetime.datetime.now()
-##
-##try:
-##    options,args = parser.parse_args(sys.argv[1:])
-##except:
-##    print "Error: check usage with ./QEcompleto.py -h ";sys.exit(1);
-##
-##if options.verbose:
-##    print 'Lista de imagens: ', options.list
-##
-##minute = nowInitial.minute
-##second = nowInitial.second
-
 
 #------------------------------------------------------------------------------------------
 images_path = r'C:\Users\observer\Desktop\Imagens_ECC\EQ'
