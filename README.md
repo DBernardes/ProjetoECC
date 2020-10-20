@@ -1,4 +1,4 @@
-# Projeto dos Ensaios Caracterização dos CCDs do Observatório Pico dos Dias
+# Projeto dos Ensaios de Caracterização dos CCDs do Observatório Pico dos Dias
 Este repositório disponibiliza os códigos desenvolvidos em python para os ensaios de caracterização do Ruído de Leitura, da Corrente de Escuro, do Ganho e da Eficiência Quântica dos CCDs do Observatório Pico dos Dias. Para cada uma das caracterizações, existe um respectivo diretório. Dentro de cada diretório, é possível encontrar os códigos desenvolvidos, um conjunto de imagens de teste e um arquivo README com o passo-a-passo para a execução das caracterizações.
 
 
@@ -34,6 +34,10 @@ pip install <package_name>
 
 email: denis.bernardes099@gmail.com 
 
+* **Eder Martioli**: 
+
+email: edermartioli@gmail.com
+
 ## License
 
-Este projeto está licenciado sob a Licença MIT - consulte o arquivo [LICENSE.md] (LICENSE.md) para obter detalhes
+Este projeto está licenciado sob a Licença MIT - consulte o arquivo [LICENSE.md](https://github.com/DBernardes/ProjetoECC/blob/master/LICENSE) para obter detalhes
