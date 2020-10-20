@@ -10,7 +10,7 @@ Neste roteiro é apresentado uma breve explicação da caracterização do Ruíd
 
 #### Rodando o código:
  - Baixe e extraia as imagens do arquivo .ZIP presentes neste diretório.
- - Abra o arquivo run.py. Neste arquivo, deve ser fornecido para a variável ´´´dir_path´´´ o repositório onde as imagens foram extraída.
+ - Abra o arquivo run.py. Neste arquivo, deve ser fornecido para a variável ```dir_path``` o repositório onde as imagens foram extraída.
  - Após isso, o arquivo pode ser executado e o relatório da caracterização aparecerá no diretório das imagens.
  - Abaixo, segue um exemplo do resultado a ser obtido
   
