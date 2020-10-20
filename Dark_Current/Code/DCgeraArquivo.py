@@ -6,11 +6,20 @@
     
     Descricão: esta biblioteca possui as seguintes funcoes:
 
-		CombinaImgs_salvaArquivoFITS: esta funcao tem como input uma serie imagens obtidas pelo CCD, retornando uma imagem combinada dessa serie. Sobre os dados e realizada uma mediana para cada pixel em funcao do tempo, salvando a imagem resultante com o nome ImgReduce.
+		CombinaImgs_salvaArquivoFITS: esta funcao tem como input uma serie imagens obtidas pelo CCD,
+		retornando uma imagem combinada dessa serie. Sobre os dados e realizada uma mediana para cada pixel
+		em funcao do tempo, salvando a imagem resultante com o nome ImgReduce.
 
-		criaImgBias_Reduction: esta funcao faz a leitura de uma lista de imagens bias fornecida, retornando essa serie para a funcao CombinaImgs_salvaArquivoFITS.
+		criaImgBias_Reduction: esta funcao faz a leitura de uma lista de imagens bias fornecida, retornando
+		essa serie para a funcao CombinaImgs_salvaArquivoFITS.
 
-		criaArq_DadosTemporais: esta funcao recebe uma lista de imagens de dark; sobre essas imagens faz a reducao do bias utilizando da imagem combinada, retira uma caixa de pixels e, sobre ela, calcula sua mediana e desvio padrao, realizando para cada uma a leitura do valor do tempo de exposicao. Sobre o tempo de exposicao e a mediana das imagens, calcula uma funcao linear; gera um arquivo chamado Arquivo_DadosTemporais  expressando um cabecalho contendo o coeficiente angular e linear da curva e desvio padrao do ajuste; e tambem escrito o valor da mediana e desvio padrao das imagens em forma de colunas. A funcao gera ainda um segundo arquivo contendo uma lista do tempo de exposicao das imagens.
+		criaArq_DadosTemporais: esta funcao recebe uma lista de imagens de dark; sobre essas imagens faz a
+		reducao do bias utilizando da imagem combinada, retira uma caixa de pixels e, sobre ela, calcula sua
+		mediana e desvio padrao, realizando para cada uma a leitura do valor do tempo de exposicao. Sobre o
+		tempo de exposicao e a mediana das imagens, calcula uma funcao linear; gera um arquivo chamado
+		Arquivo_DadosTemporais  expressando um cabecalho contendo o coeficiente angular e linear da curva e
+		desvio padrao do ajuste; e tambem escrito o valor da mediana e desvio padrao das imagens em forma de
+		colunas. A funcao gera ainda um segundo arquivo contendo uma lista do tempo de exposicao das imagens.
 
     @author: Denis Varise Bernardes & Eder Martioli
     
@@ -63,19 +72,20 @@ def linearFunc(p, x):
 
 
 def infoCaractTemporal(listaImgDark,parametros):
+        print(parametros),exit()
 	Imgmedian,ImgStd, VetorEtime = [], [],[]
 	for img in listaImgDark:		
-		scidata,hdr = fits.getdata(img,header=True)
-		imgReduce = fits.getdata('ImgReduce.fits')
-		scidata = scidata.astype(float) - imgReduce		
-		scidata = caixaPixels(scidata[0], parametros) #retira apenas uma caixa de pixels da imagem total
+                scidata,hdr = fits.getdata(img,header=True)
+                imgReduce = fits.getdata('ImgReduce.fits')
+                scidata = scidata.astype(float) - imgReduce		
+                scidata = caixaPixels(scidata[0], parametros) #retira apenas uma caixa de pixels da imagem total
 
-		Imgmedian.append(np.median(scidata))
-		devs = np.abs(scidata - np.median(scidata))
-		meddev = np.median(devs)
-		ImgStd.append(meddev)
-		#print np.median(scidata), np.std(scidata), meddev
-		VetorEtime.append(hdr['exposure'])
+                Imgmedian.append(np.median(scidata))
+                devs = np.abs(scidata - np.median(scidata))
+                meddev = np.median(devs)
+                ImgStd.append(meddev)
+                #print np.median(scidata), np.std(scidata), meddev
+                VetorEtime.append(hdr['exposure'])
 
 	#ajuste da curva
 	modelLinearFunc = Model(linearFunc)

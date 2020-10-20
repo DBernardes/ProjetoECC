@@ -5,13 +5,19 @@
     Criado em 4 de Outubro de 2016  
     Descricao: esta bilbioteca possui as seguintes funcoes:
 
-		calcDerivada_XY: esta funcao recebe uma serie de imagens e respectivos tempo de exposicao. Sobre essa serie e calculado um ajuste linear para a media dos pixels ao longo das colunas e ao longo das linhas em funcao do tempo de exposicao, sendo a derivada desta curva o valor da corrente de escuro. 
+		calcDerivada_XY: esta funcao recebe uma serie de imagens e respectivos tempo de exposicao.
+		Sobre essa serie e calculado um ajuste linear para a media dos pixels ao longo das colunas e ao
+		longo das linhas em funcao do tempo de exposicao, sendo a derivada desta curva o valor da corrente de escuro. 
 
-		plotGrafico: esta funcao plota um grafico para os valores x e y fornecidos. Sobre essa serie de dados e tracada uma linha de referencia para media +/- desvio padrao e calculada uma binagem dos dados para cada intervalo de 50 pontos.
+		plotGrafico: esta funcao plota um grafico para os valores x e y fornecidos. Sobre essa serie de dados e
+		tracada uma linha de referencia para media +/- desvio padrao e calculada uma binagem dos dados para cada
+		intervalo de 50 pontos.
 
-		caixaTexto: esta funcao recebe os principais valores obtidos no plot dos grafico, expressando-os numa caixa de texto lateral.
+		caixaTexto: esta funcao recebe os principais valores obtidos no plot dos grafico, expressando-os numa caixa
+		de texto lateral.
 
-		DCderivada: esta funcao recebe uma lista de imagens de dark e o header de uma das imagens, retirando e fornecendo as informacoes necessarias para todas as outras funcoes.
+		DCderivada: esta funcao recebe uma lista de imagens de dark e o header de uma das imagens, retirando e f
+		ornecendo as informacoes necessarias para todas as outras funcoes.
 
     @author: Denis Varise Bernardes & Eder Martioli
     
@@ -137,7 +143,7 @@ def caixaTexto(mean, std, meanBin, meanStdbin, posx, posy):
 
 
 def CaractDCEspacial(listaImagens, gain):
-	print '\nCalculando a distribuicao da corrente de escuro pelo CCD.\n'
+	print('\nCalculando a distribuicao da corrente de escuro pelo CCD.\n')
 	header = fits.getheader(listaImagens[0])
 	VetorEtime 	= DCReadArq.Etime()
 	temperatura = header['temp']
