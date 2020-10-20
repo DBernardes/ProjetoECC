@@ -34,6 +34,10 @@ pip install <package_name>
 
 email: denis.bernardes099@gmail.com 
 
+* **Eder Martioli**: 
+
+email: edermartioli@gmail.com
+
 ## License
 
 Este projeto está licenciado sob a Licença MIT - consulte o arquivo [LICENSE.md] (LICENSE.md) para obter detalhes
