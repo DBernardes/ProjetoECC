@@ -182,7 +182,7 @@ class DarkCurrent:
 		for Dir  in self.Directories:
 			chdir = self.dir_path + '/' + Dir
 			os.chdir(chdir)
-			self.listaImgDark = DCReadArq.returnListImages(options.dark)
+			self.listaImgDark = DCReadArq.returnListImages(self.Keywords[1])
 			header=fits.getheader(self.listaImgDark[0])
 			self.vetorTemp.append(header['temp'])
 			if header['temp'] < TempMin:

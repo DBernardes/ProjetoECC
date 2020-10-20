@@ -17,15 +17,16 @@ __copyright__ = """
     Copyright (c) ...  All rights reserved.
     """
 import numpy as np
+from sys import exit
 
 def caixaPixels(imagem, parametros):
-	#retira apenas uma caixa de pixels, dada as coordenadas (x,y) e seu tamanho			
-	xcoord = parametros[0]
-	ycoord = parametros[1]
-	dimension = parametros[2]/2
-	d = dimension	
-	newimage = imagem[xcoord-d:xcoord+d, ycoord-d:ycoord+d]	
-	return newimage
+    #retira apenas uma caixa de pixels, dada as coordenadas (x,y) e seu tamanho    
+    xcoord = parametros[0]
+    ycoord = parametros[1]
+    dimension = int(parametros[2]/2)
+    d = dimension   
+    newimage = imagem[xcoord-d:xcoord+d, ycoord-d:ycoord+d] 
+    return newimage
 
 
 

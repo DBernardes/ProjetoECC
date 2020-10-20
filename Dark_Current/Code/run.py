@@ -8,18 +8,17 @@
 #da corrente de escuro dos CCDs.
 
 import DCCharact as DC
+import DCReadArq
+import matplotlib.pyplot as plt
+import os
 
-dir_path = r'C:\Users\denis\Desktop\ProjetoECC\Dark_Current'
+dir_path = r'C:\Users\observer\Desktop\Imagens_ECC\DC'
 DCobjeto = DC.DarkCurrent(ccd_gain = 3.36, dir_path = dir_path)
 DCobjeto.caractTemporal()
 DCobjeto.DiretorioMenorTemperatura()
 
-listaImgDark = DCReadArq.returnListImages(options.dark)
+listaImgDark = DCReadArq.returnListImages(keyword = 'DC')
 fig = plt.figure(figsize=(15,17))
 DCobjeto.CaractTemporal()
 DCobjeto.CaractEspacial()
-DCobjeto.LogFile()
-plt.savefig('Relatório DC', format='png')
-
-arqCaract = arquivoCaract()
-arqCaract.criaArq(arqCaract)
+plt.savefig('Relatório DC.pdf', format='pdf')

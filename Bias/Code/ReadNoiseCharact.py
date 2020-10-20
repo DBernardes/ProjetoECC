@@ -136,13 +136,12 @@ class ReadNoiseCharact:
             textstr = Strtemperatura + self.StrGradiente + self.StrHistograma
             ConstructTextBox.textBox(textstr, 4, 3, 0, 2, font=24, space=0.05, rspan=2)
 
-	def salvaArquivosResultados(self):
-            os.chdir(self.BackDir)
-            plt.savefig('Relatório Bias.pdf', format='pdf')
-            os.chdir(self.cwd)
+	def salvaArquivosResultados(self):            
+            plt.savefig(self.cwd + '\\' + 'Relatório Bias.pdf', format='pdf')
+            
 
             dic = {'minute':self.minute, 'second':self.second,'ruidoNominal':self.ruidoCalculado, 'header':self.header}
-##            
+            
 ##            print('Criando arquivo log', '\n')
 ##            logfile(dic, self.NPcombinedImage)	
 ##

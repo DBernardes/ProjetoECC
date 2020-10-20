@@ -4,9 +4,12 @@
 """
     Criado em 29 de Setembro de 2016  
     Descricao: esta biblioteca possui as seguintes funcoes:
-		criaArq_listaImgInput: dado o numero de imagens para cada intensidade de luz obtidas e parte do nome das imagens, que serve de referencia para o codigo identificar quais sao as imagens de bias e quais sao as de flat, a funcao criara um arquivo contendo uma lista com as imagens do ensaio.
+		criaArq_listaImgInput: dado o numero de imagens para cada intensidade de luz obtidas e parte do nome das imagens,
+		que serve de referencia para o codigo identificar quais sao as imagens de bias e quais sao as de flat, a funcao criara
+		um arquivo contendo uma lista com as imagens do ensaio.
 
-		LeArquivoReturnLista: esta funcao faz a leitura do arquivo gerado pela funcao criaArq_listaImgInput, retornando um vetor contendo o nome das imagens. 
+		LeArquivoReturnLista: esta funcao faz a leitura do arquivo gerado pela funcao criaArq_listaImgInput, retornando um vetor
+		contendo o nome das imagens. 
 
     @author: Denis Varise Bernardes & Eder Martioli
     
@@ -26,9 +29,9 @@ import os
 cwd = os.getcwd()
 
 
-def criaArq_listaImgInput(nImages, name):
+def criaArq_listaImgInput(nImages, name, images_path):
 	s,i='',0	
-	listaImagens = os.listdir(cwd)
+	listaImagens = os.listdir(images_path)
 	listaImagensFiltrada = []
 	for img in listaImagens:
 		if '.fits' in img and name in img:
@@ -42,7 +45,7 @@ def criaArq_listaImgInput(nImages, name):
 			s += str(img)+','
 		i+=1
 	
-	nameArq = name+'list'
+	nameArq = images_path+ '\\'+ name+'list.txt'
 	try:
 		logf = open(nameArq, 'w') 
 	except:
@@ -55,8 +58,8 @@ def criaArq_listaImgInput(nImages, name):
 
 
 
-def LeArquivoReturnLista(arquivo):	
-	with open(arquivo) as arq:
+def LeArquivoReturnLista(arquivo, images_path):	
+	with open(images_path + '\\' + arquivo) as arq:
 		lista = []
 		linhas = arq.read().splitlines()
 		for lin in linhas:			

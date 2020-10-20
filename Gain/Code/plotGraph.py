@@ -55,7 +55,7 @@ def Graph_sinal_variance(X, Y, yerr, xerr, sigmaBias):
 	return (coefAng, stdLinAjust)
 
 
-def Graph_residuos(x,y, std):
+def Graph_residuos(x,y, std, image_path):
 	i,font, residuo,err = 0, 17, [], []
 	for dado in y:
 		residuo.append(dado - coefAng*x[i]- intercept)
@@ -77,13 +77,9 @@ def Graph_residuos(x,y, std):
 	std  = str(round(np.std(residuo),num))
 	if  '-0.0' == mean:
 		mean = mean[1:]
-	plt.text(0.05,0.9, r'$\mathtt{M\acuteedia \; = \; %s^+_- \; %s \quad el\acuteetrons}$'%(mean,std), va='center', ha='left', size=font+3, transform=ax.transAxes)
-
-	cwd = os.getcwd()
-	BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
-	os.chdir(BackDir)
-	plt.savefig('ganho', format='png')
-	os.chdir(cwd)
+	plt.text(0.05,0.9, r'$\mathtt{M\acuteedia \; = \; %s^+_- \; %s \quad el\acuteetrons}$'%(mean,std), va='center', ha='left', size=font+3, transform=ax.transAxes)		
+	plt.savefig(image_path + '\\' + 'Relatório Ganho.pdf', format='pdf')
+	
 	
 	
 	

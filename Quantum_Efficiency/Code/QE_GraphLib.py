@@ -34,7 +34,7 @@ from math import sqrt
 
 from QE_reduceImgs_readArq import LeArq_curvaEQFabricante
 
-def plotGraph(x,y, std, parametrosGraph, name):	
+def plotGraph(x,y, std, parametrosGraph, name, images_path):	
 
 	errorSourceEstabilization = 0.07714 #erro calculado para estabilizacao da fonte
 	comprimentoOnda = range(300,1200,100)
@@ -45,7 +45,7 @@ def plotGraph(x,y, std, parametrosGraph, name):
 		ErroExperimental.append(sqrt((Interpolation(Lambda)**2 + errorSourceEstabilization**2)*100**2))
 
 	if name != '':
-		EQfabricante, espectroFrabricante = LeArq_curvaEQFabricante(name)
+		EQfabricante, espectroFrabricante = LeArq_curvaEQFabricante(name, images_path)
 		plt.plot(espectroFrabricante, EQfabricante,'-', c='green', linewidth=2, label=r'$\mathtt{Fabricante}$')		
 
 	CopyY = copy.copy(y) 
@@ -67,13 +67,10 @@ def plotGraph(x,y, std, parametrosGraph, name):
 
 	plt.annotate(r'$\mathtt{EQ_{max} \; = \; %.1f}$' %(parametrosGraph[0]) + ' %', xy=(0.32,0.15), xycoords='axes fraction',  ha='left', va='center', size=font)
 	plt.annotate(r'$\mathtt{Comp. \; onda \; = \; %.2f \; (nm)}$' %(parametrosGraph[1]), xy=(0.32,0.10), xycoords='axes fraction',  ha='left', va='center', size=font)
-	plt.annotate(r'$\mathtt{EQ_{eff} \; = \; %.2f}$' %(parametrosGraph[2]) + ' %', xy=(0.32, 0.05), xycoords='axes fraction',  ha='left', va='center', size=font)
-
-	cwd = os.getcwd()
-	BackDir = os.path.normpath(os.getcwd() + os.sep + os.pardir)
-	os.chdir(BackDir)
-	plt.savefig('Eficiencia Quantica', format='png')
-	os.chdir(cwd)
+	plt.annotate(r'$\mathtt{EQ_{eff} \; = \; %.2f}$' %(parametrosGraph[2]) + ' %', xy=(0.32, 0.05), xycoords='axes fraction',  ha='left', va='center', size=font)		
+	
+	plt.savefig(images_path + '\\' + 'Relatório EQ.pdf', format='pdf')
+	
 
 
 def parametrosGraph(string, dados):
@@ -83,7 +80,7 @@ def parametrosGraph(string, dados):
 	xInicial = int(listValues[0])
 	xFinal	 = int(listValues[1])
 	step	 = int(listValues[2])
-	n = (xFinal - xInicial)/step
+	n = int((xFinal - xInicial)/step)
 	x = np.linspace(xInicial, xFinal, n+1)
 	f = interp1d(x, dados, kind='cubic')
 	

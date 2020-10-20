@@ -7,19 +7,28 @@
     @author: Denis Varise Bernardes & Eder Martioli
     Descricao: esta biblioteca possui as seguintes funcoes:
 
-		mkDir_saveCombinedImages: esta funcao recebe o numero de imagens (nImages) adquiridas para o mesmo comprimento de onda; pela chamada da funcao LeArquivoReturnLista retorna a lista de todas as imagens adquiridas no ensaio; para um numero de nImages em nImages imagens (onde nImages é um valor fornecido) a funcao cria um vetor, retornando-o para a funcao geraArquivo: esta funcao ira combinar as imagens pela mediana, salvando-as num novo diretorio. Feito isso, a funcao cria uma lista com o nomes das novas imagens atraves da chamada da funcao criaArquivo_listaImagensCombinadas.
+		mkDir_saveCombinedImages: esta funcao recebe o numero de imagens (nImages) adquiridas para o mesmo comprimento de onda;
+		pela chamada da funcao LeArquivoReturnLista retorna a lista de todas as imagens adquiridas no ensaio; para um numero de
+		nImages em nImages imagens (onde nImages é um valor fornecido) a funcao cria um vetor, retornando-o para a funcao geraArquivo:
+		esta funcao ira combinar as imagens pela mediana, salvando-as num novo diretorio. Feito isso, a funcao cria uma lista com
+		o nomes das novas imagens atraves da chamada da funcao criaArquivo_listaImagensCombinadas.
 
 		readArqDetector: esta funcao recebe o nome do arquivo contendo os dados do detector, retornando um vetor com os valores medidos.
 
 		ImagemUnica_returnHeader: esta funcao recebe uma unica imagem da lista, retornando o header para a retirada de informacoes.
 
-		LeArquivoReturnLista: esta funcao faz a leitura do arquivo listaImagens gerado pela funcao criaArq_listaImgInput, retornando uma lista com o nome das imagens.
+		LeArquivoReturnLista: esta funcao faz a leitura do arquivo listaImagens gerado pela funcao criaArq_listaImgInput, retornando
+		uma lista com o nome das imagens.
 
-		criaArquivo_listaImagensCombinadas: esta funcao cria um arquivo chamado listaImagensCombinadas contendo o nome das imagens combinadas geradas na funcao mkDir_saveCombinedImages.
+		criaArquivo_listaImagensCombinadas: esta funcao cria um arquivo chamado listaImagensCombinadas contendo o nome das imagens
+		combinadas geradas na funcao mkDir_saveCombinedImages.
 
-		LeArqFluxoCamera: esta funcao faz a leitura do arquivo Fluxo camera.dat gerado pela funcao criaArqFluxoCamera, retornado dois vetores com os valores do fluxo e dos desvio padrao.
+		LeArqFluxoCamera: esta funcao faz a leitura do arquivo Fluxo camera.dat gerado pela funcao criaArqFluxoCamera, retornado
+		dois vetores com os valores do fluxo e dos desvio padrao.
 
-		LeArq_curvaCalibDetector: dado o nome do arquivo da curva de calibracao do detector e o numero do conjunto de imagens, esta funcao retornara um vetor contendo os valores da curva caso a opcao seja fornecida; caso contrario, a funcao retorna um vetor contendo o valor 1.	
+		LeArq_curvaCalibDetector: dado o nome do arquivo da curva de calibracao do detector e o numero do conjunto de imagens, esta
+		funcao retornara um vetor contendo os valores da curva caso a opcao seja fornecida; caso contrario, a funcao retorna um vetor
+		contendo o valor 1.	
 
 
     Laboratorio Nacional de Astrofisica, Brazil.
